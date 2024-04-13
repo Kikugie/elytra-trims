@@ -1,7 +1,9 @@
 package dev.kikugie.elytratrims.mixin.common;
 
 import com.google.common.collect.Iterables;
+import dev.kikugie.elytratrims.common.config.ConfigTesters.RequireClientSide;
 import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
+import dev.kikugie.elytratrims.common.plugin.RequireTest;
 import dev.kikugie.elytratrims.common.recipe.ElytraGlowRecipe;
 import dev.kikugie.elytratrims.common.recipe.ElytraPatternRecipe;
 import net.minecraft.network.packet.s2c.play.SynchronizeRecipesS2CPacket;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
  * Hides recipes from clients, because they use custom serializers and would cause registry desync.
  * The recipes are still available, but not present in the recipe book.
  */
+@RequireTest(RequireClientSide.class)
 @MixinConfigurable
 @Mixin(value = SynchronizeRecipesS2CPacket.class, remap = false)
 public abstract class SynchronizeRecipesS2CPacketMixin {
@@ -22,7 +25,7 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
     private Iterable<Recipe<?>> removeElytraPatternRecipe(Iterable<Recipe<?>> elements) {
         return Iterables.filter(elements, recipe -> !(recipe instanceof ElytraPatternRecipe) && !(recipe instanceof ElytraGlowRecipe));
     }
-     /*?} else {*//*
+    /*?} else {*//*
     private Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
         return Iterables.filter(elements, entry -> {
             Recipe<?> recipe = entry.value();

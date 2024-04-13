@@ -30,4 +30,11 @@ public class ConfigTesters {
             return ServerConfigs.getConfig().cleanableElytra;
         }
     }
+
+    public static class RequireClientSide implements Tester {
+        @Override
+        public boolean test(String mixinClassName) {
+            return ServerConfigs.getConfig().requireClientSide;
+        }
+    }
 }

@@ -14,19 +14,22 @@ public class ETServerConfig {
                     Codec.BOOL.fieldOf("addTrims").forGetter(it -> it.addTrims),
                     Codec.BOOL.fieldOf("addPatterns").forGetter(it -> it.addPatterns),
                     Codec.BOOL.fieldOf("addGlow").forGetter(it -> it.addGlow),
-                    Codec.BOOL.fieldOf("cleanableElytra").forGetter(it -> it.cleanableElytra)
+                    Codec.BOOL.fieldOf("cleanableElytra").forGetter(it -> it.cleanableElytra),
+                    Codec.BOOL.fieldOf("requireClientSide").forGetter(it -> it.requireClientSide)
             ).apply(instance, ETServerConfig::new));
     private static final Path CONFIG_FILE = ModStatus.configDir.resolve("elytra-trims-server.json");
     public final boolean addTrims;
     public final boolean addPatterns;
     public final boolean addGlow;
     public final boolean cleanableElytra;
+    public final boolean requireClientSide;
 
-    public ETServerConfig(boolean addTrims, boolean addPatterns, boolean addGlow, boolean cleanableElytra) {
+    public ETServerConfig(boolean addTrims, boolean addPatterns, boolean addGlow, boolean cleanableElytra, boolean requireClientSide) {
         this.addTrims = addTrims;
         this.addPatterns = addPatterns;
         this.addGlow = addGlow;
         this.cleanableElytra = cleanableElytra;
+        this.requireClientSide = requireClientSide;
     }
 
     public static ETServerConfig load() {
@@ -38,7 +41,7 @@ public class ETServerConfig {
     }
 
     public static ETServerConfig create() {
-        return new ETServerConfig(true, true, true, true);
+        return new ETServerConfig(true, true, true, true, false);
     }
 
     public void save() {
