@@ -34,7 +34,7 @@ public class ConfigTesters {
     public static class RequireClientSide implements Tester {
         @Override
         public boolean test(String mixinClassName) {
-            return ServerConfigs.getConfig().requireClientSide;
+            return !ServerConfigs.getConfig().requireClientSide;
         }
     }
 }
