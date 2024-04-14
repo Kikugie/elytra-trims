@@ -64,8 +64,10 @@ public class ETServerWrapper {
 import dev.kikugie.elytratrims.common.config.ServerConfigs;
 import dev.kikugie.elytratrims.client.ETClientWrapper;
 import dev.kikugie.elytratrims.common.recipe.ETRecipeSerializers;
+import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -88,6 +90,10 @@ public class ETServerWrapper {
 
     public static void init(FMLCommonSetupEvent event) {
         ETServer.init();
+    }
+
+    public static Identifier getItemId(Item item) {
+        return Registries.ITEM.getId(item);
     }
 }
 *//*?}*/

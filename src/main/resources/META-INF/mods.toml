@@ -17,11 +17,13 @@ logoFile = "assets/elytratrims/icon.png"
 
 [[mixins]]
 config = "elytratrims.mixins.json"
-# TODO: include compat mixins for neoforge when stonecutter is fixed
+
+[[mixins]]
+config = "elytratrims-compat.mixins.json"
 
 [[dependencies.elytratrims]]
 modId = "minecraft"
-mandatory = true
+${mnd}
 versionRange = "${mc}"
 ordering = "NONE"
 side = "BOTH"

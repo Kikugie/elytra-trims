@@ -119,7 +119,8 @@ tasks.processResources {
     val map = mapOf(
         "version" to mod.version,
         "mc" to mcDep,
-        "fml" to if (loader == "neoforge") "1" else "45"
+        "fml" to if (loader == "neoforge") "1" else "45",
+        "mnd" to if (loader == "neoforge") "" else "mandatory = true"
     )
 
     filesMatching("fabric.mod.json") { expand(map) }
@@ -145,7 +146,7 @@ publishMods {
     displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for $mcVersion"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = BETA
+    type = if (loader == "neoforge") BETA else STABLE
     modLoaders.add(loader)
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN")
