@@ -1,8 +1,8 @@
 package dev.kikugie.elytratrims.common;
 
+import dev.kikugie.elytratrims.common.access.FeatureAccess;
 import dev.kikugie.elytratrims.mixin.access.ElytraOverlaysAccessor;
 import dev.kikugie.elytratrims.common.config.ServerConfigs;
-import dev.kikugie.elytratrims.common.recipe.GlowingItem;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
 import net.minecraft.item.*;
@@ -11,28 +11,22 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 
 public class ETServer {
-    public static DyeableItem DYEABLE;
-    public static GlowingItem GLOWING;
     public static CauldronBehavior CLEAN_ELYTRA;
 
     public static void init() {
         ETCommentary.run();
-        DYEABLE = new DyeableItem() {
-        };
-        GLOWING = new GlowingItem() {
-        };
 
         CLEAN_ELYTRA = (state, world, pos, player, hand, stack) -> {
             boolean glowRemoval = false;
             boolean bannerRemoval = false;
             boolean dyeRemoval = false;
 
-            if (GLOWING.hasGlow(stack)) {
-                GLOWING.removeGlow(stack);
+            if (FeatureAccess.hasGlow(stack)) {
+                FeatureAccess.setGlow(stack, false);
                 glowRemoval = true;
             }
-            if (DYEABLE.hasColor(stack)) {
-                DYEABLE.removeColor(stack);
+            if (FeatureAccess.getColor(stack) != 0) {
+                FeatureAccess.setColor(stack, 0);
                 dyeRemoval = true;
             }
             if (!((ElytraOverlaysAccessor) (Object) stack).elytra_trims$getPatterns().isEmpty()) {

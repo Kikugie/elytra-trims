@@ -1,23 +1,23 @@
 package dev.kikugie.elytratrims.common;
 
-/*? if fabric {*/
 import dev.kikugie.elytratrims.common.config.ServerConfigs;
-import dev.kikugie.elytratrims.common.recipe.ETRecipeSerializers;
-import net.fabricmc.api.ModInitializer;
+import dev.kikugie.elytratrims.common.recipe.ETGlowRecipe;
+import dev.kikugie.elytratrims.common.recipe.ETPatternRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
-public class ETServerWrapper implements ModInitializer {
+/*? if fabric {*/
+public class ETServerWrapper implements net.fabricmc.api.ModInitializer {
     @Override
     public void onInitialize() {
         ETServer.init();
 
         if (ServerConfigs.getConfig().addPatterns)
-            RecipeSerializer.register("crafting_special_elytrapatterns", ETRecipeSerializers.ELYTRA_PATTERNS);
+            RecipeSerializer.register("crafting_special_elytrapatterns", ETPatternRecipe.SERIALIZER);
         if (ServerConfigs.getConfig().addGlow)
-            RecipeSerializer.register("crafting_special_elytraglow", ETRecipeSerializers.ELYTRA_GLOW);
+            RecipeSerializer.register("crafting_special_elytraglow", ETGlowRecipe.SERIALIZER);
     }
 
     public static Identifier getItemId(Item item) {
@@ -25,12 +25,6 @@ public class ETServerWrapper implements ModInitializer {
     }
 }
 /*?} elif forge {*//*
-import dev.kikugie.elytratrims.common.config.ServerConfigs;
-import dev.kikugie.elytratrims.client.ETClientWrapper;
-import dev.kikugie.elytratrims.common.recipe.ETRecipeSerializers;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.util.Identifier;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -61,13 +55,6 @@ public class ETServerWrapper {
     }
 }
 *//*?} else {*//*
-import dev.kikugie.elytratrims.common.config.ServerConfigs;
-import dev.kikugie.elytratrims.client.ETClientWrapper;
-import dev.kikugie.elytratrims.common.recipe.ETRecipeSerializers;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;

@@ -1,10 +1,7 @@
 package dev.kikugie.elytratrims.client.render;
 
-import com.mojang.datafixers.util.Pair;
 import dev.kikugie.elytratrims.client.ETClient;
-import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import dev.kikugie.elytratrims.client.compat.AllTheTrimsCompat;
-import dev.kikugie.elytratrims.client.compat.StackableTrimsCompat;
 import dev.kikugie.elytratrims.client.config.ETClientConfig;
 import dev.kikugie.elytratrims.client.config.RenderConfig;
 import dev.kikugie.elytratrims.client.config.RenderConfig.RenderType;
@@ -12,9 +9,10 @@ import dev.kikugie.elytratrims.client.config.TextureConfig;
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder;
 import dev.kikugie.elytratrims.client.resource.ImageUtils;
 import dev.kikugie.elytratrims.client.resource.Textures;
-import dev.kikugie.elytratrims.common.ETServer;
-import dev.kikugie.elytratrims.mixin.access.ElytraOverlaysAccessor;
+import dev.kikugie.elytratrims.common.access.BannerLayer;
+import dev.kikugie.elytratrims.common.access.FeatureAccess;
 import dev.kikugie.elytratrims.common.plugin.ModStatus;
+import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
@@ -28,21 +26,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static net.minecraft.client.render.RenderPhase.*;
 
-@SuppressWarnings("DataFlowIssue")
 public class ETFeatureRenderer {
     public static final Function<Identifier, RenderLayer> ELYTRA_LAYER = Util.memoize(texture -> RenderLayer.of("elytra_layer", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, true, true, RenderLayer.MultiPhaseParameters.builder()
             .program(ENTITY_NO_OUTLINE_PROGRAM)
@@ -66,6 +58,14 @@ public class ETFeatureRenderer {
         resetCache();
     }
 
+    /**
+     * If a trim texture is missing, the mod will skip it instead of rendering the purple-black checkerboard because it's ugly.<br>
+     * However, it will render it on the armor stand inside a smithing table to inform the player.
+     */
+    public static boolean renderMissingTexture(LivingEntity entity) {
+        return ((LivingEntityAccessor) entity).elytra_trims$isGui();
+    }
+
     public void resetCache() {
         trimGetter = Util.memoize(this::trimSpriteGetter);
         patternGetter = Util.memoize(this::patternSpriteGetter);
@@ -73,7 +73,7 @@ public class ETFeatureRenderer {
 
     public void render(Model elytra, MatrixStack matrices, VertexConsumerProvider provider, LivingEntity entity, ItemStack stack, int light, float alpha) {
         if (!holder.isReady()) return;
-        if (!cancelRender(RenderType.GLOW, entity) && ETServer.GLOWING.hasGlow(stack))
+        if (!cancelRender(RenderType.GLOW, entity) && FeatureAccess.hasGlow(stack))
             light = 0xFF00FF;
 
         if (!renderJebElytra(elytra, matrices, provider, entity, stack, light, alpha)) {
@@ -84,40 +84,21 @@ public class ETFeatureRenderer {
     }
 
     private void renderElytraTrims(Model elytra, MatrixStack matrices, VertexConsumerProvider provider, LivingEntity entity, ItemStack stack, int light, float alpha) {
-        if (cancelRender(RenderConfig.RenderType.TRIMS, entity))
-            return;
-
-        World world = entity.getWorld();
-
-        List<ArmorTrim> trims;
-        if (ModStatus.isLoaded("stacked_trims"))
-            trims = StackableTrimsCompat.getTrims(world.getRegistryManager(), stack);
-        else {
-            Optional<ArmorTrim> optional = ArmorTrim.getTrim(world.getRegistryManager(),
-                    stack
-                    /*? if >=1.20.2 */
-                    /*, true*/
-            );
-            trims = optional.map(List::of).orElseGet(List::of);
-        }
-
-        for (ArmorTrim trim : trims)
-            renderTrim(elytra, trim, matrices, provider, entity, stack, light, alpha);
+        if (!cancelRender(RenderConfig.RenderType.TRIMS, entity))
+            for (ArmorTrim trim : FeatureAccess.getTrims(stack, entity.getWorld().getRegistryManager()))
+                renderTrim(elytra, trim, matrices, provider, entity, stack, light, alpha);
     }
 
     private void renderElytraPatterns(Model elytra, MatrixStack matrices, VertexConsumerProvider provider, LivingEntity entity, ItemStack stack, int light, float alpha) {
         if (cancelRender(RenderConfig.RenderType.PATTERNS, entity))
             return;
 
-        List<Pair<RegistryEntry<BannerPattern>, DyeColor>> patterns = ((ElytraOverlaysAccessor) (Object) stack).elytra_trims$getPatterns();
-
-        for (int i = 0; i < 17 && i < patterns.size(); i++) {
-            Pair<RegistryEntry<BannerPattern>, DyeColor> pair = patterns.get(i);
-            Sprite sprite = getPatternSprite(pair.getFirst());
+        for (BannerLayer layer : FeatureAccess.getPatterns(stack)) {
+            Sprite sprite = getPatternSprite(layer.pattern());
             if (ImageUtils.isMissing(sprite))
                 continue;
 
-            float[] color = pair.getSecond().getColorComponents();
+            float[] color = layer.color().getColorComponents();
             VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(
                     ItemRenderer.getDirectItemGlintConsumer(
                             provider,
@@ -132,20 +113,20 @@ public class ETFeatureRenderer {
         if (cancelRender(RenderType.COLOR, entity))
             return;
 
-        int color = ((ElytraOverlaysAccessor) (Object) stack).elytra_trims$getColor();
-        if (color != 0)
-            renderElytraColor(elytra, matrices, provider, entity, stack, light, color, alpha);
+        int color = FeatureAccess.getColor(stack);
+        if (color != 0) renderElytraColor(elytra, matrices, provider, entity, stack, light, color, alpha);
     }
 
     /**
      * Easter egg hee hee.
+     *
      * @return {@code true} if jeb_ variant was rendered.
      */
     private boolean renderJebElytra(Model elytra, MatrixStack matrices, VertexConsumerProvider provider, LivingEntity entity, ItemStack stack, int light, float alpha) {
         if (cancelRender(RenderType.COLOR, entity))
             return true;
 
-        if (((ElytraOverlaysAccessor) (Object) stack).elytra_trims$getPatterns().isEmpty() && stack.getName().getString().equals("jeb_")) {
+        if (stack.getName().getString().equals("jeb_")) {
             long tick = MinecraftClient.getInstance().getRenderTime() % 360;
             int color = MathHelper.hsvToRgb(tick / 360F, 1F, 1F);
             renderElytraColor(elytra, matrices, provider, entity, stack, light, color, alpha);
@@ -226,21 +207,14 @@ public class ETFeatureRenderer {
      * Implementation for {@link ETFeatureRenderer#patternGetter}. Textures copy the respective shield/banner path.
      */
     private Sprite patternSpriteGetter(RegistryEntry<BannerPattern> pattern) {
-        Optional<RegistryKey<BannerPattern>> optional = pattern.getKey();
-        if (optional.isEmpty()) return atlas.getSprite(null);
-
+        /*? if <=1.20.4 */
+        var id = pattern.getKey().get();
+        /*? if >1.20.4 */
+        /*var id = pattern;*/
         SpriteIdentifier shieldSprite = config.texture.useBannerTextures.get()
-                ? TexturedRenderLayers.getBannerPatternTextureId(optional.get())
-                : TexturedRenderLayers.getShieldPatternTextureId(optional.get());
+                ? TexturedRenderLayers.getBannerPatternTextureId(id)
+                : TexturedRenderLayers.getShieldPatternTextureId(id);
         return atlas.getSprite(shieldSprite.getTextureId());
-    }
-
-    /**
-     * If a trim texture is missing, the mod will skip it instead of rendering the purple-black checkerboard because it's ugly.<br>
-     * However, it will render it on the armor stand inside a smithing table to inform the player.
-     */
-    public static boolean renderMissingTexture(LivingEntity entity) {
-        return ((LivingEntityAccessor) entity).elytra_trims$isGui();
     }
 
     private Sprite getTrimSprite(ArmorTrim trim) {

@@ -2,7 +2,6 @@ package dev.kikugie.elytratrims.common.plugin;
 
 import dev.kikugie.elytratrims.common.ETReference;
 import dev.kikugie.elytratrims.common.config.ServerConfigs;
-import dev.kikugie.elytratrims.common.plugin.RequirePlatform.Loader;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
@@ -48,13 +47,7 @@ public class ETMixinPlugin implements IMixinConfigPlugin {
         if (!modResult) return false;
 
         AnnotationNode testerRequirement = getAnnotation(mixin, RequireTest.class);
-        boolean testerResult = testerRequirement == null || runTester(Annotations.getValue(testerRequirement), mixin);
-        if (!testerResult) return false;
-
-        AnnotationNode platformRequirement = getAnnotation(mixin, RequirePlatform.class);
-        if (platformRequirement == null) return true;
-        Loader loader = Annotations.getValue(platformRequirement);
-        return (loader == Loader.FABRIC && ModStatus.isFabric) || (loader == Loader.FORGE && !ModStatus.isFabric);
+        return testerRequirement == null || runTester(Annotations.getValue(testerRequirement), mixin);
     }
 
     @Override

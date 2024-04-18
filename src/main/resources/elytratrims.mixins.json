@@ -5,7 +5,7 @@
   "plugin": "dev.kikugie.elytratrims.common.plugin.ETMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "common.BannerElytraItemMixin",
+    "common.ElytraItemMixin",
     "common.GlowingElytraItemMixin",
     "common.ItemMixin",
     "common.ItemStackMixin",

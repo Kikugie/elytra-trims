@@ -17,7 +17,8 @@ import java.util.List;
 
 @RequireTest(ConfigTesters.Patterns.class)
 @Mixin(ElytraItem.class)
-public class BannerElytraItemMixin extends ItemMixin implements DyeableItem {
+public class ElytraItemMixin extends ItemMixin
+        /*? if <=1.20.4 {*/ implements DyeableItem /*?} */ {
     @Override
     protected void elytra_trims$modifyTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
         BannerItem.appendBannerTooltip(stack, tooltip);

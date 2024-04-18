@@ -13,5 +13,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 @RequireMod("betterend")
 @Mixin(targets = {"org.betterx.betterend.item.ArmoredElytra", "org.betterx.betterend.item.CrystaliteElytra"})
 @MixinConfigurable
-public class BannerElytraItemMixin implements DyeableItem {
+public class BannerElytraItemMixin
+        /*? if <=1.20.4 {*/ implements DyeableItem /*?} */ {
 }
