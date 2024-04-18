@@ -1,4 +1,4 @@
-package dev.kikugie.elytratrims.client.access;
+package dev.kikugie.elytratrims.mixin.access;
 
 public interface LivingEntityAccessor {
     void elytra_trims$markGui();

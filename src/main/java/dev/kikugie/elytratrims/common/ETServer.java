@@ -1,6 +1,6 @@
 package dev.kikugie.elytratrims.common;
 
-import dev.kikugie.elytratrims.common.access.ElytraOverlaysAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraOverlaysAccessor;
 import dev.kikugie.elytratrims.common.config.ServerConfigs;
 import dev.kikugie.elytratrims.common.recipe.GlowingItem;
 import net.minecraft.block.LeveledCauldronBlock;

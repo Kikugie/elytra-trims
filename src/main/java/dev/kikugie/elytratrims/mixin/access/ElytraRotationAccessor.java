@@ -1,4 +1,4 @@
-package dev.kikugie.elytratrims.client.access;
+package dev.kikugie.elytratrims.mixin.access;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;

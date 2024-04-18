@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.mixin.client;
 
 import dev.kikugie.elytratrims.client.resource.ETResourceListener;
-import dev.kikugie.elytratrims.client.access.ElytraSourceAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraSourceAccessor;
 import net.minecraft.client.texture.atlas.AtlasSource;
 import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource;
 import net.minecraft.resource.ResourceManager;

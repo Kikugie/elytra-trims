@@ -1,4 +1,4 @@
-package dev.kikugie.elytratrims.common.access;
+package dev.kikugie.elytratrims.mixin.access;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.entity.BannerPattern;

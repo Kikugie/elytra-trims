@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.mixin.client;
 
-import dev.kikugie.elytratrims.client.access.ElytraRotationAccessor;
-import dev.kikugie.elytratrims.client.access.LivingEntityAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
+import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import dev.kikugie.elytratrims.common.ETServer;
 import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;

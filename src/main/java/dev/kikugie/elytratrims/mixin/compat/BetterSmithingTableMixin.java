@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.mixin.compat;
 
 import com.bawnorton.mixinsquared.TargetHandler;
-import dev.kikugie.elytratrims.client.access.ElytraRotationAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.common.plugin.RequireMod;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;

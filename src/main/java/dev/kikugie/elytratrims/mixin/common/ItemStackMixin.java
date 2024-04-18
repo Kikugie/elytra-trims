@@ -2,7 +2,7 @@ package dev.kikugie.elytratrims.mixin.common;
 
 import com.mojang.datafixers.util.Pair;
 import dev.kikugie.elytratrims.common.ETServer;
-import dev.kikugie.elytratrims.common.access.ElytraOverlaysAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraOverlaysAccessor;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.item.BlockItem;

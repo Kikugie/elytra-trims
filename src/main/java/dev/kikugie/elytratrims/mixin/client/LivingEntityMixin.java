@@ -1,6 +1,6 @@
 package dev.kikugie.elytratrims.mixin.client;
 
-import dev.kikugie.elytratrims.client.access.LivingEntityAccessor;
+import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

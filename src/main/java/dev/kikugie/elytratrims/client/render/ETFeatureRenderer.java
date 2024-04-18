@@ -2,7 +2,7 @@ package dev.kikugie.elytratrims.client.render;
 
 import com.mojang.datafixers.util.Pair;
 import dev.kikugie.elytratrims.client.ETClient;
-import dev.kikugie.elytratrims.client.access.LivingEntityAccessor;
+import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import dev.kikugie.elytratrims.client.compat.AllTheTrimsCompat;
 import dev.kikugie.elytratrims.client.compat.StackableTrimsCompat;
 import dev.kikugie.elytratrims.client.config.ETClientConfig;
@@ -13,7 +13,7 @@ import dev.kikugie.elytratrims.client.resource.ETAtlasHolder;
 import dev.kikugie.elytratrims.client.resource.ImageUtils;
 import dev.kikugie.elytratrims.client.resource.Textures;
 import dev.kikugie.elytratrims.common.ETServer;
-import dev.kikugie.elytratrims.common.access.ElytraOverlaysAccessor;
+import dev.kikugie.elytratrims.mixin.access.ElytraOverlaysAccessor;
 import dev.kikugie.elytratrims.common.plugin.ModStatus;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.client.MinecraftClient;
