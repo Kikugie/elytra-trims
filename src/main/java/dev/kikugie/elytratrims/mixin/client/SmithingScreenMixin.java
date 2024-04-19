@@ -2,8 +2,7 @@ package dev.kikugie.elytratrims.mixin.client;
 
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
-import dev.kikugie.elytratrims.common.ETServer;
-import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
+import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -17,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static dev.kikugie.elytratrims.common.util.UtilKt.isProbablyElytra;
 
 @MixinConfigurable
 @Mixin(value = SmithingScreen.class, priority = 1100)
@@ -37,7 +38,7 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
     @Inject(method = "equipArmorStand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"), cancellable = true)
     private void equipElytra(ItemStack stack, CallbackInfo ci) {
         if (armorStand == null) return;
-        if (ETServer.isProbablyElytra(stack.getItem())) {
+        if (isProbablyElytra(stack.getItem())) {
             isElytra = true;
             armorStand.equipStack(EquipmentSlot.CHEST, stack.copy());
             ci.cancel();
@@ -45,14 +46,16 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
     }
 
     @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE",
-            /*? if >=1.20.2 {*//*
+            /*? if >1.20.4 {*/
+            target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
+            /*?} elif >=1.20.2 {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
             *//*?} elif >=1.20.1 {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?} else {*/
+            *//*?} else {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            /*?} */
-    ), index = /*? if >=1.20.2 {*//* 5 *//*?} else {*/ 4 /*?} */)
+            *//*?} */
+    ), index = /*? if >=1.20.2 {*/ 5 /*?} else {*//* 4 *//*?} */)
     private Quaternionf applyRotation(Quaternionf quaternionf) {
         return elytra_trims$rotateElytra(quaternionf);
     }

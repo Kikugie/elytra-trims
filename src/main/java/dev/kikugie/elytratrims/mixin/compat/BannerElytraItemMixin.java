@@ -1,18 +1,17 @@
 package dev.kikugie.elytratrims.mixin.compat;
 
-import dev.kikugie.elytratrims.common.config.ConfigTesters;
-import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.common.plugin.RequireMod;
-import dev.kikugie.elytratrims.common.plugin.RequireTest;
-import net.minecraft.item.DyeableItem;
+import dev.kikugie.elytratrims.common.config.PatternTester;
+import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
+import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
+import dev.kikugie.elytratrims.mixin.plugin.RequireTest;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 
 @Pseudo
-@RequireTest(ConfigTesters.Patterns.class)
+@RequireTest(PatternTester.class)
 @RequireMod("betterend")
 @Mixin(targets = {"org.betterx.betterend.item.ArmoredElytra", "org.betterx.betterend.item.CrystaliteElytra"})
 @MixinConfigurable
 public class BannerElytraItemMixin
-        /*? if <=1.20.4 {*/ implements DyeableItem /*?} */ {
+        /*? if <=1.20.4 {*//* implements net.minecraft.item.DyeableItem *//*?} */ {
 }

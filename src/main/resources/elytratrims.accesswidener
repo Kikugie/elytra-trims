@@ -7,7 +7,7 @@ accessible method net/minecraft/client/render/RenderLayer of (Ljava/lang/String;
 accessible method net/minecraft/client/texture/atlas/PalettedPermutationsAtlasSource <init> (Ljava/util/List;Lnet/minecraft/util/Identifier;Ljava/util/Map;)V
 accessible method net/minecraft/client/texture/atlas/AtlasLoader <init> (Ljava/util/List;)V
 accessible field net/minecraft/client/texture/SpriteContents image Lnet/minecraft/client/texture/NativeImage;
-accessible field net/minecraft/client/texture/atlas/Sprite id Lnet/minecraft/util/Identifier;
+#accessible field net/minecraft/client/texture/atlas/Sprite id Lnet/minecraft/util/Identifier;
 accessible field net/minecraft/client/render/RenderPhase ENTITY_NO_OUTLINE_PROGRAM Lnet/minecraft/client/render/RenderPhase$ShaderProgram;
 accessible field net/minecraft/client/render/RenderPhase TRANSLUCENT_TRANSPARENCY Lnet/minecraft/client/render/RenderPhase$Transparency;
 accessible field net/minecraft/client/render/RenderPhase DISABLE_CULLING Lnet/minecraft/client/render/RenderPhase$Cull;

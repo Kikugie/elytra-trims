@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.kikugie.elytratrims.client.ETClient;
-import dev.kikugie.elytratrims.client.config.RenderConfig.RenderType;
+import dev.kikugie.elytratrims.client.config.RenderType;
+import dev.kikugie.elytratrims.client.render.ETRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
@@ -13,7 +13,6 @@ import net.minecraft.client.render.entity.model.ElytraEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -25,7 +24,7 @@ public class ElytraFeatureRendererMixin {
      */
     @ModifyExpressionValue(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
     private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
-        return !ETClient.getRenderer().cancelRender(RenderType.CAPE, entity) && original;
+        return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     /**
@@ -45,6 +44,6 @@ public class ElytraFeatureRendererMixin {
                                   @Local(argsOnly = true) VertexConsumerProvider provider,
                                   @Local(argsOnly = true) LivingEntity entity) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETClient.getRenderer().render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
+        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
     }
 }

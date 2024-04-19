@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.kikugie.elytratrims.mixin.client",
+  "plugin": "dev.kikugie.elytratrims.mixin.plugin.ETMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ElytraFeatureRendererMixin",
+    "LivingEntityMixin",
+    "SmithingScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

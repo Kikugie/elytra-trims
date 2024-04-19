@@ -6,9 +6,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.client.ETClient;
-import dev.kikugie.elytratrims.client.config.RenderConfig;
-import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.common.plugin.RequireMod;
+import dev.kikugie.elytratrims.client.config.RenderType;
+import dev.kikugie.elytratrims.client.render.ETRenderer;
+import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
+import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
@@ -29,13 +30,13 @@ public class MinecraftCapesCompatMixin {
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
     private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
-        return !ETClient.getRenderer().cancelRender(RenderConfig.RenderType.CAPE, entity) && original;
+        return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraftcapes/config/MinecraftCapesConfig;isCapeVisible()Z"))
     private boolean cancelCapeRender2(boolean original, @Local(argsOnly = true) LivingEntity entity) {
-        return !ETClient.getRenderer().cancelRender(RenderConfig.RenderType.CAPE, entity) && original;
+        return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
@@ -53,6 +54,6 @@ public class MinecraftCapesCompatMixin {
                                   @Local(argsOnly = true) VertexConsumerProvider provider,
                                   @Local(argsOnly = true) LivingEntity entity) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETClient.getRenderer().render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
+        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
     }
 }

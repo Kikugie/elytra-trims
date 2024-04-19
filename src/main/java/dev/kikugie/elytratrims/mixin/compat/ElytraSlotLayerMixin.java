@@ -6,10 +6,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import dev.kikugie.elytratrims.client.ETClient;
-import dev.kikugie.elytratrims.client.config.RenderConfig;
-import dev.kikugie.elytratrims.common.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.common.plugin.RequireMod;
+import dev.kikugie.elytratrims.client.config.RenderType;
+import dev.kikugie.elytratrims.client.render.ETRenderer;
+import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
+import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -34,7 +34,7 @@ public abstract class ElytraSlotLayerMixin extends FeatureRenderer {
 
     @ModifyExpressionValue(method = "lambda$render$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
     private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
-        return !ETClient.getRenderer().cancelRender(RenderConfig.RenderType.CAPE, entity) && original;
+        return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @ModifyExpressionValue(method = "lambda$render$0",
@@ -62,6 +62,6 @@ public abstract class ElytraSlotLayerMixin extends FeatureRenderer {
                                   @Local(argsOnly = true) LivingEntity entity,
                                   @Share("stack") LocalRef<ItemStack> stack) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETClient.getRenderer().render(model, matrices, provider, entity, stack.get(), light, alpha);
+        ETRenderer.render(model, matrices, provider, entity, stack.get(), light, alpha);
     }
 }

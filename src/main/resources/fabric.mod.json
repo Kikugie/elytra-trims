@@ -13,7 +13,11 @@
     "issues": "https://github.com/Kikugie/elytra-trims/issues"
   },
   "mixins": [
-    "elytratrims.mixins.json",
+    {
+      "environment": "client",
+      "config": "elytratrims-client.mixins.json"
+    },
+    "elytratrims-common.mixins.json",
     "elytratrims-compat.mixins.json"
   ],
   "accessWidener": "elytratrims.accesswidener",
@@ -22,13 +26,22 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.kikugie.elytratrims.common.ETServerWrapper"
+      {
+        "adapter": "kotlin",
+        "value": "dev.kikugie.elytratrims.platform.ETCommonWrapper"
+      }
     ],
     "client": [
-      "dev.kikugie.elytratrims.client.ETClientWrapper"
+      {
+        "adapter": "kotlin",
+        "value": "dev.kikugie.elytratrims.platform.ETClientWrapper"
+      }
     ],
     "modmenu": [
-      "dev.kikugie.elytratrims.client.compat.ModMenuCompat"
+      {
+        "adapter": "kotlin",
+        "value": "dev.kikugie.elytratrims.client.config.lib.ModMenuImpl"
+      }
     ]
   },
   "depends": {

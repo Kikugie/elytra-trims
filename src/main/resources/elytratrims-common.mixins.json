@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.kikugie.elytratrims.mixin.common",
+  "plugin": "dev.kikugie.elytratrims.mixin.plugin.ETMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ElytraItemMixin",
+    "SynchronizeRecipesS2CPacketMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

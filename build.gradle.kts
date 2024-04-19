@@ -1,5 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+
 plugins {
     `maven-publish`
+    kotlin("jvm") version "1.9.22"
     id("dev.architectury.loom")
     id("me.modmuss50.mod-publish-plugin")
     id("me.fallenbreath.yamlang") version "1.3.1"
@@ -11,6 +14,7 @@ class ModData {
     val version = property("mod.version").toString()
     val group = property("mod.group").toString()
 }
+
 val mod = ModData()
 
 val loader = loom.platform.get().name.lowercase()
@@ -44,11 +48,12 @@ repositories {
     maven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
     maven("https://maven.kikugie.dev/releases")
     maven("https://maven.neoforged.net/releases/")
+    maven("https://thedarkcolour.github.io/KotlinForForge/")
 }
 
 dependencies {
     fun ifStable(dep: String, action: (String) -> Any?) {
-        if (stonecutter.current.version.startsWith("snapshot")) modCompileOnly(dep)
+        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
         else action(dep)
     }
 
@@ -60,8 +65,10 @@ dependencies {
     if (isFabric) {
         ifStable("dev.kikugie:crash-pipe:0.1.0", ::modLocalRuntime) // Very important asset
         modLocalRuntime(fabricApi.module("fabric-registry-sync-v0", property("deps.fapi").toString()))
+        modImplementation(fabricApi.module("fabric-resource-loader-v0", property("deps.fapi").toString()))
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-        modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+        modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
+        modCompileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}")
         include(implementation(mixinSquared.format("fabric"))!!)
     } else {
         if (loader == "forge") {
@@ -70,6 +77,7 @@ dependencies {
             include(implementation(mixinExtras.format("forge"))!!)
         } else
             "neoForge"("net.neoforged:neoforge:${property("deps.fml")}")
+        implementation("thedarkcolour:kotlinforforge${if (loader == "neoforge") "-neoforge" else ""}:${property("deps.kff")}")
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
@@ -134,6 +142,12 @@ yamlang {
 
 java {
     withSourcesJar()
+    val version = if (mcVersion.startsWith("1.20.5")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    sourceCompatibility = version
+}
+
+kotlin {
+    jvmToolchain(if (mcVersion.startsWith("1.20.5")) 21 else 17)
 }
 
 tasks.named("publishMods") {
