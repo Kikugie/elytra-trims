@@ -23,12 +23,12 @@ import java.util.Collection;
 @MixinConfigurable
 @Mixin(value = SynchronizeRecipesS2CPacket.class, remap = false)
 public abstract class SynchronizeRecipesS2CPacketMixin {
-    /*? if <1.20.2 {*//*
+    /*? if <1.20.2 {*/
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
     private Iterable<Recipe<?>> removeElytraPatternRecipe(Iterable<Recipe<?>> elements) {
         return Iterables.filter(elements, recipe -> !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe));
     }
-    *//*?} elif <=1.20.4 {*//*
+    /*?} elif <=1.20.4 {*//*
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
     private Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
         return Iterables.filter(elements, entry -> {
@@ -36,7 +36,7 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
             return !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe);
         });
     }
-    *//*?} else {*/
+    *//*?} else {*//*
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;copyOf(Ljava/util/Collection;)Ljava/util/List;"))
     private Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
         Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> res = new ArrayList<>();
@@ -47,5 +47,5 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
         }
         return res;
     }
-    /*?} */
+    *//*?} */
 }

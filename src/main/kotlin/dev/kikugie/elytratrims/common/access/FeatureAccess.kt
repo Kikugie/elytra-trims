@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.DynamicRegistryManager
 
-/*? if <=1.20.4 {*//*
+/*? if <=1.20.4 {*/
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.nbt.NbtCompound
@@ -60,7 +60,7 @@ object FeatureAccess : IFeatureAccess {
         if (nbt.isEmpty) removeSubNbt("display")
     }
 }
-*//*?} else {*/
+/*?} else {*//*
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.component.type.NbtComponent
@@ -109,7 +109,7 @@ object FeatureAccess : IFeatureAccess {
         if (data.isEmpty) remove(DataComponentTypes.CUSTOM_DATA)
     }
 }
-/*?} */
+*//*?} */
 
 
 private interface IFeatureAccess {

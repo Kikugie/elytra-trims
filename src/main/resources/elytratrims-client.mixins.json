@@ -7,6 +7,7 @@
   "client": [
     "ElytraFeatureRendererMixin",
     "LivingEntityMixin",
+    "PalettedPermutationsAtlasSourceAccessor",
     "SmithingScreenMixin"
   ],
   "injectors": {

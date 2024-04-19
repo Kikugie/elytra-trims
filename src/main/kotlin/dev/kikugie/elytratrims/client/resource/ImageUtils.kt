@@ -11,7 +11,7 @@ import java.io.IOException
 import kotlin.math.max
 import kotlin.math.min
 
-internal typealias AtlasSprite = /*? if <=1.20.4 {*//*net.minecraft.client.texture.atlas.Sprite*//*?} else {*/net.minecraft.client.texture.atlas.AtlasSprite/*?} */
+internal typealias AtlasSprite = /*? if <=1.20.4 {*/net.minecraft.client.texture.atlas.Sprite/*?} else {*//*net.minecraft.client.texture.atlas.AtlasSprite*//*?} */
 internal typealias ContentSupplier = () -> SpriteContents
 
 fun loadTexture(id: Identifier, manager: ResourceManager, regions: Int = 1) =
@@ -71,8 +71,8 @@ fun NativeImage.toContents(id: Identifier) = SpriteContents(
     id,
     SpriteDimensions(width, height),
     this,
-    /*? if <1.20.2*//*net.minecraft.client.resource.metadata.AnimationResourceMetadata.EMPTY*/
-    /*? if >=1.20.2*/net.minecraft.resource.metadata.ResourceMetadata.NONE
+    /*? if <1.20.2*/net.minecraft.client.resource.metadata.AnimationResourceMetadata.EMPTY
+    /*? if >=1.20.2*//*net.minecraft.resource.metadata.ResourceMetadata.NONE*/
 )
 
 fun saturationMask(image: NativeImage): NativeImage {

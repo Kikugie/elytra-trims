@@ -41,7 +41,7 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
 
     companion object {
         val SERIALIZER: RecipeSerializer<ETGlowRecipe> =
-            /*? if <=1.20.4*//*SpecialRecipeSerializer { id, category -> ETGlowRecipe(id, category) }*/
-            /*? if >1.20.4*/SpecialRecipeSerializer { ETGlowRecipe(Identifier("crafting_special_elytraglow"), it) }
+            /*? if <=1.20.4*/SpecialRecipeSerializer { id, category -> ETGlowRecipe(id, category) }
+            /*? if >1.20.4*//*SpecialRecipeSerializer { ETGlowRecipe(Identifier("crafting_special_elytraglow"), it) }*/
     }
 }

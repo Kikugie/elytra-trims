@@ -13,5 +13,5 @@ import org.spongepowered.asm.mixin.Pseudo;
 @Mixin(targets = {"org.betterx.betterend.item.ArmoredElytra", "org.betterx.betterend.item.CrystaliteElytra"})
 @MixinConfigurable
 public class BannerElytraItemMixin
-        /*? if <=1.20.4 {*//* implements net.minecraft.item.DyeableItem *//*?} */ {
+        /*? if <=1.20.4 {*/ implements net.minecraft.item.DyeableItem /*?} */ {
 }

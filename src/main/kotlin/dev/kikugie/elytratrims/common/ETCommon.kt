@@ -46,15 +46,15 @@ object ETCommon {
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
                 true
             } else false
-            /*? if <1.20.4 {*//*
+            /*? if <1.20.4 {*/
             return@CauldronBehavior if (result) net.minecraft.util.ActionResult.success(world.isClient)
             else net.minecraft.util.ActionResult.PASS
-            *//*?} else {*/
+            /*?} else {*//*
             return@CauldronBehavior if (result) net.minecraft.util.ItemActionResult.success(world.isClient)
             else net.minecraft.util.ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
-            /*?} */
+            *//*?} */
         }
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 */.map()
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 *//*.map()*/
             .put(Items.ELYTRA, behaviour)
     }
 }

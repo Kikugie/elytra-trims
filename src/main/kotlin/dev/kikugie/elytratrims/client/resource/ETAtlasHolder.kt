@@ -2,13 +2,16 @@ package dev.kikugie.elytratrims.client.resource
 
 import com.google.gson.JsonParser
 import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.serialization.Dynamic
 import com.mojang.serialization.JsonOps
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.util.getAnyway
+import dev.kikugie.elytratrims.mixin.client.PalettedPermutationsAtlasSourceAccessor
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.*
 import net.minecraft.client.texture.SpriteLoader.StitchResult
 import net.minecraft.client.texture.atlas.AtlasLoader
+import net.minecraft.client.texture.atlas.AtlasSourceManager
 import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource
 import net.minecraft.resource.ResourceFinder
 import net.minecraft.resource.ResourceManager
@@ -22,7 +25,7 @@ import java.util.function.Supplier
 
 object ETAtlasHolder : ResourceReloader {
     /*? if >=1.20.2 */
-    private val opener: SpriteOpener = SpriteOpener.create(SpriteLoader.METADATA_READERS)
+    /*private val opener: SpriteOpener = SpriteOpener.create(SpriteLoader.METADATA_READERS)*/
     val id: Identifier = ETReference.id("elytra_features")
     val atlas = SpriteAtlasTexture(ETReference.id("textures/atlas/elytra_features.png")).also {
         RenderSystem.recordRenderCall { MinecraftClient.getInstance().textureManager.registerTexture(id, it) }
@@ -62,20 +65,26 @@ object ETAtlasHolder : ResourceReloader {
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
         val crop = true
         val atlases = manager.findResources("atlases") { it.path.endsWith("armor_trims.json") }
-        val sources = atlases.mapNotNull { (_, v) ->
+        val sources = atlases.flatMap { (_, v) ->
             try {
-                PalettedPermutationsAtlasSource.CODEC
-                    /*? if >1.20.4*/.codec()
-                    .decode(JsonOps.INSTANCE, JsonParser.parseReader(v.reader)).getAnyway().first
+                val dynamic = v.reader.use { Dynamic(JsonOps.INSTANCE, JsonParser.parseReader(it)) }
+                val data = AtlasSourceManager.LIST_CODEC.parse(dynamic).getAnyway()
+                data.filterIsInstance<PalettedPermutationsAtlasSource>()
             } catch (e: Exception) {
-                null
+                emptyList()
             }
+        }
+        sources.forEach { src ->
+            src as PalettedPermutationsAtlasSourceAccessor
+            src.textures = src.textures
+                .filter { "armor" in it.path && "leggings" !in it.path }
+                .map { it.withPath { path -> path.replaceFirst("armor", "elytra") } }
         }
         return AtlasLoader(sources).loadSources(manager).map { {
             /*? if >=1.20.2 */
-            if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)
+            /*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/
             /*? if <1.20.2 */
-            /*it.get().transform { it.mask(model) }*/
+            it.get().transform { it.mask(model) }
         } }
     }
 
@@ -85,11 +94,11 @@ object ETAtlasHolder : ResourceReloader {
         sprites: List<ContentSupplier>,
         executor: Executor,
     ): CompletableFuture<List<SpriteContents>> =
-        /*? if <1.20.2 {*//*
+        /*? if <1.20.2 {*/
         SpriteLoader.loadAll(sprites.map { Supplier { it() } }, executor);
-        *//*?} else {*/
+        /*?} else {*//*
         SpriteLoader.loadAll(opener, sprites.map { Function { it() } }, executor)
-        /*?} */
+        *//*?} */
 
     private fun load(manager: ResourceManager, executor: Executor): CompletableFuture<StitchResult> {
         var model: NativeImage? = null

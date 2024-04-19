@@ -22,8 +22,7 @@ class RenderConfig(
         cape: RenderMode,
         glow: RenderMode,
         global: RenderMode,
-    )
-            : this(
+    ) : this(
         color.toOption(),
         patterns.toOption(),
         trims.toOption(),
@@ -87,7 +86,6 @@ enum class RenderMode(internal val weight: Int) : StringIdentifiable {
     OTHERS(1),
     ALL(2);
 
-    val translation get() = "elytratrims.config.mode.${asString()}".translation()
     override fun asString() = name.lowercase()
 
     companion object {

@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
-
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.9.22"

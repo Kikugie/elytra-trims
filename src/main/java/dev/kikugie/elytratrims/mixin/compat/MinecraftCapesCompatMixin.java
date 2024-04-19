@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.kikugie.elytratrims.client.ETClient;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;

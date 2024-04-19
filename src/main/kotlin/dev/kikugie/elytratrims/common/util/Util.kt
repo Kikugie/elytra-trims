@@ -16,5 +16,5 @@ fun isProbablyElytra(item: Item): Boolean {
 }
 
 fun <R> DataResult<R>.getAnyway(): R =
-    /*? if <=1.20.4 *//*getOrThrow(false) {}*/
-    /*? if >1.20.4 */orThrow
+    /*? if <=1.20.4 */getOrThrow(false) {}
+    /*? if >1.20.4 *//*orThrow*/
