@@ -23,9 +23,8 @@ class ETServerConfig(
                 ).apply(instance, ::ETServerConfig)
             }
         private val CONFIG_FILE: Path = ModStatus.configDir.resolve("elytra-trims-server.json")
-        fun load() = ConfigLoader.load(CONFIG_FILE, CODEC, Companion::default)
-
-        fun default() = ETServerConfig(
+        fun load() = ConfigLoader.load(CONFIG_FILE, CODEC, Companion::create)
+        fun create() = ETServerConfig(
             addTrims = true,
             addPatterns = true,
             addGlow = true,

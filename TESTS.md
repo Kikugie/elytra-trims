@@ -1,0 +1,10 @@
+- [x] Trims apply
+- [x] Trims render
+- [ ] Dyes apply
+- [ ] Dyes render
+- [x] Patterns apply
+- [-] Patterns render
+- [ ] Glow apply
+- [ ] Glow render
+- [ ] Config works
+- [x] Smithing table renders

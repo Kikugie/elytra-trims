@@ -17,7 +17,7 @@ data class ETClientConfig(val render: RenderConfig, val texture: TextureConfig) 
         }
         val FILE: Path = ModStatus.configDir.resolve("elytra-trims.json")
 
-        fun load(): ETClientConfig = ConfigLoader.load(FILE, CODEC, ::default)
-        private fun default() = ETClientConfig(RenderConfig.default(), TextureConfig.default())
+        fun load(): ETClientConfig = ConfigLoader.load(FILE, CODEC, ::create)
+        private fun create() = ETClientConfig(RenderConfig.default(), TextureConfig.default())
     }
 }

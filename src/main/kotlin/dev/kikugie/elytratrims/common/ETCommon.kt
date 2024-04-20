@@ -14,12 +14,8 @@ import net.minecraft.item.Items
 import net.minecraft.stat.Stats
 
 object ETCommon {
-    lateinit var config: ETServerConfig
-        private set
-
-    fun preInit() {
-        config = if (ModStatus.isClient) ETServerConfig.default() else ETServerConfig.load()
-    }
+    @JvmField
+    val config: ETServerConfig = if (ModStatus.isClient) ETServerConfig.create() else ETServerConfig.load()
 
     fun init() {
         ETCommentary.run()

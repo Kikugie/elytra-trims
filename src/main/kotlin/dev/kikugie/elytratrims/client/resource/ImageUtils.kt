@@ -49,7 +49,7 @@ fun NativeImage.offset(dx: Int, dy: Int) = NativeImage(width, height, true).also
     forEachPixel { x, y ->
         val nx = x + dx
         val ny = y + dy
-        if (isInBounds(nx, ny)) copyColor(it, nx, ny)
+        if (isInBounds(nx, ny)) it.setColor(nx, ny, getColor(x, y))
     }
 }
 

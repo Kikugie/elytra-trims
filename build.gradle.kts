@@ -97,8 +97,11 @@ loom {
     if (loader == "forge") {
         forge {
             convertAccessWideners.set(true)
-            mixinConfigs("${mod.id}.mixins.json")
-            mixinConfigs("${mod.id}-compat.mixins.json")
+            mixinConfigs(
+                "${mod.id}-client.mixins.json",
+                "${mod.id}-common.mixins.json",
+//                "${mod.id}-compat.mixins.json"
+            )
         }
     }
 

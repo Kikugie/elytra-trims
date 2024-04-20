@@ -1,6 +1,7 @@
 package dev.kikugie.elytratrims.mixin.common;
 
 import com.google.common.collect.Iterables;
+import dev.kikugie.elytratrims.common.ETCommon;
 import dev.kikugie.elytratrims.common.config.RequireClientTester;
 import dev.kikugie.elytratrims.common.recipe.ETGlowRecipe;
 import dev.kikugie.elytratrims.common.recipe.ETPatternRecipe;
@@ -26,11 +27,15 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
     /*? if <1.20.2 {*/
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
     private Iterable<Recipe<?>> removeElytraPatternRecipe(Iterable<Recipe<?>> elements) {
+        if (ETCommon.config.getRequireClientSide())
+            return elements;
         return Iterables.filter(elements, recipe -> !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe));
     }
     /*?} elif <=1.20.4 {*//*
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
     private Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Iterable<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
+        if (ETCommon.config.getRequireClientSide())
+            return elements;
         return Iterables.filter(elements, entry -> {
             Recipe<?> recipe = entry.value();
             return !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe);
@@ -39,6 +44,8 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
     *//*?} else {*//*
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Ljava/util/List;copyOf(Ljava/util/Collection;)Ljava/util/List;"))
     private Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
+        if (ETCommon.config.getRequireClientSide())
+            return elements;
         Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> res = new ArrayList<>();
         for (net.minecraft.recipe.RecipeEntry<? extends Recipe<?>> entry : elements) {
             Recipe<?> recipe = entry.value();

@@ -4,6 +4,7 @@ import com.google.gson.JsonParser
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.serialization.Dynamic
 import com.mojang.serialization.JsonOps
+import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.util.getAnyway
 import dev.kikugie.elytratrims.mixin.client.PalettedPermutationsAtlasSourceAccessor
@@ -41,7 +42,7 @@ object ETAtlasHolder : ResourceReloader {
     }
 
     private fun patterns(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
-        val useBanners = false
+        val useBanners = ETClient.config.texture.useBannerTextures.value
         val finder = ResourceFinder("textures/entity/${if (useBanners) "banner" else "shield"}", ".png")
         return buildList {
             for ((id, res) in finder.findResources(manager)) {
@@ -54,7 +55,8 @@ object ETAtlasHolder : ResourceReloader {
                 val xOffset = ((if (useBanners) 35.5F else 34F) * scale).toInt()
                 val yOffset = if (useBanners) (scale * 1.5F).toInt() else 0
                 add {
-                    image.use { it.offset(xOffset, yOffset) }
+                    image
+                        .use { it.offset(xOffset, yOffset) }
                         .use { it.mask(model) }
                         .toContents(id)
                 }
@@ -63,7 +65,7 @@ object ETAtlasHolder : ResourceReloader {
     }
 
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
-        val crop = true
+        val crop = ETClient.config.texture.cropTrims.value
         val atlases = manager.findResources("atlases") { it.path.endsWith("armor_trims.json") }
         val sources = atlases.flatMap { (_, v) ->
             try {
@@ -81,10 +83,8 @@ object ETAtlasHolder : ResourceReloader {
                 .map { it.withPath { path -> path.replaceFirst("armor", "elytra") } }
         }
         return AtlasLoader(sources).loadSources(manager).map { {
-            /*? if >=1.20.2 */
-            /*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/
-            /*? if <1.20.2 */
-            it.get().transform { it.mask(model) }
+            /*? if <1.20.2 */if (crop) it.get().transform { it.mask(model) } else it.get()
+            /*? if >=1.20.2 *//*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/
         } }
     }
 
@@ -94,11 +94,8 @@ object ETAtlasHolder : ResourceReloader {
         sprites: List<ContentSupplier>,
         executor: Executor,
     ): CompletableFuture<List<SpriteContents>> =
-        /*? if <1.20.2 {*/
-        SpriteLoader.loadAll(sprites.map { Supplier { it() } }, executor);
-        /*?} else {*//*
-        SpriteLoader.loadAll(opener, sprites.map { Function { it() } }, executor)
-        *//*?} */
+        /*? if <1.20.2 */SpriteLoader.loadAll(sprites.map(::asSupplier), executor);
+        /*? if >=1.20.2 *//*SpriteLoader.loadAll(opener, sprites.map(::asFunction), executor)*/
 
     private fun load(manager: ResourceManager, executor: Executor): CompletableFuture<StitchResult> {
         var model: NativeImage? = null
@@ -144,4 +141,7 @@ object ETAtlasHolder : ResourceReloader {
         }.thenCompose {
             apply(it, applyProfiler, applyExecutor)
         }
+
+    private fun <T> asSupplier(it: () -> T) = Supplier { it() }
+    private fun <P, T> asFunction(it: () -> T) = Function<P, T> { it() }
 }

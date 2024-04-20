@@ -47,7 +47,7 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
 
     companion object {
         var SERIALIZER =
-            /*? if <=1.20.4*/SpecialRecipeSerializer { id, category -> ETPatternRecipe(id, category) }
-            /*? if >1.20.4*//*SpecialRecipeSerializer { ETPatternRecipe(Identifier("crafting_special_elytrapatterns"), it) }*/
+            /*? if <1.20.2*/SpecialRecipeSerializer { id, category -> ETPatternRecipe(id, category) }
+            /*? if >=1.20.2*//*SpecialRecipeSerializer { ETPatternRecipe(Identifier("crafting_special_elytrapatterns"), it) }*/
     }
 }

@@ -1,7 +1,5 @@
 package dev.kikugie.elytratrims.mixin.plugin;
 
-import dev.kikugie.elytratrims.common.ETReference;
-import dev.kikugie.elytratrims.common.ETCommon;
 import dev.kikugie.elytratrims.common.config.Tester;
 import dev.kikugie.elytratrims.platform.ModStatus;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +20,6 @@ import java.util.Set;
 public class ETMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
-        ETCommon.INSTANCE.preInit();
     }
 
     @Override
@@ -40,16 +37,16 @@ public class ETMixinPlugin implements IMixinConfigPlugin {
     }
 
     private boolean shouldApply(String mixin) {
+        return true;
 //        AnnotationNode mixinConfigurable = getAnnotation(mixin, MixinConfigurable.class);
 //        boolean configResult = mixinConfigurable == null || !ServerConfigs.getMixinConfig().contains(mixin);
 //        if (!configResult) return false;
 
-        AnnotationNode modRequirement = getAnnotation(mixin, RequireMod.class);
-        boolean modResult = modRequirement == null || ModStatus.INSTANCE.isLoaded(Annotations.getValue(modRequirement));
-        if (!modResult) return false;
-
-        AnnotationNode testerRequirement = getAnnotation(mixin, RequireTest.class);
-        return testerRequirement == null || runTester(Annotations.getValue(testerRequirement));
+//        AnnotationNode modRequirement = getAnnotation(mixin, RequireMod.class);
+//        return modRequirement == null || ModStatus.INSTANCE.isLoaded(Annotations.getValue(modRequirement));
+//
+//        AnnotationNode testerRequirement = getAnnotation(mixin, RequireTest.class);
+//        return testerRequirement == null || runTester(Annotations.getValue(testerRequirement));
     }
 
     @Override

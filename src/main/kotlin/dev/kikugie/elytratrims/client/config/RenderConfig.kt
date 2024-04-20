@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.kikugie.elytratrims.client.config.RenderMode.ALL
 import dev.kikugie.elytratrims.client.config.RenderType.*
-import dev.kikugie.elytratrims.client.translation
 import net.minecraft.util.StringIdentifiable
+import java.util.*
 
 class RenderConfig(
     val color: RenderModeOption,

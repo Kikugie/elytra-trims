@@ -15,8 +15,9 @@ import net.minecraft.util.DyeColor
 object FeatureAccess : IFeatureAccess {
     private val DYEABLE = object : net.minecraft.item.DyeableItem {}
     override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
-        if (ModStatus.isLoaded("stacked-armor-trims")) ArmorTrimList.getTrims(manager, this).orElse(emptyList())
-        else ArmorTrim.getTrim(manager, this).orElse(null)?.let(::listOf) ?: emptyList()
+        getArmorTrimList(this, manager) ?:
+        ArmorTrim.getTrim(manager, this).orElse(null)?.let(::listOf) ?:
+        emptyList()
 
     override fun ItemStack.getPatterns(): List<BannerLayer> {
         val nbt = BannerBlockEntity.getPatternListNbt(this) ?: return emptyList()
@@ -92,25 +93,29 @@ object FeatureAccess : IFeatureAccess {
         remove(DataComponentTypes.DYED_COLOR)
     }
 
+    // Why copy nbt if we don't modify it
     override fun ItemStack.hasGlow(): Boolean = get(DataComponentTypes.CUSTOM_DATA)?.nbt?.getBoolean("glow") ?: false
 
     override fun ItemStack.addGlow() {
-        var data = get(DataComponentTypes.CUSTOM_DATA)
-        if (data == null) {
-            data = NbtComponent.DEFAULT
-            set(DataComponentTypes.CUSTOM_DATA, data)
-        }
-        data!!.nbt.putBoolean("glow", true)
+        val data = (get(DataComponentTypes.CUSTOM_DATA) ?: NbtComponent.DEFAULT).copyNbt()
+        data.putBoolean("glow", true)
+        NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
     }
 
     override fun ItemStack.removeGlow() {
-        val data = get(DataComponentTypes.CUSTOM_DATA) ?: return
-        data.nbt.remove("glow")
-        if (data.isEmpty) remove(DataComponentTypes.CUSTOM_DATA)
+        val data = get(DataComponentTypes.CUSTOM_DATA)?.copyNbt() ?: return
+        data.remove("glow")
+        NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
     }
 }
 *//*?} */
 
+private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager): List<ArmorTrim>? =
+    /*? if fabric {*/
+    if (ModStatus.isLoaded("stacked-armor-trims")) ArmorTrimList.getTrims(manager, stack).orElse(null) else null
+    /*?} else {*//*
+    null
+    *//*?} */
 
 private interface IFeatureAccess {
     fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim>
