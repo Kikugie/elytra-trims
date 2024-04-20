@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.common.util
 
 import com.mojang.serialization.DataResult
-import net.minecraft.item.ElytraItem
+import dev.kikugie.elytratrims.common.ETCommon
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
 
@@ -11,9 +11,9 @@ fun <K, V> memoize(provider: (K) -> V): (K) -> V = object : (K) -> V {
     override fun invoke(key: K): V = cache.computeIfAbsent(key, provider)
 }
 
-fun isProbablyElytra(item: Item): Boolean {
-    return item is ElytraItem || Registries.ITEM.getId(item).path.contains("elytra")
-}
+val Item.id get() = Registries.ITEM.getId(this)
+
+fun isProbablyElytra(item: Item): Boolean = item in ETCommon.elytras
 
 fun <R> DataResult<R>.getAnyway(): R =
     /*? if <=1.20.4 */getOrThrow(false) {}

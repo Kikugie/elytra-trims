@@ -31,18 +31,19 @@ public class ElytraFeatureRendererMixin {
      * Handles rendering of the mod features
      */
     @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytraPostRender(ElytraEntityModel<?> model,
-                                  MatrixStack matrices,
-                                  VertexConsumer vertices,
-                                  int light,
-                                  int overlay,
-                                  float red,
-                                  float green,
-                                  float blue,
-                                  float alpha,
-                                  Operation<ElytraEntityModel<?>> original,
-                                  @Local(argsOnly = true) VertexConsumerProvider provider,
-                                  @Local(argsOnly = true) LivingEntity entity) {
+    private void elytraPostRender(
+            ElytraEntityModel<?> model,
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha,
+            Operation<ElytraEntityModel<?>> original,
+            @Local(argsOnly = true) VertexConsumerProvider provider,
+            @Local(argsOnly = true) LivingEntity entity) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
         ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
     }

@@ -1,6 +1,8 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.common.access.FeatureAccess.getBaseColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
+import dev.kikugie.elytratrims.common.access.FeatureAccess.setColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setPatterns
 import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.inventory.Inventory
@@ -36,6 +38,8 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
             else if (stack.item is BannerItem) banner = stack
         }
         elytra.setPatterns(banner)
+        val color = banner.getBaseColor()
+        if (color != 0) elytra.setColor(color)
         return elytra
     }
 

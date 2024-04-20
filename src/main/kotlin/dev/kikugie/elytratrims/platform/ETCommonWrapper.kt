@@ -30,8 +30,6 @@ import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -79,12 +77,11 @@ import thedarkcolour.kotlinforforge.neoforge.forge.runWhenOn
 import java.util.function.Supplier
 
 @Mod(ETReference.MOD_ID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 object ETCommonWrapper {
     init {
         ETCommon.init()
         runWhenOn(Dist.CLIENT) {
-            MOD_BUS.addListener<FMLClientSetupEvent> { ETClient.init() }
+            ETClient.init()
             MOD_BUS.addListener<RegisterClientReloadListenersEvent> {
                 it.registerReloadListener(ETAtlasHolder)
             }

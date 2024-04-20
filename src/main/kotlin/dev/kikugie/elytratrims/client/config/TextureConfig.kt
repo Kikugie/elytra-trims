@@ -6,12 +6,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 data class TextureConfig(
     val useBannerTextures: TextureOption,
     val cropTrims: TextureOption,
-    val useDarkerTrims: TextureOption,
+    val useDarkerTrim: TextureOption,
 ) {
     constructor(useBannerTextures: Boolean, cropTrims: Boolean, useDarkerTrims: Boolean) : this(
         useBannerTextures.toOption("useBannerTextures"),
         cropTrims.toOption("cropTrims"),
-        useDarkerTrims.toOption("useDarkerTrims")
+        useDarkerTrims.toOption("useDarkerTrim")
     )
 
     companion object {
@@ -25,7 +25,7 @@ data class TextureConfig(
             instance.group(
                 Codec.BOOL.fieldOf("useBannerTextures").forGetter { it.useBannerTextures.value },
                 Codec.BOOL.fieldOf("cropTrims").forGetter { it.cropTrims.value },
-                Codec.BOOL.fieldOf("useDarkerTrims").forGetter { it.useDarkerTrims.value }
+                Codec.BOOL.fieldOf("useDarkerTrim").forGetter { it.useDarkerTrim.value }
             ).apply(instance, ::TextureConfig)
         }
     }

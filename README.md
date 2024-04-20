@@ -94,7 +94,6 @@ It's likely to work with other mods, but you'll have to try it out.
 
 ### Conflicts
 - [Customizable Elytra](<https://modrinth.com/mod/customizable-elytra>) - overrides elytra renderer entirely, preventing Elytra Trims from working.
-- [DashLoader](<https://modrinth.com/mod/dashloader>) - causes trims to not display. The development has been cancelled, no support will be provided.
 
 ## Customization
 With resourcepack support, you can customize all the mod's features to your liking. Change the texture of your armor
@@ -116,12 +115,6 @@ Trims can't be removed without other mods due to vanilla parity.
 
 > Trims look bad with capes!
 - Install [Mod Menu](<https://modrinth.com/mod/modmenu>) (Fabric) and [YACL](<https://modrinth.com/mod/yacl>). In the mods tab find ET and open its settings. There you can disable rendering elytra capes. This is preferable to the vanilla cape setting because it will keep the cape while not wearing an elytra.
-
-## Building from source
-Elytra Trims uses [Stonecutter](https://github.com/kikugie/stonecutter-kt) to manage multiple Minecraft versions. Familiarize yourself with it if you want to work on the code.
-
-**TL;DR**: use task `stonecutter/Set active version to X` before running Minecraft on `X`. **Do not** run `build` task, `project/chiseledBuild` is the correct one. 
-
 
 ## Roadmap
 - [x] Elytra trims (v1.0)

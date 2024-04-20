@@ -17,7 +17,8 @@ import net.minecraft.util.Identifier
 
 object ETRenderer {
     @Suppress("INACCESSIBLE_TYPE")
-    internal val layer: (Identifier) -> RenderLayer = memoize {
+    @JvmField
+    val layer: (Identifier) -> RenderLayer = memoize {
         RenderLayer.of(
             "elytra_layer",
             VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL,

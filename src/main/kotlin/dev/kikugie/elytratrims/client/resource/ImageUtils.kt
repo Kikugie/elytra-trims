@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.client.resource
 
+import dev.kikugie.elytratrims.common.util.*
 import net.minecraft.client.texture.MissingSprite
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.texture.Sprite
@@ -29,7 +30,7 @@ fun NativeImage.alpha(x: Int, y: Int) = getColor(x, y) shr 24 and 0xFF
 
 fun NativeImage.copyColor(to: NativeImage, x: Int, y: Int) = to.setColor(x, y, getColor(x, y))
 
-fun NativeImage.isInBounds(x: Int, y: Int) = x < width && y < height
+fun NativeImage.isInBounds(x: Int, y: Int) = x < width && y < height && x >= 0 && y >= 0
 
 inline fun NativeImage.forEachPixel(
     widthLimit: Int = this.width,
@@ -93,6 +94,22 @@ fun saturationMask(image: NativeImage): NativeImage {
         masked.setColor(x, y, color and -0x1000000 or (saturation shl 16) or (saturation shl 8) or saturation)
     }
     return masked
+}
+
+inline fun NativeImage.outline(action: (Boolean) -> ARGB?) = NativeImage(width, height, true).also { img ->
+    forEachPixel { x, y ->
+        var outline = false
+        val color = getColor(x, y)
+        if (color.alpha == 0) return@forEachPixel
+        main@for (lx in x-1..x+1) for (ly in y-1..y+1) {
+            if ((lx == 0 && ly == 0) || isInBounds(lx, ly) && getColor(lx, ly).alpha != 0) continue
+            outline = true
+            break@main
+        }
+        val result = action(outline)
+        if (result == null) img.setColor(x, y, color)
+        else img.setColor(x, y, result)
+    }
 }
 
 val Sprite.missing get() = contents.id == MissingSprite.getMissingSpriteId()

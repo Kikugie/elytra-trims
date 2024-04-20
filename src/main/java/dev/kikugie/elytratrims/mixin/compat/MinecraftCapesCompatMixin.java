@@ -28,19 +28,19 @@ import org.spongepowered.asm.mixin.injection.At;
 public class MinecraftCapesCompatMixin {
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
-    private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+    private boolean minecraftcapes$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraftcapes/config/MinecraftCapesConfig;isCapeVisible()Z"))
-    private boolean cancelCapeRender2(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+    private boolean minecraftcapes$cancelCapeRender2(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @WrapOperation(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytraPostRender(ElytraEntityModel<?> model,
+    private void minecraftcapes$elytraPostRender(ElytraEntityModel<?> model,
                                   MatrixStack matrices,
                                   VertexConsumer vertices,
                                   int light,

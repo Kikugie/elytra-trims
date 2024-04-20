@@ -33,14 +33,14 @@ public abstract class ElytraSlotLayerMixin extends FeatureRenderer {
     }
 
     @ModifyExpressionValue(method = "lambda$render$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
-    private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+    private boolean elytraslot$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @ModifyExpressionValue(method = "lambda$render$0",
             at = @At(value = "INVOKE",
                     target = "Lcom/illusivesoulworks/elytraslot/client/ElytraRenderResult;stack()Lnet/minecraft/item/ItemStack;"))
-    private ItemStack saveItemStack(ItemStack stack, @Share("stack") LocalRef<ItemStack> stackRef) {
+    private ItemStack elytraslot$saveItemStack(ItemStack stack, @Share("stack") LocalRef<ItemStack> stackRef) {
         stackRef.set(stack);
         return stack;
     }
@@ -48,7 +48,7 @@ public abstract class ElytraSlotLayerMixin extends FeatureRenderer {
     @WrapOperation(method = "lambda$render$0",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytraPostRender(ElytraEntityModel<?> model,
+    private void elytraslot$elytraPostRender(ElytraEntityModel<?> model,
                                   MatrixStack matrices,
                                   VertexConsumer vertices,
                                   int light,

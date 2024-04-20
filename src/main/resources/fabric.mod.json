@@ -1,6 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "elytra-trims",
+  "id": "elytratrims",
+  "provides": [
+    "elytra-trims"
+  ],
   "name": "Elytra Trims",
   "version": "${version}",
   "description": "Lightweight and customizable support for elytra trims, patterns and dyes",
@@ -46,7 +49,8 @@
   },
   "depends": {
     "fabricloader": ">=0.15.0",
-    "minecraft": "${mc}"
+    "minecraft": "${mc}",
+    "fabric-language-kotlin": ">=0.10"
   },
   "conflicts": {
     "dashloader": "*",

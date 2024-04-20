@@ -51,8 +51,13 @@ repositories {
 
 dependencies {
     fun ifStable(dep: String, action: (String) -> Any?) {
-        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
-        else action(dep)
+//        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
+//        else
+            action(dep)
+    }
+
+    fun modules(vararg modules: String) {
+        modules.forEach { modImplementation(fabricApi.module("fabric-$it", "${property("deps.fapi")}")) }
     }
 
     minecraft("com.mojang:minecraft:${mcVersion}")
@@ -61,9 +66,7 @@ dependencies {
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
     implementation(annotationProcessor(mixinSquared.format("common"))!!)
     if (isFabric) {
-        ifStable("dev.kikugie:crash-pipe:0.1.0", ::modLocalRuntime) // Very important asset
-        modLocalRuntime(fabricApi.module("fabric-registry-sync-v0", property("deps.fapi").toString()))
-        modImplementation(fabricApi.module("fabric-resource-loader-v0", property("deps.fapi").toString()))
+        modules("registry-sync-v0", "resource-loader-v0")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
         modCompileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}")
@@ -89,6 +92,7 @@ dependencies {
     modCompileOnly("maven.modrinth:stacked-armor-trims:1.1.0")
     modCompileOnly("maven.modrinth:allthetrims:${if (isFabric) "3.4.2" else "NXPVk0Ym"}")
     modCompileOnly("maven.modrinth:betterend:3.2.5")
+    vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.0")
 }
 
 loom {
@@ -100,7 +104,7 @@ loom {
             mixinConfigs(
                 "${mod.id}-client.mixins.json",
                 "${mod.id}-common.mixins.json",
-//                "${mod.id}-compat.mixins.json"
+                "${mod.id}-compat.mixins.json"
             )
         }
     }
@@ -110,6 +114,12 @@ loom {
         vmArgs("-Dmixin.debug.export=true")
         programArgs("--username=KikuGie") // Mom look I'm in the codebase!
         runDir = "../../run"
+    }
+
+    decompilers {
+        get("vineflower").apply {
+            options.put("mark-corresponding-synthetics", "1")
+        }
     }
 }
 
@@ -171,18 +181,16 @@ publishMods {
         projectId = property("publish.modrinth").toString()
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.add(mcVersion)
-        if (isFabric) requires {
-            slug = "fabric-api"
-        }
+        if (isFabric) requires("fabric-api", "fabric-language-kotlin")
+        else requires("kotlin-for-forge")
     }
 
     curseforge {
         projectId = property("publish.curseforge").toString()
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.add(mcVersion)
-        if (isFabric) requires {
-            slug = "fabric-api"
-        }
+        if (isFabric) requires("fabric-api", "fabric-language-kotlin")
+        else requires("kotlin-for-forge")
     }
 }
 

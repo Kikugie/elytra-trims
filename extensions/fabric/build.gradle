@@ -15,9 +15,14 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
+repositories {
+    maven { url "https://api.modrinth.com/maven" }
+}
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.deps_fabric}"
     modImplementation fabricApi.module("fabric-resource-loader-v0", project.fabric_api)
+    modCompileOnly "maven.modrinth:dynamic-trim:1.4.1"
 
     common(project(path: ":extensions:common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":extensions:common", configuration: "transformProductionFabric")) { transitive false }

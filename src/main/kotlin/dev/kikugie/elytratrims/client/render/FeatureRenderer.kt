@@ -5,8 +5,9 @@ import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.RenderType
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
-import dev.kikugie.elytratrims.client.resource.floatChannels
+import dev.kikugie.elytratrims.common.util.floatChannels
 import dev.kikugie.elytratrims.client.resource.missing
+import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
@@ -27,6 +28,12 @@ import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper.hsvToRgb
+
+private val missing = mutableSetOf<Identifier>()
+
+private fun report(id: Identifier) {
+    if (missing.add(id)) ETReference.LOGGER.warn("Texture $id is missing and will be skipped")
+}
 
 interface FeatureRenderer {
     val type: RenderType
@@ -74,7 +81,10 @@ interface FeatureRenderer {
 
 class ColorOverlayRenderer : FeatureRenderer {
     override val type = RenderType.COLOR
-    private val sprite: Sprite by lazy { atlas.getSprite(Identifier("entity/elytra")) }
+    private val sprite: Sprite by lazy {
+        val id = Identifier("entity/elytra")
+        atlas.getSprite(id).apply { if (missing) report(id) }
+    }
     override fun render(
         model: Model,
         matrices: MatrixStack,
@@ -99,10 +109,10 @@ class PatternsOverlayRenderer : FeatureRenderer {
         val key = it/*? if <=1.20.4*/.key.get()
         val useBanner = false
         val spriteId = if (useBanner)
-            TexturedRenderLayers.getBannerPatternTextureId(key)
+            TexturedRenderLayers.getBannerPatternTextureId(key).textureId
         else
-            TexturedRenderLayers.getShieldPatternTextureId(key)
-        atlas.getSprite(spriteId.textureId)
+            TexturedRenderLayers.getShieldPatternTextureId(key).textureId
+        atlas.getSprite(spriteId).apply { if (missing) report(spriteId) }
     }
 
     override fun render(
@@ -126,22 +136,22 @@ class TrimOverlayRenderer : FeatureRenderer {
         val id: Identifier = it.pattern.value().assetId.withPath { path ->
             "trims/models/elytra/${path}_${it.material.value().assetName}"
         }
-        if (ETClient.config.texture.useDarkerTrims.value) {
-            val sprite = atlas.getSprite(id.withSuffixedPath("_darker"))
-            if (!sprite.missing) return@memoize sprite
-        }
-        atlas.getSprite(id)
+        sprite(id)
     }
     private val attCache: (TrimInfo) -> Sprite = memoize {
         val material = it.trim.material.value().assetName
         val id = it.trim.pattern.value().assetId.withPath { path ->
             "trims/models/elytra/${path}_${it.index}_$material"
         }
-        if (ETClient.config.texture.useDarkerTrims.value) {
+        sprite(id)
+    }
+
+    private fun sprite(id: Identifier): Sprite {
+        if (ETClient.config.texture.useDarkerTrim.value) {
             val sprite = atlas.getSprite(id.withSuffixedPath("_darker"))
-            if (!sprite.missing) return@memoize sprite
+            if (!sprite.missing) return sprite
         }
-        atlas.getSprite(id)
+        return atlas.getSprite(id).apply { if (missing) report(id) }
     }
 
     override fun render(

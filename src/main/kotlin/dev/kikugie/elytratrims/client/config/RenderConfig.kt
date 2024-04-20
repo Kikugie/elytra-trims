@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.kikugie.elytratrims.client.config.RenderMode.ALL
 import dev.kikugie.elytratrims.client.config.RenderType.*
+import dev.kikugie.elytratrims.client.translation
 import net.minecraft.util.StringIdentifiable
 import java.util.*
 
@@ -23,12 +24,12 @@ class RenderConfig(
         glow: RenderMode,
         global: RenderMode,
     ) : this(
-        color.toOption(),
-        patterns.toOption(),
-        trims.toOption(),
-        cape.toOption(),
-        glow.toOption(),
-        global.toOption()
+        color.toOption("color"),
+        patterns.toOption("patterns"),
+        trims.toOption("trims"),
+        cape.toOption("cape"),
+        glow.toOption("glow"),
+        global.toOption("global")
     )
 
     fun effective(type: RenderType): RenderMode {
@@ -87,6 +88,8 @@ enum class RenderMode(internal val weight: Int) : StringIdentifiable {
     ALL(2);
 
     override fun asString() = name.lowercase()
+
+    fun name() = "elytratrims.config.mode.${asString()}".translation()
 
     companion object {
         val CODEC = StringIdentifiable.createCodec(entries::toTypedArray)

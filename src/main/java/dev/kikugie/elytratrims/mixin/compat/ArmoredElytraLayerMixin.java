@@ -26,14 +26,14 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ArmoredElytraLayerMixin {
     /*? if fabric {*/
     @ModifyExpressionValue(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
-    private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+    private boolean betterend$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "INVOKE",
                     target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytraPostRender(ArmoredElytraModel<?> model,
+    private void betterend$elytraPostRender(ArmoredElytraModel<?> model,
                                   MatrixStack matrices,
                                   VertexConsumer vertices,
                                   int light,

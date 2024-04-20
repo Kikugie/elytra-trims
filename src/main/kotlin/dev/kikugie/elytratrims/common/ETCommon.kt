@@ -7,15 +7,24 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeGlow
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
 import dev.kikugie.elytratrims.common.config.ETServerConfig
+import dev.kikugie.elytratrims.common.util.id
 import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.LeveledCauldronBlock
 import net.minecraft.block.cauldron.CauldronBehavior
+import net.minecraft.item.ElytraItem
+import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.registry.Registries
 import net.minecraft.stat.Stats
 
 object ETCommon {
     @JvmField
     val config: ETServerConfig = if (ModStatus.isClient) ETServerConfig.create() else ETServerConfig.load()
+    val elytras: Set<Item> by lazy { Registries.ITEM.filter { isProbablyElytra(it) }.toSet() }
+
+    private fun isProbablyElytra(item: Item): Boolean {
+        return item is ElytraItem || item.id.path.contains("elytra")
+    }
 
     fun init() {
         ETCommentary.run()
@@ -42,7 +51,7 @@ object ETCommon {
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
                 true
             } else false
-            /*? if <1.20.4 {*/
+            /*? if <=1.20.4 {*/
             return@CauldronBehavior if (result) net.minecraft.util.ActionResult.success(world.isClient)
             else net.minecraft.util.ActionResult.PASS
             /*?} else {*//*
@@ -50,6 +59,7 @@ object ETCommon {
             else net.minecraft.util.ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
             *//*?} */
         }
+        // TODO delegate this to the point when all mods are loaded
         CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 *//*.map()*/
             .put(Items.ELYTRA, behaviour)
     }

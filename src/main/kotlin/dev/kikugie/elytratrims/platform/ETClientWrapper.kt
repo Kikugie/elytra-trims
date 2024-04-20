@@ -25,7 +25,14 @@ object ETClientWrapper : ClientModInitializer {
                 applyProfiler: Profiler,
                 prepareExecutor: Executor,
                 applyExecutor: Executor,
-            ) = ETAtlasHolder.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor)
+            ) = ETAtlasHolder.reload(
+                synchronizer,
+                manager,
+                prepareProfiler,
+                applyProfiler,
+                prepareExecutor,
+                applyExecutor
+            )
 
             override fun getFabricId() = ETReference.id("textures")
         })

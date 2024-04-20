@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.serialization.Dynamic
 import com.mojang.serialization.JsonOps
 import dev.kikugie.elytratrims.client.ETClient
+import dev.kikugie.elytratrims.client.render.ETRenderer
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.util.getAnyway
 import dev.kikugie.elytratrims.mixin.client.PalettedPermutationsAtlasSourceAccessor
@@ -38,6 +39,12 @@ object ETAtlasHolder : ResourceReloader {
         addAll(trims(manager, model))
         addAll(patterns(manager, model))
         add(color(id, model))
+//        val item = loadTexture(Identifier("textures/item/elytra.png"), manager)?.readSafe()
+//        if (item != null) {
+//            add(itemColor(ETReference.id("item/elytra_overlay"), item))
+//            add(itemOutline(ETReference.id("item/elytra_outline"), item))
+//            item.close()
+//        }
         add(MissingSprite::createSpriteContents)
     }
 
@@ -58,7 +65,7 @@ object ETAtlasHolder : ResourceReloader {
                     image
                         .use { it.offset(xOffset, yOffset) }
                         .use { it.mask(model) }
-                        .toContents(id)
+                        .toContents(id.withPath { path -> path.substring(9..<path.length - 4) })
                 }
             }
         }
@@ -90,6 +97,16 @@ object ETAtlasHolder : ResourceReloader {
 
     private fun color(id: Identifier, model: NativeImage): ContentSupplier = { saturationMask(model).toContents(id) }
 
+    private fun itemOutline(id: Identifier, model: NativeImage): ContentSupplier {
+        val out = model.outline { edge -> if (edge) -1 else 0 }
+        return { out.toContents(id) }
+    }
+
+    private fun itemColor(id: Identifier, model: NativeImage): ContentSupplier {
+        val out = saturationMask(model).outline { edge -> if (edge) 0 else null }
+        return { out.toContents(id) }
+    }
+
     private fun transform(
         sprites: List<ContentSupplier>,
         executor: Executor,
@@ -101,6 +118,7 @@ object ETAtlasHolder : ResourceReloader {
         var model: NativeImage? = null
         return CompletableFuture.supplyAsync {
             ready = false
+            ETRenderer.reset()
             atlas.clear()
             val id = Identifier("textures/entity/elytra.png")
             model = loadTexture(id, manager)?.readSafe() ?: return@supplyAsync emptyList()

@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.common.access
 
+import dev.kikugie.elytratrims.common.util.toARGB
 import dev.kikugie.elytratrims.platform.ModStatus
 import io.github.apfelrauber.stacked_trims.ArmorTrimList
 import net.minecraft.item.ItemStack
@@ -8,6 +9,7 @@ import net.minecraft.registry.DynamicRegistryManager
 
 /*? if <=1.20.4 {*/
 import net.minecraft.block.entity.BannerBlockEntity
+import net.minecraft.item.BannerItem
 import net.minecraft.item.BlockItem
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.DyeColor
@@ -16,7 +18,7 @@ object FeatureAccess : IFeatureAccess {
     private val DYEABLE = object : net.minecraft.item.DyeableItem {}
     override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
         getArmorTrimList(this, manager) ?:
-        ArmorTrim.getTrim(manager, this).orElse(null)?.let(::listOf) ?:
+        getTrim(manager).orElse(null)?.let(::listOf) ?:
         emptyList()
 
     override fun ItemStack.getPatterns(): List<BannerLayer> {
@@ -25,6 +27,8 @@ object FeatureAccess : IFeatureAccess {
             BannerLayer(it.first, it.second)
         }
     }
+
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.fireworkColor ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         val nbt = BannerBlockEntity.getPatternListNbt(source) ?: return
@@ -39,7 +43,7 @@ object FeatureAccess : IFeatureAccess {
         if (container.isEmpty) removeSubNbt("BlockEntityTag")
     }
 
-    override fun ItemStack.getColor() = if (DYEABLE.hasColor(this)) DYEABLE.getColor(this) else 0
+    override fun ItemStack.getColor() = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
 
     override fun ItemStack.setColor(color: Int) {
         DYEABLE.setColor(this, color)
@@ -65,6 +69,7 @@ object FeatureAccess : IFeatureAccess {
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.component.type.NbtComponent
+import net.minecraft.item.BannerItem
 
 object FeatureAccess : IFeatureAccess {
     override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
@@ -74,6 +79,8 @@ object FeatureAccess : IFeatureAccess {
     override fun ItemStack.getPatterns() = get(DataComponentTypes.BANNER_PATTERNS)?.layers?.map {
         BannerLayer(it.pattern, it.color)
     } ?: emptyList()
+
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         applyComponentsFrom(source.components.filtered { it == DataComponentTypes.BANNER_PATTERNS })
@@ -117,10 +124,16 @@ private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager):
     null
     *//*?} */
 
+/*? if <=1.20.4 >=1.20.2 */
+/*private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this, true)*/
+/*? if <1.20.2 */
+private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this)
+
 private interface IFeatureAccess {
     fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim>
 
     fun ItemStack.getPatterns(): List<BannerLayer>
+    fun ItemStack.getBaseColor(): Int
     fun ItemStack.setPatterns(source: ItemStack)
     fun ItemStack.removePatterns()
 

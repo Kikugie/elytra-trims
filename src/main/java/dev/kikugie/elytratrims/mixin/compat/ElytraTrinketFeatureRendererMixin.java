@@ -31,14 +31,14 @@ public abstract class ElytraTrinketFeatureRendererMixin extends FeatureRenderer 
     }
 
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
-    private boolean cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
+    private boolean elytra_trinket$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
     @WrapOperation(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytraPostRender(ElytraEntityModel<?> model,
+    private void elytra_trinket$elytraPostRender(ElytraEntityModel<?> model,
                                   MatrixStack matrices,
                                   VertexConsumer vertices,
                                   int light,

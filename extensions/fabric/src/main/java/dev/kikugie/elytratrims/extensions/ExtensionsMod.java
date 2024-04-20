@@ -1,5 +1,7 @@
 package dev.kikugie.elytratrims.extensions;
 
+import io.github.andrew6rant.dynamictrim.api.DynamicTrimRegistry;
+import io.github.andrew6rant.dynamictrim.resource.TrimmableItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -20,14 +22,18 @@ public class ExtensionsMod implements ClientModInitializer {
                 new PackEntry("more_armor_trims", "more_armor_trims_legacy", "Legacy More Armor Trims")
         );
 
-        var container = FabricLoader.getInstance().getModContainer(MOD_ID).get();
+        var fabric = FabricLoader.getInstance();
+        var container = fabric.getModContainer(MOD_ID).get();
         for (PackEntry pack : packs) {
-            if (!FabricLoader.getInstance().isModLoaded(pack.mod())) continue;
+            if (!fabric.isModLoaded(pack.mod())) continue;
             LOGGER.info("Registering extension pack: {}", pack.path());
             ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(MOD_ID, pack.path()),
                     container,
                     ResourcePackActivationType.NORMAL
             );
         }
+
+        if (fabric.isModLoaded("dynamictrim"))
+            DynamicTrimRegistry.add(new TrimmableItem("elytra", new Identifier("elytra")));
     }
 }
