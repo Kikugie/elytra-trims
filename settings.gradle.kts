@@ -31,15 +31,14 @@ extensions.configure<StonecutterSettings> {
     kotlinController = true
     centralScript = "build.gradle.kts"
     shared {
-        vers("1.19.4-fabric", "1.19.4")
-        vers("1.19.4-forge", "1.19.4")
-        vers("1.20.1-fabric", "1.20.1")
-        vers("1.20.1-forge", "1.20.1")
-        vers("1.20.2-fabric", "1.20.2")
-        vers("1.20.2-forge", "1.20.2")
-        vers("1.20.4-fabric", "1.20.4")
-        vers("1.20.4-neoforge", "1.20.4")
-        vers("1.20.5-fabric", "1.20.5")
+        fun mc(version: String, vararg loaders: String) {
+            for (it in loaders) vers("$version-$it", version)
+        }
+        mc("1.19.4", "fabric", "forge")
+        mc("1.20.1", "fabric", "forge")
+        mc("1.20.2", "fabric", "forge")
+        mc("1.20.4", "fabric", "neoforge")
+        mc("1.20.5", "fabric")
     }
     create(rootProject)
 }
