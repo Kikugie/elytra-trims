@@ -38,12 +38,7 @@ object ETRenderer {
                 .build(true)
         )
     }
-    private val renderers: MutableList<FeatureRenderer> = mutableListOf<FeatureRenderer>().apply {
-        add(ColorOverlayRenderer())
-        add(PatternsOverlayRenderer())
-        add(TrimOverlayRenderer())
-    }
-
+    private val renderers: MutableList<FeatureRenderer> = mutableListOf()
     fun reset() = with(renderers) {
         clear()
         add(ColorOverlayRenderer())

@@ -24,12 +24,12 @@ class RenderConfig(
         glow: RenderMode,
         global: RenderMode,
     ) : this(
-        color.toOption("color"),
-        patterns.toOption("patterns"),
-        trims.toOption("trims"),
-        cape.toOption("cape"),
-        glow.toOption("glow"),
-        global.toOption("global")
+        color.toOption(ALL, "color"),
+        patterns.toOption(ALL, "patterns"),
+        trims.toOption(ALL, "trims"),
+        cape.toOption(ALL, "cape"),
+        glow.toOption(ALL, "glow"),
+        global.toOption(ALL, "global")
     )
 
     fun effective(type: RenderType): RenderMode {

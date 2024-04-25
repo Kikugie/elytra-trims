@@ -15,10 +15,10 @@ data class TextureConfig(
         useDarkerTrims: Boolean,
         useElytraModel: Boolean,
     ) : this(
-        useBannerTextures.toOption("useBannerTextures"),
-        cropTrims.toOption("cropTrims"),
-        useDarkerTrims.toOption("useDarkerTrim"),
-        useElytraModel.toOption("useElytraModel")
+        useBannerTextures.toOption(false, "useBannerTextures"),
+        cropTrims.toOption(false, "cropTrims"),
+        useDarkerTrims.toOption(false, "useDarkerTrim"),
+        useElytraModel.toOption(true, "useElytraModel")
     )
 
     companion object {

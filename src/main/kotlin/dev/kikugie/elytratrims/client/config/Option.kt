@@ -24,5 +24,5 @@ class RenderModeOption(override val default: RenderMode, override val id: String
     override fun tooltip() = "elytratrims.config.type.$id.tooltip".translation()
 }
 
-fun RenderMode.toOption(id: String) = RenderModeOption(this, id)
-fun Boolean.toOption(id: String) = TextureOption(this, id)
+fun RenderMode.toOption(default: RenderMode, id: String) = RenderModeOption(default, id)
+fun Boolean.toOption(default: Boolean, id: String) = TextureOption(default, id)
