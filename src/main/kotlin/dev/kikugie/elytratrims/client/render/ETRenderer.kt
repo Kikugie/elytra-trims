@@ -56,13 +56,13 @@ object ETRenderer {
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
         alpha: Float,
     ) {
         if (!ETAtlasHolder.ready) return
-        val effectiveLight = if (!stack.hasGlow() || !shouldRender(RenderType.GLOW, entity)) light
+        val effectiveLight = if (!stack.hasGlow() || !(entity == null || shouldRender(RenderType.GLOW, entity))) light
         else 0xFF00FF
         renderers.forEach {
             it.render(model, matrices, provider, entity, stack, effectiveLight, alpha)

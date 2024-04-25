@@ -5,12 +5,12 @@ import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.RenderType
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
-import dev.kikugie.elytratrims.common.util.floatChannels
 import dev.kikugie.elytratrims.client.resource.missing
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
+import dev.kikugie.elytratrims.common.util.floatChannels
 import dev.kikugie.elytratrims.common.util.memoize
 import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.entity.BannerPattern
@@ -42,7 +42,7 @@ interface FeatureRenderer {
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
         alpha: Float,
@@ -85,11 +85,12 @@ class ColorOverlayRenderer : FeatureRenderer {
         val id = Identifier("entity/elytra")
         atlas.getSprite(id).apply { if (missing) report(id) }
     }
+
     override fun render(
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
         alpha: Float,
@@ -119,7 +120,7 @@ class PatternsOverlayRenderer : FeatureRenderer {
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
         alpha: Float,
@@ -158,17 +159,20 @@ class TrimOverlayRenderer : FeatureRenderer {
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
         alpha: Float,
-    ) = stack.getTrims(entity.world.registryManager).forEach {
+    ) = stack.getTrims(
+        entity?.world?.registryManager ?: CLIENT.world?.registryManager
+        ?: throw AssertionError("No available world - nowhere to get trims from")
+    ).forEach {
         val sprite = vanillaCache(it)
         if (!sprite.missing)
             model.render(sprite, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
         else if (ModStatus.isLoaded("allthetrims"))
             renderTrimExtended(model, matrices, provider, entity, stack, it, light, alpha)
-        else if (ETRenderer.renderAlways(entity))
+        else if (entity != null && ETRenderer.renderAlways(entity))
             model.render(sprite, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
     }
 
@@ -176,7 +180,7 @@ class TrimOverlayRenderer : FeatureRenderer {
         model: Model,
         matrices: MatrixStack,
         provider: VertexConsumerProvider,
-        entity: LivingEntity,
+        entity: LivingEntity?,
         stack: ItemStack,
         trim: ArmorTrim,
         light: Int,
@@ -185,7 +189,7 @@ class TrimOverlayRenderer : FeatureRenderer {
         val palette = PaletteHelper.getPalette(trim.material.value().ingredient.value())
         for (i in 0 until 8) {
             val sprite = attCache(TrimInfo(trim, i))
-            if (sprite.missing && !ETRenderer.renderAlways(entity)) continue
+            if (sprite.missing && !(entity == null || ETRenderer.renderAlways(entity))) continue
             val color = palette[i]
             model.render(sprite, matrices, provider, stack, light, alpha, *color.rgb.floatChannels)
         }

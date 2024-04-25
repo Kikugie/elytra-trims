@@ -25,6 +25,9 @@ elytratrims:
       showBannerIcon:
         .: Show Banner Icon
         tooltip: Show banner icon on elytra item.
+      useElytraModel:
+        .: Use Elytra Model
+        tooltip: Render a 3D elytra item model, similar to shields and banners.
     type:
       color:
         .: Dye

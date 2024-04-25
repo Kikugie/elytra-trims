@@ -32,6 +32,7 @@ object YaclConfig {
                             .option(config.texture.cropTrims.yaclOption(true))
                             .option(config.texture.useDarkerTrim.yaclOption(true))
                             .option(config.texture.useBannerTextures.yaclOption(true))
+                            .option(config.texture.useElytraModel.yaclOption(false))
                             .build()
                     )
                     .build()

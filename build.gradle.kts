@@ -51,8 +51,8 @@ repositories {
 
 dependencies {
     fun ifStable(dep: String, action: (String) -> Any?) {
-//        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
-//        else
+        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
+        else
             action(dep)
     }
 
@@ -69,8 +69,11 @@ dependencies {
         modules("registry-sync-v0", "resource-loader-v0")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
-        modCompileOnly("com.terraformersmc:modmenu:${property("deps.modmenu")}")
         include(implementation(mixinSquared.format("fabric"))!!)
+        ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}") {
+            modCompileOnly(it)
+            modLocalRuntime(it)
+        }
     } else {
         if (loader == "forge") {
             "forge"("net.minecraftforge:forge:${mcVersion}-${property("deps.fml")}")
