@@ -4,15 +4,15 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public interface ElytraRotationAccessor {
-    Vector3f elytra_trims$UP = new Vector3f(0, 1, 0);
-    Quaternionf elytra_trims$getVector();
-    boolean elytra_trims$isElytra();
-    void elytra_trims$setElytra(boolean value);
+    Vector3f elytratrims$UP = new Vector3f(0, 1, 0);
+    Quaternionf elytratrims$getVector();
+    boolean elytratrims$isElytra();
+    void elytratrims$setElytra(boolean value);
 
-    default Quaternionf elytra_trims$rotateElytra(Quaternionf source) {
-        if (elytra_trims$isElytra()) {
-            Quaternionf vec = elytra_trims$getVector();
-            source.rotateAxis((float) Math.PI, elytra_trims$UP, vec);
+    default Quaternionf elytratrims$rotateElytra(Quaternionf source) {
+        if (elytratrims$isElytra()) {
+            Quaternionf vec = elytratrims$getVector();
+            source.rotateAxis((float) Math.PI, elytratrims$UP, vec);
             return vec;
         } else return source;
     }

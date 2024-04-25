@@ -7,6 +7,5 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @RequireTest(PatternTester.class)
 @Mixin(ElytraItem.class)
-public class ElytraItemMixin
-        /*? if <=1.20.4 {*/ implements net.minecraft.item.DyeableItem /*?} */ {
+public class ElytraItemMixin/*? if <=1.20.4 {*/ implements net.minecraft.item.DyeableItem /*?} */ {
 }

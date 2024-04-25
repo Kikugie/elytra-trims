@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.mixin.access;
 
 public interface LivingEntityAccessor {
-    void elytra_trims$markGui();
+    void elytratrims$markGui();
 
-    boolean elytra_trims$isGui();
+    boolean elytratrims$isGui();
 }

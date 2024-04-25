@@ -77,5 +77,5 @@ object ETRenderer {
     }
 
     @JvmStatic
-    fun renderAlways(entity: LivingEntity): Boolean = (entity as LivingEntityAccessor).`elytra_trims$isGui`()
+    fun renderAlways(entity: LivingEntity): Boolean = (entity as LivingEntityAccessor).`elytratrims$isGui`()
 }

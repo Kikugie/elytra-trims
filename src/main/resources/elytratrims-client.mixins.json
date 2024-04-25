@@ -9,7 +9,8 @@
     "ItemRendererMixin",
     "LivingEntityMixin",
     "PalettedPermutationsAtlasSourceAccessor",
-    "SmithingScreenMixin"
+    "SmithingScreenMixin",
+    "ItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

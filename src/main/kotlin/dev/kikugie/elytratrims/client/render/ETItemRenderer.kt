@@ -2,18 +2,13 @@ package dev.kikugie.elytratrims.client.render
 
 import dev.kikugie.elytratrims.client.CLIENT
 import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.entity.model.ElytraEntityModel
-import net.minecraft.client.render.entity.model.EntityModelLayers
-import net.minecraft.client.render.entity.model.EntityModelLoader
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.decoration.ArmorStandEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.collection.DefaultedList
 
 object ETItemRenderer {
-
     // Armor stand is used because *some* other mods like to implement their own elytra renderers for no good reason.
     private var dummy: ArmorStandEntity? = null
 

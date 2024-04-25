@@ -4,6 +4,8 @@ elytratrims:
       get_mode: "Current %s mode is %s"
       set_mode: "%s mode has been set to %s"
       reset: Config reset!
+  item:
+    glow: §7Glowing
   config:
     title: Elytra Trims
     category:

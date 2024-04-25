@@ -35,6 +35,6 @@ public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor
             /*?} */
     ), index = /*? if >=1.20.2 {*//* 5 *//*?} else {*/ 4 /*?} */)
     private Quaternionf applyElytraRotation(Quaternionf quaternionf) {
-        return elytra_trims$rotateElytra(quaternionf);
+        return elytratrims$rotateElytra(quaternionf);
     }
 }

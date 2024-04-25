@@ -14,12 +14,12 @@ public class LivingEntityMixin implements LivingEntityAccessor {
     private boolean isGui = false;
 
     @Override
-    public void elytra_trims$markGui() {
+    public void elytratrims$markGui() {
         this.isGui = true;
     }
 
     @Override
-    public boolean elytra_trims$isGui() {
+    public boolean elytratrims$isGui() {
         return this.isGui;
     }
 }

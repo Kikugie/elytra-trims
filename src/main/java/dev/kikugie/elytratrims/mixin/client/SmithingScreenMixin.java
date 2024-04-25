@@ -32,7 +32,7 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
 
     @Inject(method = "setup", at = @At("TAIL"))
     private void markGuiArmorStand(CallbackInfo ci) {
-        if (armorStand != null) ((LivingEntityAccessor) this.armorStand).elytra_trims$markGui();
+        if (armorStand != null) ((LivingEntityAccessor) this.armorStand).elytratrims$markGui();
     }
 
     @Inject(method = "equipArmorStand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"), cancellable = true)
@@ -57,21 +57,21 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
             /*?} */
     ), index = /*? if >=1.20.2 {*//* 5 *//*?} else {*/ 4 /*?} */)
     private Quaternionf applyRotation(Quaternionf quaternionf) {
-        return elytra_trims$rotateElytra(quaternionf);
+        return elytratrims$rotateElytra(quaternionf);
     }
 
     @Override
-    public Quaternionf elytra_trims$getVector() {
+    public Quaternionf elytratrims$getVector() {
         return dummy;
     }
 
     @Override
-    public boolean elytra_trims$isElytra() {
+    public boolean elytratrims$isElytra() {
         return isElytra;
     }
 
     @Override
-    public void elytra_trims$setElytra(boolean value) {
+    public void elytratrims$setElytra(boolean value) {
         isElytra = value;
     }
 }
