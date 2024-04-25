@@ -28,7 +28,7 @@ object FeatureAccess : IFeatureAccess {
         }
     }
 
-    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.fireworkColor ?: 0
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         val nbt = BannerBlockEntity.getPatternListNbt(source) ?: return
@@ -43,7 +43,7 @@ object FeatureAccess : IFeatureAccess {
         if (container.isEmpty) removeSubNbt("BlockEntityTag")
     }
 
-    override fun ItemStack.getColor() = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
+    override fun ItemStack.getColor() = if (DYEABLE.hasColor(this)) DYEABLE.getColor(this) else 0
 
     override fun ItemStack.setColor(color: Int) {
         DYEABLE.setColor(this, color)

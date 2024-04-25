@@ -174,7 +174,7 @@ publishMods {
     displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for $mcVersion"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = if (loader == "neoforge") BETA else STABLE
+    type = STABLE
     modLoaders.add(loader)
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN")

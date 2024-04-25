@@ -6,11 +6,11 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ElytraFeatureRendererMixin",
+    "ItemMixin",
     "ItemRendererMixin",
     "LivingEntityMixin",
     "PalettedPermutationsAtlasSourceAccessor",
-    "SmithingScreenMixin",
-    "ItemMixin"
+    "SmithingScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
