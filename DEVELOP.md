@@ -9,3 +9,6 @@ Elytra Trims uses [Stonecutter](https://github.com/kikugie/stonecutter-kt) to ma
 **TL;DR**: use task `stonecutter/Set active version to X` before running Minecraft on `X`. 
 You can use `project/buildActive` to build that version specifically.  
 **Do not** run `build` task, `project/chiseledBuild` is the correct one.
+
+## Editing the code
+**Do not** run reformat on random files or worse the whole project. It will remove important versioned comments and break the build.
