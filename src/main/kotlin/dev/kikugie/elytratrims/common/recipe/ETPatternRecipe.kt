@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getBaseColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setColor
@@ -8,7 +9,7 @@ import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.BannerItem
 import net.minecraft.item.ItemStack
-import net.minecraft.recipe.SpecialRecipeSerializer
+import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
@@ -29,14 +30,8 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
     }
 
     override fun craft(inventory: Inventory): ItemStack {
-        var elytra = ItemStack.EMPTY
-        var banner = ItemStack.EMPTY
-        for (slot in 0 until inventory.size()) {
-            val stack = inventory.getStack(slot)
-            if (stack.isEmpty) continue
-            if (isProbablyElytra(stack.item)) elytra = stack.copy()
-            else if (stack.item is BannerItem) banner = stack
-        }
+        val banner = inventory.firstItem { it is BannerItem } ?: return ItemStack.EMPTY
+        val elytra = inventory.firstItem(::isProbablyElytra)?.copy() ?: return ItemStack.EMPTY
         elytra.setPatterns(banner)
         val color = banner.getBaseColor()
         if (color != 0) elytra.setColor(color)
@@ -50,8 +45,6 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        var SERIALIZER =
-            /*? if <1.20.2*/SpecialRecipeSerializer { id, category -> ETPatternRecipe(id, category) }
-            /*? if >=1.20.2*//*SpecialRecipeSerializer { ETPatternRecipe(Identifier("crafting_special_elytrapatterns"), it) }*/
+        val SERIALIZER: RecipeSerializer<ETPatternRecipe> = serializer(ETReference.id("crafting_special_elytrapatterns"), ::ETPatternRecipe)
     }
 }

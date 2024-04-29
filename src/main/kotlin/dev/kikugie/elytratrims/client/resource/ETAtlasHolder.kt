@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Function
 import java.util.function.Supplier
+import kotlin.jvm.optionals.getOrNull
 
 object ETAtlasHolder : ResourceReloader {
     /*? if >=1.20.2 */
@@ -39,6 +40,7 @@ object ETAtlasHolder : ResourceReloader {
         addAll(trims(manager, model))
         addAll(patterns(manager, model))
         add(color(id, model))
+        addAll(animation(manager))
 //        val item = loadTexture(Identifier("textures/item/elytra.png"), manager)?.readSafe()
 //        if (item != null) {
 //            add(itemColor(ETReference.id("item/elytra_overlay"), item))
@@ -107,6 +109,17 @@ object ETAtlasHolder : ResourceReloader {
         return { out.toContents(id) }
     }
 
+    private fun animation(manager: ResourceManager): Collection<ContentSupplier> = buildList {
+        if (!ETClient.config.texture.animationEasterEgg.value) return emptyList()
+        val resource = manager.getResource(ETReference.id("textures/animation/animation.png")).getOrNull()
+            ?: return emptyList()
+        /*? if <1.20.2 */
+        val sprite = SpriteLoader.load(ETReference.id("animation/animation"), resource) ?: return emptyList()
+        /*? if >=1.20.2 */
+        /*val sprite = opener.loadSprite(ETReference.id("apple/bad_apple"), resource) ?: return emptyList()*/
+        add { sprite }
+    }
+
     private fun transform(
         sprites: List<ContentSupplier>,
         executor: Executor,
@@ -160,6 +173,6 @@ object ETAtlasHolder : ResourceReloader {
             apply(it, applyProfiler, applyExecutor)
         }
 
-    private fun <T> asSupplier(it: () -> T) = Supplier { it() }
+    internal fun <T> asSupplier(it: () -> T) = Supplier { it() }
     private fun <P, T> asFunction(it: () -> T) = Function<P, T> { it() }
 }

@@ -1,8 +1,10 @@
 package dev.kikugie.elytratrims.common
 
+import dev.kikugie.elytratrims.common.access.FeatureAccess.getAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.hasGlow
+import dev.kikugie.elytratrims.common.access.FeatureAccess.removeAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeGlow
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
@@ -33,6 +35,7 @@ object ETCommon {
             var glowRemoval = false
             var bannerRemoval = false
             var dyeRemoval = false
+            var animationRemoval = false
 
             if (stack.hasGlow()) {
                 stack.removeGlow()
@@ -46,7 +49,11 @@ object ETCommon {
                 stack.removePatterns()
                 bannerRemoval = true
             }
-            val result = if (glowRemoval || bannerRemoval || dyeRemoval) {
+            if (stack.getAnimationStatus()) {
+                stack.removeAnimationStatus()
+                animationRemoval = false
+            }
+            val result = if (glowRemoval || bannerRemoval || dyeRemoval || animationRemoval) {
                 player.incrementStat(Stats.CLEAN_ARMOR)
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
                 true

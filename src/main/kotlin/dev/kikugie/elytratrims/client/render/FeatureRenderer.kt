@@ -7,6 +7,7 @@ import dev.kikugie.elytratrims.client.config.RenderType
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import dev.kikugie.elytratrims.client.resource.missing
 import dev.kikugie.elytratrims.common.ETReference
+import dev.kikugie.elytratrims.common.access.FeatureAccess.getAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
@@ -26,6 +27,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper.hsvToRgb
 
@@ -196,4 +198,31 @@ class TrimOverlayRenderer : FeatureRenderer {
     }
 
     private data class TrimInfo(val trim: ArmorTrim, val index: Int)
+}
+
+class AnimationRenderer : FeatureRenderer {
+    override val type: RenderType = RenderType.GLOBAL
+    private val colors = DyeColor.BLACK.colorComponents
+    private val background: Sprite by lazy {
+        val id = Identifier("entity/elytra")
+        atlas.getSprite(id).apply { if (missing) report(id) }
+    }
+    private val animation: Sprite by lazy {
+        val id = ETReference.id("animation/animation")
+        atlas.getSprite(id).apply { if (missing) report(id) }
+    }
+
+    override fun render(
+        model: Model,
+        matrices: MatrixStack,
+        provider: VertexConsumerProvider,
+        entity: LivingEntity?,
+        stack: ItemStack,
+        light: Int,
+        alpha: Float
+    ) {
+        if (!ETClient.config.texture.animationEasterEgg.value || !stack.getAnimationStatus()) return
+        model.render(background, matrices, provider, stack, light, alpha, *colors)
+        model.render(animation, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
+    }
 }

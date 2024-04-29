@@ -8,17 +8,20 @@ data class TextureConfig(
     val cropTrims: TextureOption,
     val useDarkerTrim: TextureOption,
     val useElytraModel: TextureOption,
+    val animationEasterEgg: TextureOption
 ) {
     constructor(
         useBannerTextures: Boolean,
         cropTrims: Boolean,
         useDarkerTrims: Boolean,
         useElytraModel: Boolean,
+        animationEasterEgg: Boolean,
     ) : this(
         useBannerTextures.toOption(false, "useBannerTextures"),
         cropTrims.toOption(false, "cropTrims"),
         useDarkerTrims.toOption(false, "useDarkerTrim"),
-        useElytraModel.toOption(true, "useElytraModel")
+        useElytraModel.toOption(true, "useElytraModel"),
+        animationEasterEgg.toOption(true, "animationEasterEgg"),
     )
 
     companion object {
@@ -26,7 +29,8 @@ data class TextureConfig(
             useBannerTextures = false,
             cropTrims = true,
             useDarkerTrims = false,
-            useElytraModel = true
+            useElytraModel = true,
+            animationEasterEgg = true
         )
 
         val CODEC: Codec<TextureConfig> = RecordCodecBuilder.create { instance ->
@@ -34,7 +38,8 @@ data class TextureConfig(
                 Codec.BOOL.fieldOf("useBannerTextures").forGetter { it.useBannerTextures.value },
                 Codec.BOOL.fieldOf("cropTrims").forGetter { it.cropTrims.value },
                 Codec.BOOL.fieldOf("useDarkerTrim").forGetter { it.useDarkerTrim.value },
-                Codec.BOOL.fieldOf("useElytraModel").forGetter { it.useElytraModel.value }
+                Codec.BOOL.fieldOf("useElytraModel").forGetter { it.useElytraModel.value },
+                Codec.BOOL.fieldOf("animationEasterEgg").forGetter { it.animationEasterEgg.value },
             ).apply(instance, ::TextureConfig)
         }
     }

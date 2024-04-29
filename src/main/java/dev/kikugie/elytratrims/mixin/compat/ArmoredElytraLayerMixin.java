@@ -33,19 +33,20 @@ public class ArmoredElytraLayerMixin {
     @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "INVOKE",
                     target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void betterend$elytraPostRender(ArmoredElytraModel<?> model,
-                                  MatrixStack matrices,
-                                  VertexConsumer vertices,
-                                  int light,
-                                  int overlay,
-                                  float red,
-                                  float green,
-                                  float blue,
-                                  float alpha,
-                                  Operation<Void> original,
-                                  @Local(argsOnly = true) VertexConsumerProvider provider,
-                                  @Local(argsOnly = true) LivingEntity entity,
-                                  @Local ItemStack stack) {
+    private void betterend$elytraPostRender(
+            ArmoredElytraModel<?> model,
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha,
+            Operation<Void> original,
+            @Local(argsOnly = true) VertexConsumerProvider provider,
+            @Local(argsOnly = true) LivingEntity entity,
+            @Local ItemStack stack) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
         ETRenderer.render(model, matrices, provider, entity, stack, light, alpha);
     }

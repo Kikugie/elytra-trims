@@ -94,7 +94,7 @@ dependencies {
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
     modCompileOnly("maven.modrinth:stacked-armor-trims:1.1.0")
     modCompileOnly("maven.modrinth:allthetrims:${if (isFabric) "3.4.2" else "NXPVk0Ym"}")
-    modCompileOnly("maven.modrinth:betterend:3.2.5")
+    modCompileOnly("maven.modrinth:betterend:4.0.8")
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.0")
 }
 

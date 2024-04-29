@@ -1,5 +1,7 @@
 package dev.kikugie.elytratrims.common.access
 
+import dev.kikugie.elytratrims.common.access.FeatureAccess.addGlow
+import dev.kikugie.elytratrims.common.access.FeatureAccess.removeGlow
 import dev.kikugie.elytratrims.common.util.toARGB
 import dev.kikugie.elytratrims.platform.ModStatus
 import io.github.apfelrauber.stacked_trims.ArmorTrimList
@@ -53,16 +55,29 @@ object FeatureAccess : IFeatureAccess {
         DYEABLE.removeColor(this)
     }
 
-    override fun ItemStack.hasGlow() = getSubNbt("display")?.getBoolean("glow") ?: false
+    override fun ItemStack.hasGlow(): Boolean {
+        val glow = nbt?.getBoolean("glow")
+        return glow ?: (getSubNbt("display")?.getBoolean("glow") ?: false)
+    }
 
     override fun ItemStack.addGlow() {
-        getOrCreateSubNbt("display").putBoolean("glow", true)
+        orCreateNbt.putBoolean("glow", true)
     }
 
     override fun ItemStack.removeGlow() {
+        nbt?.remove("glow")
         val nbt = getSubNbt("display") ?: return
         nbt.remove("glow")
         if (nbt.isEmpty) removeSubNbt("display")
+    }
+
+    override fun ItemStack.getAnimationStatus() = nbt?.getBoolean("bad_apple") ?: false
+    override fun ItemStack.addAnimationStatus() {
+        orCreateNbt.putBoolean("bad_apple", true)
+    }
+
+    override fun ItemStack.removeAnimationStatus() {
+        nbt?.remove("bad_apple")
     }
 }
 /*?} else {*//*
@@ -114,6 +129,20 @@ object FeatureAccess : IFeatureAccess {
         data.remove("glow")
         NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
     }
+
+    override fun ItemStack.getAnimationStatus(): Boolean = get(DataComponentTypes.CUSTOM_DATA)?.nbt?.getBoolean("animation") ?: false
+
+    override fun ItemStack.addAnimationStatus() {
+        val data = (get(DataComponentTypes.CUSTOM_DATA) ?: NbtComponent.DEFAULT).copyNbt()
+        data.putBoolean("animation", true)
+        NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
+    }
+
+    override fun ItemStack.removeAnimationStatus() {
+        val data = get(DataComponentTypes.CUSTOM_DATA)?.copyNbt() ?: return
+        data.remove("animation")
+        NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
+    }
 }
 *//*?} */
 
@@ -144,4 +173,8 @@ private interface IFeatureAccess {
     fun ItemStack.hasGlow(): Boolean
     fun ItemStack.addGlow()
     fun ItemStack.removeGlow()
+
+    fun ItemStack.getAnimationStatus(): Boolean
+    fun ItemStack.addAnimationStatus()
+    fun ItemStack.removeAnimationStatus()
 }

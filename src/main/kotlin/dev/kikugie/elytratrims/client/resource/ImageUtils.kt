@@ -55,9 +55,11 @@ fun NativeImage.offset(dx: Int, dy: Int) = NativeImage(width, height, true).also
 }
 
 fun NativeImage.mask(mask: NativeImage) = NativeImage(width, height, true).also {
-    val scale = mask.width / width
+    val scale = width / mask.width
     if (width >= mask.width) forEachPixel { x, y ->
-        if (mask.isInBounds(x, y) && mask.alpha(x, y) != 0)
+        val mx = x / scale
+        val my = y / scale
+        if (mask.isInBounds(mx, my) && mask.alpha(mx, my) != 0)
             copyColor(it, x, y)
     }
     else forEachPixel { x, y ->

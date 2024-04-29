@@ -1,12 +1,12 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.addGlow
 import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
@@ -25,14 +25,9 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
     }
 
     override fun craft(inventory: Inventory): ItemStack {
-        var item = ItemStack.EMPTY
-        for (slot in 0 until inventory.size()) {
-            val stack = inventory.getStack(slot)
-            if (!isProbablyElytra(stack.item)) continue
-            item = stack.copy()
-        }
-        item.addGlow()
-        return item
+        val elytra = inventory.firstItem(::isProbablyElytra)?.copy() ?: return ItemStack.EMPTY
+        elytra.addGlow()
+        return elytra
     }
 
     override fun fits(width: Int, height: Int): Boolean = width * height >= 2
@@ -40,8 +35,6 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETGlowRecipe> =
-            /*? if <1.20.2*/SpecialRecipeSerializer { id, category -> ETGlowRecipe(id, category) }
-            /*? if >=1.20.2*//*SpecialRecipeSerializer { ETGlowRecipe(Identifier("crafting_special_elytraglow"), it) }*/
+        val SERIALIZER: RecipeSerializer<ETGlowRecipe> = serializer(ETReference.id("crafting_special_elytraglow"), ::ETGlowRecipe)
     }
 }

@@ -30,6 +30,11 @@ elytratrims:
       useElytraModel:
         .: Use Elytra Model
         tooltip: Render a 3D elytra item model, similar to shields and banners.
+      animationEasterEgg:
+        .: Animation Easter Egg
+        tooltip: |
+          Enables a silly easter egg you have to find out.
+          Disabling it might increase your loading time by a bit, so decide for yourself.
     type:
       color:
         .: Dye

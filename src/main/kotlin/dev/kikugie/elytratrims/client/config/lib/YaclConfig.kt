@@ -33,6 +33,7 @@ object YaclConfig {
                             .option(config.texture.useDarkerTrim.yaclOption(true))
                             .option(config.texture.useBannerTextures.yaclOption(true))
                             .option(config.texture.useElytraModel.yaclOption(false))
+                            .option(config.texture.animationEasterEgg.yaclOption(true))
                             .build()
                     )
                     .build()

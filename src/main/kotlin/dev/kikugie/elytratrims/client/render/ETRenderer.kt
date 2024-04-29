@@ -43,6 +43,7 @@ object ETRenderer {
         clear()
         add(ColorOverlayRenderer())
         add(PatternsOverlayRenderer())
+        add(AnimationRenderer())
         add(TrimOverlayRenderer())
     }
 
