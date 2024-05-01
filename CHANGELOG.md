@@ -1,2 +1,5 @@
-## Oopsie
-- Fixes HD banners not displaying on elytras
+## Changes
+- Added 1.20.6 compatibility
+
+## Fixes
+- Fixed mod config not reading itself

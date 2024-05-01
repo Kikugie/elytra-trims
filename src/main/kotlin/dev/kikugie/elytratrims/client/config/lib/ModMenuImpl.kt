@@ -6,7 +6,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi
 import net.minecraft.client.gui.screen.Screen
 
 object ModMenuImpl : ModMenuApi {
-    override fun getModConfigScreenFactory(): ConfigScreenFactory<out Screen>? =
-        ConfigScreenProvider.screen?.let { ConfigScreenFactory { s -> it(s) } }
+    override fun getModConfigScreenFactory(): ConfigScreenFactory<out Screen?> =
+        ConfigScreenFactory(ConfigScreenProvider.screen)
 }
 /*?} */

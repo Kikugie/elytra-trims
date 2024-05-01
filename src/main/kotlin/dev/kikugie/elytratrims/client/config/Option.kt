@@ -12,17 +12,15 @@ interface Option<T> {
     fun tooltip(): Text
 }
 
-class TextureOption(override val default: Boolean, override val id: String) : Option<Boolean> {
-    override var value = default
+class TextureOption(override val default: Boolean, override var value: Boolean = default, override val id: String) : Option<Boolean> {
     override fun name() = "elytratrims.config.texture.$id".translation()
     override fun tooltip() = "elytratrims.config.texture.$id.tooltip".translation()
 }
 
-class RenderModeOption(override val default: RenderMode, override val id: String) : Option<RenderMode> {
-    override var value = default
+class RenderModeOption(override val default: RenderMode, override var value: RenderMode = default, override val id: String) : Option<RenderMode> {
     override fun name() = "elytratrims.config.type.$id".translation()
     override fun tooltip() = "elytratrims.config.type.$id.tooltip".translation()
 }
 
-fun RenderMode.toOption(default: RenderMode, id: String) = RenderModeOption(default, id)
-fun Boolean.toOption(default: Boolean, id: String) = TextureOption(default, id)
+fun RenderMode.toOption(default: RenderMode, id: String) = RenderModeOption(default, this, id)
+fun Boolean.toOption(default: Boolean, id: String) = TextureOption(default, this, id)
