@@ -159,6 +159,7 @@ java {
     withSourcesJar()
     val version = if (mcVersion.startsWith("1.20.5")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = version
+    targetCompatibility = version
 }
 
 kotlin {
@@ -172,11 +173,13 @@ tasks.named("publishMods") {
 publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
-    displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for $mcVersion"
+    displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
     type = STABLE
     modLoaders.add(loader)
+
+    val targets = property("mod.mc_targets").toString().split(' ')
 
     dryRun = providers.environmentVariable("MODRINTH_TOKEN")
         .getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
@@ -184,7 +187,7 @@ publishMods {
     modrinth {
         projectId = property("publish.modrinth").toString()
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-        minecraftVersions.add(mcVersion)
+        targets.forEach(minecraftVersions::add)
         if (isFabric) requires("fabric-api", "fabric-language-kotlin")
         else requires("kotlin-for-forge")
     }
@@ -192,7 +195,7 @@ publishMods {
     curseforge {
         projectId = property("publish.curseforge").toString()
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add(mcVersion)
+        targets.forEach(minecraftVersions::add)
         if (isFabric) requires("fabric-api", "fabric-language-kotlin")
         else requires("kotlin-for-forge")
     }

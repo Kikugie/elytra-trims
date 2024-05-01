@@ -18,23 +18,23 @@ abstract class DelegatedRecipe(id: Identifier, category: CraftingRecipeCategory)
     override fun craft(inventory: net.minecraft.inventory.RecipeInputInventory, lookup: net.minecraft.registry.RegistryWrapper.WrapperLookup): ItemStack {
         return craft(inventory)
     }
-    *//*?} elif >=1.20 {*//*
+    *//*?} elif >=1.20 {*/
     override fun craft(inventory: net.minecraft.inventory.RecipeInputInventory, lookup: net.minecraft.registry.DynamicRegistryManager): ItemStack {
         return craft(inventory)
     }
-    *//*?} else {*/
+    /*?} else {*//*
     override fun craft(inventory: net.minecraft.inventory.CraftingInventory, registryManager: net.minecraft.registry.DynamicRegistryManager): ItemStack {
         return craft(inventory)
     }
-    /*?} */
+    *//*?} */
 
-    /*? <1.20 {*/
+    /*? <1.20 {*//*
     override fun matches(inventory: net.minecraft.inventory.CraftingInventory, world: World): Boolean {
         return matches(inventory)
     }
-    /*?} else {*//*
+    *//*?} else {*/
     override fun matches(inventory: net.minecraft.inventory.RecipeInputInventory, world: World): Boolean {
         return matches(inventory)
     }
-    *//*?} */
+    /*?} */
 }

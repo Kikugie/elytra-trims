@@ -50,11 +50,11 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
             *//*?} elif >=1.20.2 {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?} elif >=1.20.1 {*//*
+            *//*?} elif >=1.20.1 {*/
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?} else {*/
+            /*?} else {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            /*?} */
+            *//*?} */
     ), index = /*? if >=1.20.2 {*//* 5 *//*?} else {*/ 4 /*?} */)
     private Quaternionf applyRotation(Quaternionf quaternionf) {
         return elytratrims$rotateElytra(quaternionf);
