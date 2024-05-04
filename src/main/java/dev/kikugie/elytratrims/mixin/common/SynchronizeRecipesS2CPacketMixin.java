@@ -3,8 +3,7 @@ package dev.kikugie.elytratrims.mixin.common;
 import com.google.common.collect.Iterables;
 import dev.kikugie.elytratrims.common.ETCommon;
 import dev.kikugie.elytratrims.common.config.RequireClientTester;
-import dev.kikugie.elytratrims.common.recipe.ETGlowRecipe;
-import dev.kikugie.elytratrims.common.recipe.ETPatternRecipe;
+import dev.kikugie.elytratrims.common.recipe.DelegatedRecipe;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.mixin.plugin.RequireTest;
 import net.minecraft.network.packet.s2c.play.SynchronizeRecipesS2CPacket;
@@ -15,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Hides recipes from clients, because they use custom serializers and would cause registry desync.
@@ -24,12 +24,13 @@ import java.util.Collection;
 @MixinConfigurable
 @Mixin(value = SynchronizeRecipesS2CPacket.class, remap = false)
 public abstract class SynchronizeRecipesS2CPacketMixin {
+
     /*? if <1.20.2 {*/
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
     private Iterable<Recipe<?>> removeElytraPatternRecipe(Iterable<Recipe<?>> elements) {
         if (ETCommon.config.getRequireClientSide())
             return elements;
-        return Iterables.filter(elements, recipe -> !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe));
+        return Iterables.filter(elements, recipe -> !(recipe instanceof DelegatedRecipe));
     }
     /*?} elif <=1.20.4 {*//*
     @ModifyArg(method = "<init>(Ljava/util/Collection;)V", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Lists;newArrayList(Ljava/lang/Iterable;)Ljava/util/ArrayList;"))
@@ -38,7 +39,7 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
             return elements;
         return Iterables.filter(elements, entry -> {
             Recipe<?> recipe = entry.value();
-            return !(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe);
+            return !(recipe instanceof DelegatedRecipe);
         });
     }
     *//*?} else {*//*
@@ -49,7 +50,7 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
         Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> res = new ArrayList<>();
         for (net.minecraft.recipe.RecipeEntry<? extends Recipe<?>> entry : elements) {
             Recipe<?> recipe = entry.value();
-            if (!(recipe instanceof ETPatternRecipe) && !(recipe instanceof ETGlowRecipe))
+            if (!(recipe instanceof DelegatedRecipe))
                 res.add(entry);
         }
         return res;

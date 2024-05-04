@@ -1,5 +1,2 @@
-## Changes
-- Added 1.20.6 compatibility
-
 ## Fixes
-- Fixed mod config not reading itself
+- Animation recipe wasn't properly excluded from registry sync, forcing all clients to have the mod
