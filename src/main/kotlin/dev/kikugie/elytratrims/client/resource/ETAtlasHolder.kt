@@ -75,16 +75,18 @@ object ETAtlasHolder : ResourceReloader {
 
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
         val crop = ETClient.config.texture.cropTrims.value
-        val atlases = manager.findResources("atlases") { it.path.endsWith("armor_trims.json") }
+        val atlases = manager.findAllResources("atlases") { it.path.endsWith("armor_trims.json") }
         val sources = atlases.flatMap { (_, v) ->
-            try {
-                val dynamic = v.reader.use { Dynamic(JsonOps.INSTANCE, JsonParser.parseReader(it)) }
-                val data = AtlasSourceManager.LIST_CODEC.parse(dynamic).getAnyway()
-                data.filterIsInstance<PalettedPermutationsAtlasSource>()
-            } catch (e: Exception) {
-                emptyList()
+            v.mapNotNull {
+                try {
+                    val dynamic = it.reader.use { Dynamic(JsonOps.INSTANCE, JsonParser.parseReader(it)) }
+                    val data = AtlasSourceManager.LIST_CODEC.parse(dynamic).getAnyway()
+                    data.filterIsInstance<PalettedPermutationsAtlasSource>()
+                } catch (e: Exception) {
+                    null
+                }
             }
-        }
+        }.flatten()
         sources.forEach { src ->
             src as PalettedPermutationsAtlasSourceAccessor
             src.textures = src.textures

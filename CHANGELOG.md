@@ -1,2 +1,2 @@
 ## Fixes
-- Animation recipe wasn't properly excluded from registry sync, forcing all clients to have the mod
+- Incompatibility with [Cinderscapes](https://modrinth.com/mod/cinderscapes) and possibly other mods editing the minecraft namespace atlases.
