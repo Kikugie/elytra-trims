@@ -22,11 +22,6 @@ import net.minecraft.stat.Stats
 object ETCommon {
     @JvmField
     val config: ETServerConfig = if (ModStatus.isClient) ETServerConfig.create() else ETServerConfig.load()
-    val elytras: Set<Item> by lazy { Registries.ITEM.filter { isProbablyElytra(it) }.toSet() }
-
-    private fun isProbablyElytra(item: Item): Boolean {
-        return item is ElytraItem || item.id.path.contains("elytra")
-    }
 
     fun init() {
         ETCommentary.run()

@@ -66,7 +66,7 @@ dependencies {
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
     implementation(annotationProcessor(mixinSquared.format("common"))!!)
     if (isFabric) {
-        modules("registry-sync-v0", "resource-loader-v0")
+        modules("registry-sync-v0", "resource-loader-v0", "entity-events-v1")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
         include(implementation(mixinSquared.format("fabric"))!!)
