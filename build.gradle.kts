@@ -70,10 +70,7 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
         include(implementation(mixinSquared.format("fabric"))!!)
-        ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}") {
-            modCompileOnly(it)
-            modLocalRuntime(it)
-        }
+        modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     } else {
         if (loader == "forge") {
             "forge"("net.minecraftforge:forge:${mcVersion}-${property("deps.fml")}")
@@ -85,10 +82,7 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    ifStable("maven.modrinth:yacl:${property("deps.yacl")}") {
-        modCompileOnly(it)
-        modLocalRuntime(it)
-    }
+    modImplementation("maven.modrinth:yacl:${property("deps.yacl")}")
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
@@ -157,13 +151,13 @@ yamlang {
 
 java {
     withSourcesJar()
-    val version = if (mcVersion.startsWith("1.20.5")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val version = if (mcVersion.startsWith("1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = version
     targetCompatibility = version
 }
 
 kotlin {
-    jvmToolchain(if (mcVersion.startsWith("1.20.5")) 21 else 17)
+    jvmToolchain(if (mcVersion.startsWith("1.20.6")) 21 else 17)
 }
 
 tasks.named("publishMods") {
