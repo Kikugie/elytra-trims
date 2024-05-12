@@ -6,6 +6,8 @@ elytratrims:
       reset: Config reset!
   item:
     glow: §7Glowing
+    model1: §7§oElytra 3D model can be configured
+    model2: §7§oin the Elytra Trims config
   config:
     title: Elytra Trims
     category:
