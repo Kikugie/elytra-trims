@@ -1,9 +1,7 @@
 package dev.kikugie.elytratrims.platform
 
-import dev.kikugie.elytratrims.common.ETCommon
-import dev.kikugie.elytratrims.common.recipe.ETAnimationRecipe
-import dev.kikugie.elytratrims.common.recipe.ETGlowRecipe
-import dev.kikugie.elytratrims.common.recipe.ETPatternRecipe
+import dev.kikugie.elytratrims.common.*
+import dev.kikugie.elytratrims.common.recipe.*
 import net.minecraft.recipe.RecipeSerializer
 
 /*? if fabric {*/
@@ -26,6 +24,9 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
     }
 }
 /*?} elif forge {*//*
+import dev.kikugie.elytratrims.client.ETClient
+import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
+import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent
@@ -35,7 +36,6 @@ import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runWhenOn
-import java.util.function.Supplier
 
 @Mod(ETReference.MOD_ID)
 object ETCommonWrapper {
@@ -48,7 +48,7 @@ object ETCommonWrapper {
             }
 
             val provider = ConfigScreenProvider.screen
-            if (provider != null) ModLoadingContext.get().registerExtensionPoint(
+            ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenFactory::class.java,
             ) { ConfigScreenFactory { _, parent -> provider(parent) } }
         }
@@ -67,12 +67,13 @@ object ETCommonWrapper {
 
 }
 *//*?} else {*//*
+import dev.kikugie.elytratrims.client.ETClient
+import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
+import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraft.registry.Registries
 import net.neoforged.fml.common.Mod
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.ModLoadingContext
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -91,7 +92,7 @@ object ETCommonWrapper {
             }
 
             val provider = ConfigScreenProvider.screen
-            if (provider != null) ModLoadingContext.get().registerExtensionPoint(
+            ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenFactory::class.java,
             ) { ConfigScreenFactory { _, parent -> provider(parent) } }
         }
