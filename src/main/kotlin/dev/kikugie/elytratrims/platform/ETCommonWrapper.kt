@@ -52,15 +52,15 @@ object ETCommonWrapper {
                 ConfigScreenFactory::class.java,
             ) { ConfigScreenFactory { _, parent -> provider(parent) } }
         }
-        val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, "minecraft")
+        val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ETReference.MOD_ID)
         if (ETCommon.config.addPatterns) registry.register(
-            "elytratrims:crafting_special_elytrapatterns"
+            "crafting_special_elytrapatterns"
         ) { ETPatternRecipe.SERIALIZER }
         if (ETCommon.config.addGlow) registry.register(
-            "elytratrims:crafting_special_elytraglow"
+            "crafting_special_elytraglow"
         ) { ETGlowRecipe.SERIALIZER }
         registry.register(
-            "elytratrims:crafting_special_elytraanimation"
+            "crafting_special_elytraanimation"
         ) { ETAnimationRecipe.SERIALIZER }
         registry.register(MOD_BUS)
     }
@@ -97,17 +97,17 @@ object ETCommonWrapper {
             ) { ConfigScreenFactory { _, parent -> provider(parent) } }
         }
 
-        val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, "minecraft")
+        val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)
         if (ETCommon.config.addPatterns) registry.register(
-            "elytratrims:crafting_special_elytrapatterns",
+            "crafting_special_elytrapatterns",
             Supplier { ETPatternRecipe.SERIALIZER }
         )
         if (ETCommon.config.addGlow) registry.register(
-            "elytratrims:crafting_special_elytraglow",
+            "crafting_special_elytraglow",
             Supplier { ETGlowRecipe.SERIALIZER }
         )
         registry.register(
-            "elytratrims:crafting_special_elytraanimation",
+            "crafting_special_elytraanimation",
             Supplier { ETAnimationRecipe.SERIALIZER }
         )
         registry.register(MOD_BUS)
