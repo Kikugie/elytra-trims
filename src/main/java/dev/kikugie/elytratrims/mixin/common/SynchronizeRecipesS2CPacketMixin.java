@@ -1,7 +1,7 @@
 package dev.kikugie.elytratrims.mixin.common;
 
 import dev.kikugie.elytratrims.common.config.RequireClientTester;
-import dev.kikugie.elytratrims.common.util.UtilKt;
+import dev.kikugie.elytratrims.common.recipe.RecipeUtilsKt;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.mixin.plugin.RequireTest;
 import net.minecraft.network.packet.s2c.play.SynchronizeRecipesS2CPacket;
@@ -23,12 +23,12 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
     /*? if <1.20.2 {*/
     @ModifyVariable(method = "<init>(Ljava/util/Collection;)V", at = @At("HEAD"), argsOnly = true)
     private static Collection<Recipe<?>> removeElytraPatternRecipe(Collection<Recipe<?>> elements) {
-        return UtilKt.filterRecipes(elements);
+        return RecipeUtilsKt.filterRecipes(elements);
     }
     /*?} else {*//*
     @ModifyVariable(method = "<init>(Ljava/util/Collection;)V", at = @At("HEAD"), argsOnly = true)
     private static Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
-        return UtilKt.filterRecipes(elements);
+        return RecipeUtilsKt.filterRecipes(elements);
     }
     *//*?} */
 }

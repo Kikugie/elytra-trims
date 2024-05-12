@@ -6,10 +6,13 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ArmoredElytraLayerMixin",
-    "ElytraItemMixin",
     "BetterSmithingTableMixin",
+    "ElytraItemMixin",
     "ElytraSlotLayerMixin",
     "ElytraTrinketFeatureRendererMixin",
     "MinecraftCapesCompatMixin"
+  ],
+  "mixins": [
+    "FabricAPICompat"
   ]
 }

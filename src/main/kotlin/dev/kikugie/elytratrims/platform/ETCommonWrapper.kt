@@ -1,11 +1,9 @@
 package dev.kikugie.elytratrims.platform
 
-import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
-import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import dev.kikugie.elytratrims.common.ETCommon
-import dev.kikugie.elytratrims.common.ETReference
-import dev.kikugie.elytratrims.common.recipe.*
+import dev.kikugie.elytratrims.common.recipe.ETAnimationRecipe
+import dev.kikugie.elytratrims.common.recipe.ETGlowRecipe
+import dev.kikugie.elytratrims.common.recipe.ETPatternRecipe
 import net.minecraft.recipe.RecipeSerializer
 
 /*? if fabric {*/
@@ -14,15 +12,15 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
         ETCommon.init()
 
         if (ETCommon.config.addPatterns) RecipeSerializer.register(
-            "crafting_special_elytrapatterns",
+            "elytratrims:crafting_special_elytrapatterns",
             ETPatternRecipe.SERIALIZER
         )
         if (ETCommon.config.addGlow) RecipeSerializer.register(
-            "crafting_special_elytraglow",
+            "elytratrims:crafting_special_elytraglow",
             ETGlowRecipe.SERIALIZER
         )
         RecipeSerializer.register(
-            "crafting_special_elytraanimation",
+            "elytratrims:crafting_special_elytraanimation",
             ETAnimationRecipe.SERIALIZER
         )
     }
