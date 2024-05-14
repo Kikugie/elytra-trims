@@ -9,6 +9,7 @@
     "ItemMixin",
     "ItemRendererMixin",
     "LivingEntityMixin",
+    "LivingEntityRendererAccessor",
     "PalettedPermutationsAtlasSourceAccessor",
     "SmithingScreenMixin"
   ],

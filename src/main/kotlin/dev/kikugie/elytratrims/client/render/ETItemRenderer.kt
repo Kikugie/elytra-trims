@@ -3,9 +3,10 @@ package dev.kikugie.elytratrims.client.render
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.common.util.isProbablyElytra
-import dev.kikugie.elytratrims.platform.ModStatus
-import dev.tr7zw.firstperson.FirstPersonModelCore
+import dev.kikugie.elytratrims.mixin.client.LivingEntityRendererAccessor
 import net.minecraft.client.render.VertexConsumerProvider
+import net.minecraft.client.render.entity.ArmorStandEntityRenderer
+import net.minecraft.client.render.entity.model.ArmorStandArmorEntityModel
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.decoration.ArmorStandEntity
@@ -17,41 +18,36 @@ object ETItemRenderer {
 
     @JvmStatic
     fun render(stack: ItemStack, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int): Boolean {
-        if (dummy == null || dummy?.world != CLIENT.world) dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0).apply {
-            isInvisible = true
-        }
-        if (!isProbablyElytra(stack.item)) return false
+        if (dummy == null || dummy?.world != CLIENT.world)
+            dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0)
         if (!ETClient.config.texture.useElytraModel.value) return false
+        if (!isProbablyElytra(stack.item)) return false
+        val renderer = CLIENT.entityRenderDispatcher.getRenderer(dummy) as ArmorStandEntityRenderer
+        renderer as LivingEntityRendererAccessor
         matrices.push()
-        matrices.scale(0.75F, 0.75F, -1F)
+        renderer.model.child = true
+        renderer.model.riding = false
+        renderer.invokeSetupTransforms(dummy!!, matrices, 0F, 0F, CLIENT.tickDelta)
+        val scalar = 1.5F
+        matrices.scale(scalar, -scalar, -scalar)
+        matrices.translate(-0.34F, -1.4F, 0F)
         val items = dummy!!.armorItems as DefaultedList<ItemStack>
         val slot = EquipmentSlot.CHEST.entitySlotId
         items[slot] = stack
-        runWithFirstPersonMod {
-            CLIENT.entityRenderDispatcher.render(
-                dummy,
-                0.65,
-                -0.1,
-                -0.25,
-                0F,
-                CLIENT.tickDelta,
-                matrices,
-                vertexConsumers,
-                light
-            )
-        }
+        for (it in renderer.getFeatures<ArmorStandEntity, ArmorStandArmorEntityModel>()) it.render(
+            matrices,
+            vertexConsumers,
+            light,
+            dummy!!,
+            0F,
+            0F,
+            CLIENT.tickDelta,
+            0F,
+            0F,
+            0F
+        )
         items[slot] = ItemStack.EMPTY
         matrices.pop()
         return true
-    }
-
-    private inline fun runWithFirstPersonMod(action: () -> Unit) {
-        if (!ModStatus.isLoaded("firstperson")) action()
-        else {
-            val instance = FirstPersonModelCore.instance
-            val rendering = instance.isRenderingPlayer
-            action()
-            instance.isRenderingPlayer = rendering
-        }
     }
 }

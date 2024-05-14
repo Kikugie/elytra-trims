@@ -84,7 +84,6 @@ dependencies {
     modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
     modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
     modCompileOnly(modrinth("betterend", "4.0.8"))
-    modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.0")
 }
 
