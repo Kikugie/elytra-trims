@@ -42,7 +42,7 @@ object ETCommon {
             }
             if (stack.getAnimationStatus()) {
                 stack.removeAnimationStatus()
-                animationRemoval = false
+                animationRemoval = true
             }
             val result = if (glowRemoval || bannerRemoval || dyeRemoval || animationRemoval) {
                 player.incrementStat(Stats.CLEAN_ARMOR)
