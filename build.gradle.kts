@@ -50,12 +50,7 @@ repositories {
 }
 
 dependencies {
-    fun ifStable(dep: String, action: (String) -> Any?) {
-        if (stonecutter.current.project.startsWith("1.20.5")) modCompileOnly(dep)
-        else
-            action(dep)
-    }
-
+    fun modrinth(name: String, dep: Any?) = "maven.modrinth:$name:$dep"
     fun modules(vararg modules: String) {
         modules.forEach { modImplementation(fabricApi.module("fabric-$it", "${property("deps.fapi")}")) }
     }
@@ -82,13 +77,14 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    modImplementation("maven.modrinth:yacl:${property("deps.yacl")}")
+    modImplementation(modrinth("yacl", property("deps.yacl")))
 
     // Compat
-//    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
-    modCompileOnly("maven.modrinth:stacked-armor-trims:1.1.0")
-    modCompileOnly("maven.modrinth:allthetrims:${if (isFabric) "3.4.2" else "NXPVk0Ym"}")
-    modCompileOnly("maven.modrinth:betterend:4.0.8")
+    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
+    modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
+    modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
+    modCompileOnly(modrinth("betterend", "4.0.8"))
+    modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.0")
 }
 

@@ -9,14 +9,10 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeGlow
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
 import dev.kikugie.elytratrims.common.config.ETServerConfig
-import dev.kikugie.elytratrims.common.util.id
 import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.LeveledCauldronBlock
 import net.minecraft.block.cauldron.CauldronBehavior
-import net.minecraft.item.ElytraItem
-import net.minecraft.item.Item
 import net.minecraft.item.Items
-import net.minecraft.registry.Registries
 import net.minecraft.stat.Stats
 
 object ETCommon {
