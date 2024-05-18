@@ -28,9 +28,9 @@ object ETItemRenderer {
         renderer.model.child = true
         renderer.model.riding = false
         renderer.invokeSetupTransforms(dummy!!, matrices, 0F, 0F, CLIENT.tickDelta)
-        val scalar = 1.5F
+        val scalar = 1.25F
         matrices.scale(scalar, -scalar, -scalar)
-        matrices.translate(-0.34F, -1.4F, 0F)
+        matrices.translate(-0.4F, -1.45F, 0F)
         val items = dummy!!.armorItems as DefaultedList<ItemStack>
         val slot = EquipmentSlot.CHEST.entitySlotId
         items[slot] = stack
