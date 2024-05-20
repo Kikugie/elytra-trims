@@ -15,7 +15,7 @@ import java.util.Collection;
 /**
  * Hides recipes from clients, because they use custom serializers and would cause registry desync.
  * The recipes are still available, but not present in the recipe book.
- */
+   */
 @RequireTest(RequireClientTester.class)
 @MixinConfigurable
 @Mixin(value = SynchronizeRecipesS2CPacket.class, remap = false)
@@ -25,10 +25,10 @@ public abstract class SynchronizeRecipesS2CPacketMixin {
     private static Collection<Recipe<?>> removeElytraPatternRecipe(Collection<Recipe<?>> elements) {
         return RecipeUtilsKt.filterRecipes(elements);
     }
-    /*?} else {*//*
-    @ModifyVariable(method = "<init>(Ljava/util/Collection;)V", at = @At("HEAD"), argsOnly = true)
+    /*?} else {*/
+    /*@ModifyVariable(method = "<init>(Ljava/util/Collection;)V", at = @At("HEAD"), argsOnly = true)
     private static Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> removeElytraPatternRecipe(Collection<net.minecraft.recipe.RecipeEntry<? extends Recipe<?>>> elements) {
         return RecipeUtilsKt.filterRecipes(elements);
     }
-    *//*?} */
+    *//*?}*/
 }

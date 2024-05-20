@@ -80,8 +80,8 @@ object FeatureAccess : IFeatureAccess {
         nbt?.remove("bad_apple")
     }
 }
-/*?} else {*//*
-import net.minecraft.component.DataComponentTypes
+/*?} else {*/
+/*import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.component.type.NbtComponent
 import net.minecraft.item.BannerItem
@@ -144,17 +144,17 @@ object FeatureAccess : IFeatureAccess {
         NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
     }
 }
-*//*?} */
+  *//*?}*/
 
 private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager): List<ArmorTrim>? =
     /*? if fabric {*/
     if (ModStatus.isLoaded("stacked-armor-trims")) ArmorTrimList.getTrims(manager, stack).orElse(null) else null
-    /*?} else {*//*
-    null
-    *//*?} */
+    /*?} else {*/
+    /*null
+      *//*?}*/
 
 /*? if <=1.20.4 >=1.20.2 */
-/*private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this, true)*/
+/*private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this, true)  */
 /*? if <1.20.2 */
 private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this)
 

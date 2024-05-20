@@ -10,21 +10,12 @@ pluginManagement {
         maven("https://maven.minecraftforge.net")
         maven("https://maven.neoforged.net/releases/")
         maven("https://maven.kikugie.dev/releases")
+        maven("https://maven.kikugie.dev/snapshots")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.3.5"
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("club.minnced:discord-webhooks:0.8.4")
-    }
+    id("dev.kikugie.stonecutter") version "0.4.+"
 }
 
 extensions.configure<StonecutterSettings> {

@@ -38,4 +38,4 @@ object ETClientWrapper : ClientModInitializer {
         })
     }
 }
-/*?}} */
+/*?}*/

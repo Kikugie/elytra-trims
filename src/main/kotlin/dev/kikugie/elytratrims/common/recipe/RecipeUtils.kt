@@ -17,14 +17,14 @@ internal fun Inventory.firstItem(predicate: (Item) -> Boolean) = sequence().firs
 }
 
 internal fun <T : CraftingRecipe> serializer(defaultId: Identifier, init: (Identifier, CraftingRecipeCategory) -> T): SpecialRecipeSerializer<T> =
-    /*? if <1.20.2*/SpecialRecipeSerializer(init)
-    /*? if >=1.20.2*//*SpecialRecipeSerializer { init(defaultId, it) }*/
+    /*? if <1.20.2 */SpecialRecipeSerializer(init)
+    /*? if >=1.20.2 *//*SpecialRecipeSerializer { init(defaultId, it) }*/  
 
 typealias RecipeWrapper =
 /*? if <1.20.2 */Recipe<*>
-/*? if >=1.20.2 *//*RecipeEntry<out Recipe<*>>*/
+/*? if >=1.20.2 *//*RecipeEntry<out Recipe<*>>*/  
 
 fun filterRecipes(elements: Collection<RecipeWrapper>): Collection<RecipeWrapper> =
     if (ETCommon.config.requireClientSide) elements else elements.filter {
-        it/*? if >=1.20.2 {*//*.value*//*?} */ !is DelegatedRecipe
+        it/*? if >=1.20.2 {*//*.value  *//*?}*/ !is DelegatedRecipe
     }

@@ -23,8 +23,8 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
         )
     }
 }
-/*?} elif forge {*//*
-import dev.kikugie.elytratrims.client.ETClient
+/*?} elif forge {*/
+/*import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraftforge.api.distmarker.Dist
@@ -66,7 +66,7 @@ object ETCommonWrapper {
     }
 
 }
-*//*?} else {*//*
+  *//*?} else {*//*
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
@@ -113,4 +113,4 @@ object ETCommonWrapper {
         registry.register(MOD_BUS)
     }
 }
-*//*?}} */
+  *//*?}*/

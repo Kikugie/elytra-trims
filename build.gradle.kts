@@ -24,15 +24,6 @@ version = "${mod.version}+$mcVersion"
 group = mod.group
 base { archivesName.set("${mod.id}-$loader") }
 
-stonecutter.expression {
-    when (it) {
-        "fabric" -> loader == "fabric"
-        "forge" -> loader == "forge"
-        "neoforge" -> loader == "neoforge"
-        else -> null
-    }
-}
-
 repositories {
     exclusiveContent {
         forRepository { maven("https://www.cursemaven.com") { name = "CurseForge" } }
@@ -80,7 +71,7 @@ dependencies {
     modImplementation(modrinth("yacl", property("deps.yacl")))
 
     // Compat
-    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
+//    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
     modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
     modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
     modCompileOnly(modrinth("betterend", "4.0.8"))
@@ -146,7 +137,7 @@ yamlang {
 
 java {
     withSourcesJar()
-    val version = if (mcVersion.startsWith("1.20.6")) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val version = if (mcVersion > "1.20.4") JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = version
     targetCompatibility = version
 }

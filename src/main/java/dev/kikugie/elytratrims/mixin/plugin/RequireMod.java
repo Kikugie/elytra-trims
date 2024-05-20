@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for mixins to apply only if a mod is loaded.
- */
+   */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequireMod {

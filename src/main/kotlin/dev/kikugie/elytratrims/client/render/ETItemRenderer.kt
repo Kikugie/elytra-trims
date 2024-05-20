@@ -34,7 +34,7 @@ object ETItemRenderer {
             0F,
             0F,
             CLIENT.tickDelta,
-            /*? if >1.20.4 *//*0F */
+            /*? if >1.20.4 *//*0F*/  
         )
         val scalar = 1.25F
         matrices.scale(scalar, -scalar, -scalar)

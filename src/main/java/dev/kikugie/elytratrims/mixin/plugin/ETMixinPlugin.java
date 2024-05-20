@@ -32,15 +32,15 @@ public class ETMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (shouldApply(mixinClassName)) return true;
         String shortName = StringUtils.substringAfter(mixinClassName, "mixin.");
-        if (!shortName.startsWith("compat.")) // Reduce unneeded spam
+        if (!shortName.startsWith("compat.")) // Reduce unneeded spam  
             ETReference.LOGGER.info("Disabled mixin %s".formatted(shortName));
         return false;
     }
 
     private boolean shouldApply(String mixin) {
-//        AnnotationNode mixinConfigurable = getAnnotation(mixin, MixinConfigurable.class);
-//        boolean configResult = mixinConfigurable == null || !ServerConfigs.getMixinConfig().contains(mixin);
-//        if (!configResult) return false;
+//        AnnotationNode mixinConfigurable = getAnnotation(mixin, MixinConfigurable.class);  
+//        boolean configResult = mixinConfigurable == null || !ServerConfigs.getMixinConfig().contains(mixin);  
+//        if (!configResult) return false;  
 
         AnnotationNode modRequirement = getAnnotation(mixin, RequireMod.class);
         boolean modResult = modRequirement == null || ModStatus.INSTANCE.isLoaded(Annotations.getValue(modRequirement));

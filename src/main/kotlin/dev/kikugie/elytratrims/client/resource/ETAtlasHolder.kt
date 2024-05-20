@@ -95,7 +95,7 @@ object ETAtlasHolder : ResourceReloader {
         }
         return AtlasLoader(sources).loadSources(manager).map { {
             /*? if <1.20.2 */if (crop) it.get().transform { it.mask(model) } else it.get()
-            /*? if >=1.20.2 *//*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/
+            /*? if >=1.20.2 *//*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/  
         } }
     }
 
@@ -118,7 +118,7 @@ object ETAtlasHolder : ResourceReloader {
         /*? if <1.20.2 */
         val sprite = SpriteLoader.load(ETReference.id("animation/animation"), resource) ?: return emptyList()
         /*? if >=1.20.2 */
-        /*val sprite = opener.loadSprite(ETReference.id("apple/bad_apple"), resource) ?: return emptyList()*/
+        /*val sprite = opener.loadSprite(ETReference.id("apple/bad_apple"), resource) ?: return emptyList()*/  
         add { sprite }
     }
 
@@ -127,7 +127,7 @@ object ETAtlasHolder : ResourceReloader {
         executor: Executor,
     ): CompletableFuture<List<SpriteContents>> =
         /*? if <1.20.2 */SpriteLoader.loadAll(sprites.map(::asSupplier), executor);
-        /*? if >=1.20.2 *//*SpriteLoader.loadAll(opener, sprites.map(::asFunction), executor)*/
+        /*? if >=1.20.2 *//*SpriteLoader.loadAll(opener, sprites.map(::asFunction), executor)*/  
 
     private fun load(manager: ResourceManager, executor: Executor): CompletableFuture<StitchResult> {
         var model: NativeImage? = null

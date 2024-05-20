@@ -52,13 +52,13 @@ object ETCommon {
             /*? if <=1.20.4 {*/
             return@CauldronBehavior if (result) net.minecraft.util.ActionResult.success(world.isClient)
             else net.minecraft.util.ActionResult.PASS
-            /*?} else {*//*
-            return@CauldronBehavior if (result) net.minecraft.util.ItemActionResult.success(world.isClient)
+            /*?} else {*/
+            /*return@CauldronBehavior if (result) net.minecraft.util.ItemActionResult.success(world.isClient)
             else net.minecraft.util.ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
-            *//*?} */
+              *//*?}*/
         }
-        // TODO delegate this to the point when all mods are loaded
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 *//*.map()*/
+        // TODO delegate this to the point when all mods are loaded  
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 *//*.map()*/  
             .put(Items.ELYTRA, behaviour)
     }
 }

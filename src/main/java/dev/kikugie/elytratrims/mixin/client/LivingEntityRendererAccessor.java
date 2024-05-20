@@ -16,7 +16,7 @@ public interface LivingEntityRendererAccessor {
     @Invoker
     //? if >1.20.4 {
     /*void invokeSetupTransforms(LivingEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta, float scale);
-     *///?} else 
+    *///?} else 
     void invokeSetupTransforms(LivingEntity entity, MatrixStack matrices, float animationProgress, float bodyYaw, float tickDelta);
 
     @Accessor

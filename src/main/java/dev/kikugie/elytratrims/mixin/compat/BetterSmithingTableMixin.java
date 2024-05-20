@@ -19,15 +19,15 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor {
     @TargetHandler(
             mixin = "me.bettersmithingtable.mixin.SmithingScreenMixin",
-            /*? if >=1.20.2 {*//*
-            name = "renderBg"
+            /*? if >=1.20.2 {*/
+            /*name = "renderBg"
             *//*?} else {*/
             name = "drawArmorStandPreview"
             /*?} */
     )
     @ModifyArg(method = "@MixinSquared:Handler", at = @At(value = "INVOKE",
-            /*? if >=1.20.2 {*//*
-            target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
+            /*? if >=1.20.2 {*/
+            /*target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
             *//*?} elif >=1.20.1 {*/
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
             /*?} else {*//*

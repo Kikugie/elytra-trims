@@ -109,7 +109,7 @@ class ColorOverlayRenderer : FeatureRenderer {
 class PatternsOverlayRenderer : FeatureRenderer {
     override val type = RenderType.PATTERNS
     private val cache: (RegistryEntry<BannerPattern>) -> Sprite = memoize {
-        val key = it/*? if <=1.20.4*/.key.get()
+        val key = it/*? if <=1.20.4 */.key.get()
         val useBanner = ETClient.config.texture.useBannerTextures.value
         val spriteId = if (useBanner)
             TexturedRenderLayers.getBannerPatternTextureId(key).textureId

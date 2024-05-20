@@ -15,8 +15,8 @@ object ModStatus : IModStatus {
 
     override fun isLoaded(mod: String) = fabric.isModLoaded(mod)
 }
-/*?} elif forge {*//*
-import net.minecraftforge.fml.loading.FMLLoader
+/*?} elif forge {*/
+/*import net.minecraftforge.fml.loading.FMLLoader
 import java.util.function.Predicate
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
@@ -32,7 +32,7 @@ object ModStatus : IModStatus {
 
     override fun isLoaded(mod: String) = cache.computeIfAbsent(mod, Predicate {FMLLoader.getLoadingModList().getModFileById(mod) != null})
 }
-*//*?} else {*//*
+  *//*?} else {*//*
 import net.neoforged.fml.loading.FMLLoader
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
@@ -49,7 +49,7 @@ object ModStatus : IModStatus {
     override fun isLoaded(mod: String) = cache.computeIfAbsent(mod, Predicate {FMLLoader.getLoadingModList().getModFileById(mod) != null})
 
 }
-*//*?} */
+  *//*?}*/
 
 private interface IModStatus {
     val isClient: Boolean
