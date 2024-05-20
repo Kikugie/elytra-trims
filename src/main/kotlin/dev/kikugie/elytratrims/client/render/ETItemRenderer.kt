@@ -18,16 +18,24 @@ object ETItemRenderer {
 
     @JvmStatic
     fun render(stack: ItemStack, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int): Boolean {
-        if (dummy == null || dummy?.world != CLIENT.world)
-            dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0)
+        if (CLIENT.world == null) return false
         if (!ETClient.config.texture.useElytraModel.value) return false
         if (!isProbablyElytra(stack.item)) return false
+        if (dummy == null || dummy?.world != CLIENT.world)
+            dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0)
         val renderer = CLIENT.entityRenderDispatcher.getRenderer(dummy) as ArmorStandEntityRenderer
         renderer as LivingEntityRendererAccessor
         matrices.push()
         renderer.model.child = true
         renderer.model.riding = false
-        renderer.invokeSetupTransforms(dummy!!, matrices, 0F, 0F, CLIENT.tickDelta)
+        renderer.invokeSetupTransforms(
+            dummy!!,
+            matrices,
+            0F,
+            0F,
+            CLIENT.tickDelta,
+            /*? if >1.20.4 *//*0F */
+        )
         val scalar = 1.25F
         matrices.scale(scalar, -scalar, -scalar)
         matrices.translate(-0.4F, -1.45F, 0F)
