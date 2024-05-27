@@ -9,4 +9,4 @@ object ModMenuImpl : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<out Screen?> =
         ConfigScreenFactory(ConfigScreenProvider.screen)
 }
-/*?} */
+/*?}*/

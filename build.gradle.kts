@@ -47,7 +47,10 @@ dependencies {
     }
 
     minecraft("com.mojang:minecraft:${mcVersion}")
-    mappings("net.fabricmc:yarn:${mcVersion}+build.${property("deps.yarn_build")}:v2")
+    mappings(loom.layered {
+        mappings("net.fabricmc:yarn:${mcVersion}+build.${property("deps.yarn_build")}:v2")
+        mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
+    })
     val mixinExtras = "io.github.llamalad7:mixinextras-%s:${property("deps.mixin_extras")}"
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
     implementation(annotationProcessor(mixinSquared.format("common"))!!)
@@ -147,7 +150,7 @@ kotlin {
 }
 
 tasks.named("publishMods") {
-    mustRunAfter("publish")
+//    mustRunAfter("publish")
 }
 
 publishMods {

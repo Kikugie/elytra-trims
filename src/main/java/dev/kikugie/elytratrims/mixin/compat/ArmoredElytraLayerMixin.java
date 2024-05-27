@@ -50,5 +50,5 @@ public class ArmoredElytraLayerMixin {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
         ETRenderer.render(model, matrices, provider, entity, stack, light, alpha);
     }
-    /*?} */
+    /*?}*/
 }

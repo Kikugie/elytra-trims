@@ -23,7 +23,7 @@ public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor
             /*name = "renderBg"
             *//*?} else {*/
             name = "drawArmorStandPreview"
-            /*?} */
+            /*?}*/
     )
     @ModifyArg(method = "@MixinSquared:Handler", at = @At(value = "INVOKE",
             /*? if >=1.20.2 {*/
@@ -32,8 +32,8 @@ public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
             /*?} else {*//*
             target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?} */
-    ), index = /*? if >=1.20.2 {*//* 5 *//*?} else {*/ 4 /*?} */)
+            *//*?}*/
+    ), index = /*? if >=1.20.2 {*/ /*5 *//*?} else {*/ 4 /*?}*/)
     private Quaternionf applyElytraRotation(Quaternionf quaternionf) {
         return elytratrims$rotateElytra(quaternionf);
     }

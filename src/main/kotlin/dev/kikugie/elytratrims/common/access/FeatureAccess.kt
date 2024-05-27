@@ -153,9 +153,9 @@ private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager):
     /*null
       *//*?}*/
 
-/*? if <=1.20.4 >=1.20.2 */
+/*? if <=1.20.4 >=1.20.2*/
 /*private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this, true)  */
-/*? if <1.20.2 */
+/*? if <1.20.2*/
 private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this)
 
 private interface IFeatureAccess {

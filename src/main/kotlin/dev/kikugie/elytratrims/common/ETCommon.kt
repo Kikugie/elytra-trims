@@ -58,7 +58,7 @@ object ETCommon {
               *//*?}*/
         }
         // TODO delegate this to the point when all mods are loaded  
-        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2 *//*.map()*/  
+        CauldronBehavior.WATER_CAULDRON_BEHAVIOR/*? if >1.20.2*//*.map()*/  
             .put(Items.ELYTRA, behaviour)
     }
 }

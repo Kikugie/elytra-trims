@@ -16,11 +16,11 @@ val Item.id get() = Registries.ITEM.getId(this)
 
 fun isProbablyElytra(item: Item): Boolean = when(item) {
     is ElytraItem -> true
-    /*? if fabric */
+    /*? if fabric*/
     is net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem -> true
     else -> item is ArmorItem && item.id.path.contains("elytra")
 }
 
 fun <R> DataResult<R>.getAnyway(): R =
-    /*? if <=1.20.4 */getOrThrow(false) {}
-    /*? if >1.20.4 *//*orThrow*/  
+    /*? if <=1.20.4*/getOrThrow(false) {}
+    /*? if >1.20.4*//*orThrow*/  

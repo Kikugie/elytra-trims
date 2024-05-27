@@ -74,8 +74,8 @@ fun NativeImage.toContents(id: Identifier) = SpriteContents(
     id,
     SpriteDimensions(width, height),
     this,
-    /*? if <1.20.2 */net.minecraft.client.resource.metadata.AnimationResourceMetadata.EMPTY
-    /*? if >=1.20.2 *//*net.minecraft.resource.metadata.ResourceMetadata.NONE*/  
+    /*? if <1.20.2*/net.minecraft.client.resource.metadata.AnimationResourceMetadata.EMPTY
+    /*? if >=1.20.2*//*net.minecraft.resource.metadata.ResourceMetadata.NONE*/  
 )
 
 fun saturationMask(image: NativeImage): NativeImage {

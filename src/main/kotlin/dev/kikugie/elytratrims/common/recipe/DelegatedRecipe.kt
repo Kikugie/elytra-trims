@@ -8,8 +8,8 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
 abstract class DelegatedRecipe(id: Identifier, category: CraftingRecipeCategory) :
-    /*? if <1.20.2 */SpecialCraftingRecipe(id, category)
-    /*? if >=1.20.2 *//*SpecialCraftingRecipe(category)*/  
+    /*? if <1.20.2*/SpecialCraftingRecipe(id, category)
+    /*? if >=1.20.2*//*SpecialCraftingRecipe(category)*/  
 {
     abstract fun matches(inventory: Inventory): Boolean
     abstract fun craft(inventory: Inventory): ItemStack

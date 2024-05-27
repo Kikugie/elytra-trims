@@ -15,6 +15,7 @@ import net.minecraft.client.texture.SpriteLoader.StitchResult
 import net.minecraft.client.texture.atlas.AtlasLoader
 import net.minecraft.client.texture.atlas.AtlasSourceManager
 import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource
+import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceFinder
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceReloader
@@ -27,7 +28,7 @@ import java.util.function.Supplier
 import kotlin.jvm.optionals.getOrNull
 
 object ETAtlasHolder : ResourceReloader {
-    /*? if >=1.20.2 */
+    /*? if >=1.20.2*/
     /*private val opener: SpriteOpener = SpriteOpener.create(SpriteLoader.METADATA_READERS)*/
     val id: Identifier = ETReference.id("elytra_features")
     val atlas = SpriteAtlasTexture(ETReference.id("textures/atlas/elytra_features.png")).also {
@@ -76,8 +77,9 @@ object ETAtlasHolder : ResourceReloader {
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
         val crop = ETClient.config.texture.cropTrims.value
         val atlases = manager.findAllResources("atlases") { it.path.endsWith("armor_trims.json") }
-        val sources = atlases.flatMap { (_, v) ->
-            v.mapNotNull {
+        ETReference.LOGGER.info("Atlases: [${atlases.keys.joinToString()}]")
+        val sources = atlases.values.flatMap { res ->
+            res.mapNotNull {
                 try {
                     val dynamic = it.reader.use { Dynamic(JsonOps.INSTANCE, JsonParser.parseReader(it)) }
                     val data = AtlasSourceManager.LIST_CODEC.parse(dynamic).getAnyway()
@@ -94,8 +96,8 @@ object ETAtlasHolder : ResourceReloader {
                 .map { it.withPath { path -> path.replaceFirst("armor", "elytra") } }
         }
         return AtlasLoader(sources).loadSources(manager).map { {
-            /*? if <1.20.2 */if (crop) it.get().transform { it.mask(model) } else it.get()
-            /*? if >=1.20.2 *//*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/  
+            /*? if <1.20.2*/if (crop) it.get().transform { it.mask(model) } else it.get()
+            /*? if >=1.20.2*//*if (crop) it.apply(opener).transform { it.mask(model) } else it.apply(opener)*/  
         } }
     }
 
@@ -115,9 +117,9 @@ object ETAtlasHolder : ResourceReloader {
         if (!ETClient.config.texture.animationEasterEgg.value) return emptyList()
         val resource = manager.getResource(ETReference.id("textures/animation/animation.png")).getOrNull()
             ?: return emptyList()
-        /*? if <1.20.2 */
+        /*? if <1.20.2*/
         val sprite = SpriteLoader.load(ETReference.id("animation/animation"), resource) ?: return emptyList()
-        /*? if >=1.20.2 */
+        /*? if >=1.20.2*/
         /*val sprite = opener.loadSprite(ETReference.id("apple/bad_apple"), resource) ?: return emptyList()*/  
         add { sprite }
     }
@@ -126,8 +128,8 @@ object ETAtlasHolder : ResourceReloader {
         sprites: List<ContentSupplier>,
         executor: Executor,
     ): CompletableFuture<List<SpriteContents>> =
-        /*? if <1.20.2 */SpriteLoader.loadAll(sprites.map(::asSupplier), executor);
-        /*? if >=1.20.2 *//*SpriteLoader.loadAll(opener, sprites.map(::asFunction), executor)*/  
+        /*? if <1.20.2*/SpriteLoader.loadAll(sprites.map(::asSupplier), executor);
+        /*? if >=1.20.2*//*SpriteLoader.loadAll(opener, sprites.map(::asFunction), executor)*/  
 
     private fun load(manager: ResourceManager, executor: Executor): CompletableFuture<StitchResult> {
         var model: NativeImage? = null

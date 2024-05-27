@@ -66,8 +66,8 @@ object ETCommonWrapper {
     }
 
 }
-  *//*?} else {*//*
-import dev.kikugie.elytratrims.client.ETClient
+  *//*?} else {*/
+/*import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraft.registry.Registries

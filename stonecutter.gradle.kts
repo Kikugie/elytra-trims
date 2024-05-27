@@ -2,7 +2,7 @@ plugins {
     id("dev.kikugie.stonecutter")
     id("co.uzzu.dotenv.gradle") version "4.0.0"
     id("dev.architectury.loom") version "1.6-SNAPSHOT" apply false
-    id("me.modmuss50.mod-publish-plugin") version "0.4.+" apply false
+    id("me.modmuss50.mod-publish-plugin") version "0.5.+" apply false
 }
 stonecutter active "1.20.1-fabric" /* [SC] DO NOT EDIT */
 

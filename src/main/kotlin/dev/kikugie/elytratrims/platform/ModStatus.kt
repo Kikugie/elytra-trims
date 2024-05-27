@@ -32,8 +32,8 @@ object ModStatus : IModStatus {
 
     override fun isLoaded(mod: String) = cache.computeIfAbsent(mod, Predicate {FMLLoader.getLoadingModList().getModFileById(mod) != null})
 }
-  *//*?} else {*//*
-import net.neoforged.fml.loading.FMLLoader
+  *//*?} else {*/
+/*import net.neoforged.fml.loading.FMLLoader
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap
