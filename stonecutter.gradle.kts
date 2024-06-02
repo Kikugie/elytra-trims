@@ -20,6 +20,5 @@ stonecutter configureEach {
     val current = project.property("loom.platform")
     val platforms = listOf("fabric", "forge", "neoforge")
         .map { it to (it == current) }
-        .toTypedArray()
-    consts(*platforms)
+    consts(platforms)
 }

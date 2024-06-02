@@ -47,6 +47,7 @@ dependencies {
     }
 
     minecraft("com.mojang:minecraft:${mcVersion}")
+    @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         mappings("net.fabricmc:yarn:${mcVersion}+build.${property("deps.yarn_build")}:v2")
         mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
@@ -78,21 +79,20 @@ dependencies {
     modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
     modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
     modCompileOnly(modrinth("betterend", "4.0.8"))
-    vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.0")
+    modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
+    vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 }
 
 loom {
     accessWidenerPath.set(rootProject.file("src/main/resources/elytratrims.accesswidener"))
 
-    if (loader == "forge") {
-        forge {
-            convertAccessWideners.set(true)
-            mixinConfigs(
-                "${mod.id}-client.mixins.json",
-                "${mod.id}-common.mixins.json",
-                "${mod.id}-compat.mixins.json"
-            )
-        }
+    if (loader == "forge") forge {
+        convertAccessWideners.set(true)
+        mixinConfigs(
+            "${mod.id}-client.mixins.json",
+            "${mod.id}-common.mixins.json",
+            "${mod.id}-compat.mixins.json"
+        )
     }
 
     runConfigs["client"].apply {
@@ -156,7 +156,8 @@ tasks.named("publishMods") {
 publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
-    displayName = "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
+    displayName =
+        "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
     type = STABLE
