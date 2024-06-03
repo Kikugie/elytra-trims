@@ -118,7 +118,7 @@ object ETAtlasHolder : ResourceReloader {
         /*? if <1.20.2*/
         val sprite = SpriteLoader.load(ETReference.id("animation/animation"), resource) ?: return emptyList()
         /*? if >=1.20.2*/
-        /*val sprite = opener.loadSprite(ETReference.id("apple/bad_apple"), resource) ?: return emptyList()*/
+        /*val sprite = opener.loadSprite(ETReference.id("animation/animation"), resource) ?: return emptyList()*/
         add { sprite }
     }
 

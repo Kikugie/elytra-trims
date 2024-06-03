@@ -30,7 +30,7 @@ object ETItemRenderer {
         runWithFirstPersonMod {
             CLIENT.entityRenderDispatcher.render(
                 dummy,
-                0.75,
+                0.775,
                 -0.125,
                 -0.2,
                 0F,

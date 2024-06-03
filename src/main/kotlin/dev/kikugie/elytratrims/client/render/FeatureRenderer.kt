@@ -204,7 +204,7 @@ class AnimationRenderer : FeatureRenderer {
     override val type: RenderType = RenderType.GLOBAL
     private val colors = DyeColor.BLACK.colorComponents
     private val background: Sprite by lazy {
-        val id = Identifier("entity/elytra")
+        val id = Identifier("entity/shield/base")
         atlas.getSprite(id).apply { if (missing) report(id) }
     }
     private val animation: Sprite by lazy {
