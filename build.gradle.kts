@@ -176,16 +176,22 @@ publishMods {
         projectId = property("publish.modrinth").toString()
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         targets.forEach(minecraftVersions::add)
-        if (isFabric) requires("fabric-api", "fabric-language-kotlin")
-        else requires("kotlin-for-forge")
+        if (isFabric) {
+            requires("fabric-api", "fabric-language-kotlin")
+            optional("modmenu")
+        } else requires("kotlin-for-forge")
+        optional("yacl")
     }
 
     curseforge {
         projectId = property("publish.curseforge").toString()
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         targets.forEach(minecraftVersions::add)
-        if (isFabric) requires("fabric-api", "fabric-language-kotlin")
-        else requires("kotlin-for-forge")
+        if (isFabric) {
+            requires("fabric-api", "fabric-language-kotlin")
+            optional("modmenu")
+        } else requires("kotlin-for-forge")
+        optional("yacl")
     }
 }
 
