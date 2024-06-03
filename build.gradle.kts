@@ -19,6 +19,7 @@ val loader = loom.platform.get().name.lowercase()
 val isFabric = loader == "fabric"
 val mcVersion = stonecutter.current.project.substringBeforeLast('-')
 val mcDep = property("mod.mc_dep").toString()
+val isSnapshot = hasProperty("env.snapshot")
 
 version = "${mod.version}+$mcVersion"
 group = mod.group
@@ -45,6 +46,9 @@ dependencies {
     fun modules(vararg modules: String) {
         modules.forEach { modImplementation(fabricApi.module("fabric-$it", "${property("deps.fapi")}")) }
     }
+    fun ifStable(str: String, action: (String) -> Unit = { modImplementation(it) }) {
+        if (isSnapshot) modCompileOnly(str) else action(str)
+    }
 
     minecraft("com.mojang:minecraft:${mcVersion}")
     @Suppress("UnstableApiUsage")
@@ -60,7 +64,7 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
         include(implementation(mixinSquared.format("fabric"))!!)
-        modImplementation("com.terraformersmc:modmenu:${property("deps.modmenu")}")
+        ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     } else {
         if (loader == "forge") {
             "forge"("net.minecraftforge:forge:${mcVersion}-${property("deps.fml")}")
@@ -72,7 +76,7 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    modImplementation(modrinth("yacl", property("deps.yacl")))
+    ifStable(modrinth("yacl", property("deps.yacl")))
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
