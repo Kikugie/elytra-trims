@@ -66,7 +66,7 @@ object ETCommonWrapper {
     }
 
 }
-  *//*?} else {*/
+*//*?} else {*/
 /*import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
@@ -74,12 +74,16 @@ import net.minecraft.registry.Registries
 import net.neoforged.fml.common.Mod
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.ModLoadingContext
-import net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent
 import net.neoforged.neoforge.registries.DeferredRegister
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.neoforge.forge.runWhenOn
 import java.util.function.Supplier
+
+//? if <1.20.6 {
+/^typealias CSF = net.neoforged.neoforge.client.ConfigScreenHandler.ConfigScreenFactory^/
+//?} else
+typealias CSF = net.neoforged.neoforge.client.gui.IConfigScreenFactory
 
 @Mod(ETReference.MOD_ID)
 object ETCommonWrapper {
@@ -93,8 +97,8 @@ object ETCommonWrapper {
 
             val provider = ConfigScreenProvider.screen
             ModLoadingContext.get().registerExtensionPoint(
-                ConfigScreenFactory::class.java,
-            ) { ConfigScreenFactory { _, parent -> provider(parent) } }
+                CSF::class.java,
+            ) { CSF { _, parent -> provider(parent) } }
         }
 
         val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)

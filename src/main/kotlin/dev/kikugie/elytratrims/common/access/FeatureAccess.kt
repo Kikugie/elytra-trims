@@ -88,8 +88,9 @@ import net.minecraft.item.BannerItem
 
 object FeatureAccess : IFeatureAccess {
     override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
-        if (ModStatus.isLoaded("stacked-armor-trims")) ArmorTrimList.getTrims(manager, this).orElse(emptyList())
-        else get(DataComponentTypes.TRIM)?.let(::listOf) ?: emptyList()
+        getArmorTrimList(this, manager) ?:
+        get(DataComponentTypes.TRIM)?.let(::listOf) ?:
+        emptyList()
 
     override fun ItemStack.getPatterns() = get(DataComponentTypes.BANNER_PATTERNS)?.layers?.map {
         BannerLayer(it.pattern, it.color)

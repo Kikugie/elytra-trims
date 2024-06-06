@@ -99,7 +99,7 @@ class ColorOverlayRenderer : FeatureRenderer {
     ) {
         if (sprite.missing) return
         val color = if (stack.name.string == "jeb_")
-            hsvToRgb(CLIENT.renderTime % 360 / 360F, 1F, 1F)
+            hsvToRgb((CLIENT.world?.time ?: 0) % 360 / 360F, 1F, 1F)
         else stack.getColor()
         if (color == 0) return
         model.render(sprite, matrices, provider, stack, light, alpha, *color.floatChannels)

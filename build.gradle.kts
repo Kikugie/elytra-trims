@@ -1,3 +1,5 @@
+import dev.kikugie.stonecutter.StonecutterBuild
+
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.9.22"
@@ -76,7 +78,10 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    ifStable(modrinth("yacl", property("deps.yacl")))
+    if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && !isFabric)
+        modCompileOnly(modrinth("yacl", property("deps.yacl")))
+    else
+        modImplementation(modrinth("yacl", property("deps.yacl")))
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
@@ -164,7 +169,7 @@ publishMods {
         "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = STABLE
+    type = BETA
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')
