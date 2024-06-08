@@ -8,6 +8,7 @@ plugins {
     id("me.fallenbreath.yamlang") version "1.3.1"
 }
 
+// Variables
 class ModData {
     val id = property("mod.id").toString()
     val name = property("mod.name").toString()
@@ -27,6 +28,7 @@ version = "${mod.version}+$mcVersion"
 group = mod.group
 base { archivesName.set("${mod.id}-$loader") }
 
+// Dependencies
 repositories {
     exclusiveContent {
         forRepository { maven("https://www.cursemaven.com") { name = "CurseForge" } }
@@ -92,6 +94,7 @@ dependencies {
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 }
 
+// Loom config
 loom {
     accessWidenerPath.set(rootProject.file("src/main/resources/elytratrims.accesswidener"))
 
@@ -118,14 +121,22 @@ loom {
     }
 }
 
+// Tasks
+val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
+    group = "build"
+    from(tasks.remapJar.get().archiveFile)
+    into(rootProject.layout.buildDirectory.file("libs/${mod.version}"))
+    dependsOn("build")
+}
+
 if (stonecutter.current.isActive) {
     rootProject.tasks.register("buildActive") {
         group = "project"
-
-        dependsOn(tasks.named("build"))
+        dependsOn(buildAndCollect)
     }
 }
 
+// Resources
 tasks.processResources {
     inputs.property("version", mod.version)
     inputs.property("mc", mcDep)
@@ -147,9 +158,10 @@ yamlang {
     inputDir.set("assets/${mod.id}/lang")
 }
 
+// Env configuration
 java {
     withSourcesJar()
-    val version = if (mcVersion > "1.20.4") JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val version = if (stonecutter.compare(mcVersion, "1.20.6") >= 0) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
     sourceCompatibility = version
     targetCompatibility = version
 }
@@ -158,10 +170,7 @@ kotlin {
     jvmToolchain(if (mcVersion.startsWith("1.20.6")) 21 else 17)
 }
 
-tasks.named("publishMods") {
-//    mustRunAfter("publish")
-}
-
+// Publishing
 publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
