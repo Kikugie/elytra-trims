@@ -1,6 +1,6 @@
 package dev.kikugie.elytratrims.common
 
-import net.minecraft.util.Identifier
+import dev.kikugie.elytratrims.common.util.identifier
 import org.slf4j.LoggerFactory
 
 object ETReference {
@@ -8,5 +8,5 @@ object ETReference {
     @JvmField
     val LOGGER = LoggerFactory.getLogger(MOD_ID)
 
-    fun id(path: String) = Identifier(MOD_ID, path)
+    fun id(path: String) = identifier(MOD_ID, path)
 }

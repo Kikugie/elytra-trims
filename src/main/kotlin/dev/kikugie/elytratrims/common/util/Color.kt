@@ -26,3 +26,4 @@ fun FloatArray.toARGB(): ARGB {
     }
     return (a shl 24) or (r shl 16) or (g shl 8) or b
 }
+fun ARGB.withAlpha(alpha: Float) = this and 0xFFFFFF or ((alpha * 255).toInt() and 0xFF shl 24)

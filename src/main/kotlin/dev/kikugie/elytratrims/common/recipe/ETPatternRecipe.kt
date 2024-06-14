@@ -6,7 +6,6 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setPatterns
 import dev.kikugie.elytratrims.common.util.isProbablyElytra
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.BannerItem
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.RecipeSerializer
@@ -14,24 +13,23 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
 class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : DelegatedRecipe(id, category) {
-    override fun matches(inventory: Inventory): Boolean {
+    override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var banner = 0
-        for (slot in 0 until inventory.size()) {
-            val stack = inventory.getStack(slot)
-            if (isProbablyElytra(stack.item)) elytra++
-            else if (stack.item is BannerItem) {
-                if (stack.getPatterns().isEmpty()) return false
+        input.forEach {
+            if (isProbablyElytra(it.item)) elytra++
+            else if (it.item is BannerItem) {
+                if (it.getPatterns().isEmpty()) return false
                 banner++
-            } else if (!stack.isEmpty) return false
+            } else if (!it.isEmpty) return false
             if (elytra > 1 || banner > 1) return false
         }
         return elytra == 1 && banner == 1
     }
 
-    override fun craft(inventory: Inventory): ItemStack {
-        val banner = inventory.firstItem { it is BannerItem } ?: return ItemStack.EMPTY
-        val elytra = inventory.firstItem(::isProbablyElytra)?.copy() ?: return ItemStack.EMPTY
+    override fun craft(input: Stacks): ItemStack {
+        val banner = input.firstItemCopy { it is BannerItem } ?: return ItemStack.EMPTY
+        val elytra = input.firstItemCopy(::isProbablyElytra) ?: return ItemStack.EMPTY
         elytra.setPatterns(banner)
         val color = banner.getBaseColor()
         if (color != 0) elytra.setColor(color)
@@ -45,6 +43,7 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETPatternRecipe> = serializer(ETReference.id("crafting_special_elytrapatterns"), ::ETPatternRecipe)
+        val SERIALIZER: RecipeSerializer<ETPatternRecipe> =
+            serializer(ETReference.id("crafting_special_elytrapatterns"), ::ETPatternRecipe)
     }
 }

@@ -8,6 +8,7 @@ import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.render.ETRenderer
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.util.getAnyway
+import dev.kikugie.elytratrims.common.util.identifier
 import dev.kikugie.elytratrims.mixin.client.PalettedPermutationsAtlasSourceAccessor
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.*
@@ -15,7 +16,6 @@ import net.minecraft.client.texture.SpriteLoader.StitchResult
 import net.minecraft.client.texture.atlas.AtlasLoader
 import net.minecraft.client.texture.atlas.AtlasSourceManager
 import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource
-import net.minecraft.resource.Resource
 import net.minecraft.resource.ResourceFinder
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceReloader
@@ -42,7 +42,7 @@ object ETAtlasHolder : ResourceReloader {
         addAll(patterns(manager, model))
         add(color(id, model))
         addAll(animation(manager))
-//        val item = loadTexture(Identifier("textures/item/elytra.png"), manager)?.readSafe()
+//        val item = loadTexture(identifier("textures/item/elytra.png"), manager)?.readSafe()
 //        if (item != null) {
 //            add(itemColor(ETReference.id("item/elytra_overlay"), item))
 //            add(itemOutline(ETReference.id("item/elytra_outline"), item))
@@ -135,7 +135,7 @@ object ETAtlasHolder : ResourceReloader {
             ready = false
             ETRenderer.reset()
             atlas.clear()
-            val id = Identifier("textures/entity/elytra.png")
+            val id = identifier("textures/entity/elytra.png")
             model = loadTexture(id, manager)?.readSafe() ?: return@supplyAsync emptyList()
             sprites(manager, model!!, id.withPath { path: String ->
                 path.replace("textures/", "").replace(".png", "")

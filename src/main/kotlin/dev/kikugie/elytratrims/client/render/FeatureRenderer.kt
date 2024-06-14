@@ -11,8 +11,7 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.getAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
-import dev.kikugie.elytratrims.common.util.floatChannels
-import dev.kikugie.elytratrims.common.util.memoize
+import dev.kikugie.elytratrims.common.util.*
 import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.entity.BannerPattern
 import net.minecraft.client.model.Model
@@ -27,7 +26,6 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.entry.RegistryEntry
-import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper.hsvToRgb
 
@@ -66,25 +64,26 @@ interface FeatureRenderer {
         provider: VertexConsumerProvider,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
-        vararg channels: Float,
-    ) =
-        render(
-            matrices,
-            createVertexConsumer(sprite, provider, stack),
-            light,
-            OverlayTexture.DEFAULT_UV,
-            channels[0],
-            channels[1],
-            channels[2],
-            alpha
-        )
+        color: Int
+    ): Unit = render(
+        matrices,
+        createVertexConsumer(sprite, provider, stack),
+        light,
+        OverlayTexture.DEFAULT_UV,
+        //? if <1.21 {
+        color.red.scaled,
+        color.green.scaled,
+        color.blue.scaled,
+        color.alpha.scaled,
+        //?} else
+        /*color*/
+    )
 }
 
 class ColorOverlayRenderer : FeatureRenderer {
     override val type = RenderType.COLOR
     private val sprite: Sprite by lazy {
-        val id = Identifier("entity/elytra")
+        val id = identifier("entity/elytra")
         atlas.getSprite(id).apply { if (missing) report(id) }
     }
 
@@ -102,7 +101,7 @@ class ColorOverlayRenderer : FeatureRenderer {
             hsvToRgb((CLIENT.world?.time ?: 0) % 360 / 360F, 1F, 1F)
         else stack.getColor()
         if (color == 0) return
-        model.render(sprite, matrices, provider, stack, light, alpha, *color.floatChannels)
+        model.render(sprite, matrices, provider, stack, light, color.withAlpha(alpha))
     }
 }
 
@@ -129,7 +128,7 @@ class PatternsOverlayRenderer : FeatureRenderer {
     ) = stack.getPatterns().forEach {
         val sprite = cache(it.pattern)
         if (sprite.missing) return@forEach
-        model.render(sprite, matrices, provider, stack, light, alpha, *it.color.colorComponents)
+        model.render(sprite, matrices, provider, stack, light, it.color.components(alpha))
     }
 }
 
@@ -170,12 +169,13 @@ class TrimOverlayRenderer : FeatureRenderer {
         ?: throw AssertionError("No available world - nowhere to get trims from")
     ).forEach {
         val sprite = vanillaCache(it)
+        val color = 0xFFFFFF.withAlpha(alpha)
         if (!sprite.missing)
-            model.render(sprite, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
+            model.render(sprite, matrices, provider, stack, light, color)
         else if (ModStatus.isLoaded("allthetrims"))
             renderTrimExtended(model, matrices, provider, entity, stack, it, light, alpha)
         else if (entity != null && ETRenderer.renderAlways(entity))
-            model.render(sprite, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
+            model.render(sprite, matrices, provider, stack, light, color)
     }
 
     private fun renderTrimExtended(
@@ -193,7 +193,7 @@ class TrimOverlayRenderer : FeatureRenderer {
             val sprite = attCache(TrimInfo(trim, i))
             if (sprite.missing && !(entity == null || ETRenderer.renderAlways(entity))) continue
             val color = palette[i]
-            model.render(sprite, matrices, provider, stack, light, alpha, *color.rgb.floatChannels)
+            model.render(sprite, matrices, provider, stack, light, color.rgb.withAlpha(alpha))
         }
     }
 
@@ -202,9 +202,8 @@ class TrimOverlayRenderer : FeatureRenderer {
 
 class AnimationRenderer : FeatureRenderer {
     override val type: RenderType = RenderType.GLOBAL
-    private val colors = DyeColor.BLACK.colorComponents
     private val background: Sprite by lazy {
-        val id = Identifier("entity/shield/base")
+        val id = identifier("entity/shield/base")
         atlas.getSprite(id).apply { if (missing) report(id) }
     }
     private val animation: Sprite by lazy {
@@ -219,10 +218,10 @@ class AnimationRenderer : FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float
+        alpha: Float,
     ) {
         if (!ETClient.config.texture.animationEasterEgg.value || !stack.getAnimationStatus()) return
-        model.render(background, matrices, provider, stack, light, alpha, *colors)
-        model.render(animation, matrices, provider, stack, light, alpha, 1F, 1F, 1F)
+        model.render(background, matrices, provider, stack, light, 0.withAlpha(alpha))
+        model.render(animation, matrices, provider, stack, light, 0xFFFFFF.withAlpha(alpha))
     }
 }

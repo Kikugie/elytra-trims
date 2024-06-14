@@ -80,10 +80,9 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && !isFabric)
-        modCompileOnly(modrinth("yacl", property("deps.yacl")))
-    else
-        modImplementation(modrinth("yacl", property("deps.yacl")))
+    val yacol = modrinth("yacl", property("deps.yacl"))
+    if (isSnapshot || stonecutter.compare(mcVersion, "1.20.6") >= 0 && !isFabric) modCompileOnly(yacol)
+    else modImplementation(yacol)
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
@@ -159,15 +158,17 @@ yamlang {
 }
 
 // Env configuration
-java {
-    withSourcesJar()
-    val version = if (stonecutter.compare(mcVersion, "1.20.6") >= 0) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
-    sourceCompatibility = version
-    targetCompatibility = version
-}
+stonecutter {
+    val j21 = mcVersion comp "1.20.6" >= 0
+    java {
+        withSourcesJar()
+        sourceCompatibility = if (j21) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+        targetCompatibility = if (j21) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    }
 
-kotlin {
-    jvmToolchain(if (mcVersion.startsWith("1.20.6")) 21 else 17)
+    kotlin {
+        jvmToolchain(if (j21) 21 else 17)
+    }
 }
 
 // Publishing

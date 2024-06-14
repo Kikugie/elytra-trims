@@ -5,7 +5,6 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.addAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
 import dev.kikugie.elytratrims.common.util.isProbablyElytra
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
@@ -13,11 +12,11 @@ import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
 class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : DelegatedRecipe(id, category) {
-    override fun matches(inventory: Inventory): Boolean {
+    override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var apple = 0
         var flesh = 0
-        inventory.sequence().forEach {
+        input.forEach {
             when {
                 isProbablyElytra(it.item) -> elytra++
                 it.item == Items.APPLE -> apple++
@@ -28,8 +27,8 @@ class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : Dele
         return elytra == 1 && apple == 1 && flesh == 1
     }
 
-    override fun craft(inventory: Inventory): ItemStack {
-        val elytra = inventory.firstItem(::isProbablyElytra)?.copy() ?: return ItemStack.EMPTY
+    override fun craft(input: Stacks): ItemStack {
+        val elytra = input.firstItemCopy(::isProbablyElytra) ?: return ItemStack.EMPTY
         with(elytra) {
             addAnimationStatus()
             removePatterns()
@@ -43,6 +42,7 @@ class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : Dele
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETAnimationRecipe> = serializer(ETReference.id("crafting_special_elytraanimation"), ::ETAnimationRecipe)
+        val SERIALIZER: RecipeSerializer<ETAnimationRecipe> =
+            serializer(ETReference.id("crafting_special_elytraanimation"), ::ETAnimationRecipe)
     }
 }

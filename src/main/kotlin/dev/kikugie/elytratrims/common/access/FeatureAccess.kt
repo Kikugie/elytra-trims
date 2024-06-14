@@ -1,15 +1,13 @@
 package dev.kikugie.elytratrims.common.access
 
-import dev.kikugie.elytratrims.common.access.FeatureAccess.addGlow
-import dev.kikugie.elytratrims.common.access.FeatureAccess.removeGlow
-import dev.kikugie.elytratrims.common.util.toARGB
+import dev.kikugie.elytratrims.common.util.components
 import dev.kikugie.elytratrims.platform.ModStatus
 import io.github.apfelrauber.stacked_trims.ArmorTrimList
 import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.DynamicRegistryManager
 
-/*? if <=1.20.4 {*/
+//? if <=1.20.4 {
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.item.BannerItem
 import net.minecraft.item.BlockItem
@@ -30,7 +28,7 @@ object FeatureAccess : IFeatureAccess {
         }
     }
 
-    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.components() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         val nbt = BannerBlockEntity.getPatternListNbt(source) ?: return
@@ -80,7 +78,7 @@ object FeatureAccess : IFeatureAccess {
         nbt?.remove("bad_apple")
     }
 }
-/*?} else {*/
+//?} else {
 /*import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.component.type.NbtComponent
@@ -96,7 +94,7 @@ object FeatureAccess : IFeatureAccess {
         BannerLayer(it.pattern, it.color)
     } ?: emptyList()
 
-    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.colorComponents?.toARGB() ?: 0
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.components() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         applyComponentsFrom(source.components.filtered { it == DataComponentTypes.BANNER_PATTERNS })
@@ -145,7 +143,7 @@ object FeatureAccess : IFeatureAccess {
         NbtComponent.set(DataComponentTypes.CUSTOM_DATA, this, data)
     }
 }
-  *//*?}*/
+*///?}
 
 private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager): List<ArmorTrim>? =
     /*? if fabric {*/

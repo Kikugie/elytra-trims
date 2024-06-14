@@ -34,7 +34,7 @@ object ETItemRenderer {
                 -0.125,
                 -0.2,
                 0F,
-                CLIENT.tickDelta,
+                0F,
                 matrices,
                 vertexConsumers,
                 light
