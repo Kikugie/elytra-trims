@@ -16,6 +16,7 @@ import java.util.List;
 
 @Mixin(Item.class)
 public class ItemMixin {
+    @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(method = "appendTooltip", at = @At("HEAD"))
     protected void elytratrims$modifyTooltip(
         //? if >=1.21 {

@@ -1,6 +1,6 @@
 package dev.kikugie.elytratrims.common.access
 
-import dev.kikugie.elytratrims.common.util.components
+import dev.kikugie.elytratrims.common.util.toArgb
 import dev.kikugie.elytratrims.platform.ModStatus
 import io.github.apfelrauber.stacked_trims.ArmorTrimList
 import net.minecraft.item.ItemStack
@@ -28,7 +28,7 @@ object FeatureAccess : IFeatureAccess {
         }
     }
 
-    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.components() ?: 0
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.toArgb() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         val nbt = BannerBlockEntity.getPatternListNbt(source) ?: return
@@ -94,7 +94,7 @@ object FeatureAccess : IFeatureAccess {
         BannerLayer(it.pattern, it.color)
     } ?: emptyList()
 
-    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.components() ?: 0
+    override fun ItemStack.getBaseColor(): Int = (item as? BannerItem)?.color?.toArgb() ?: 0
 
     override fun ItemStack.setPatterns(source: ItemStack) {
         applyComponentsFrom(source.components.filtered { it == DataComponentTypes.BANNER_PATTERNS })

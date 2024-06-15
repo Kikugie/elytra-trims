@@ -77,7 +77,6 @@ object ETAtlasHolder : ResourceReloader {
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
         val crop = ETClient.config.texture.cropTrims.value
         val atlases = manager.findAllResources("atlases") { it.path.endsWith("armor_trims.json") }
-        ETReference.LOGGER.info("Atlases: [${atlases.keys.joinToString()}]")
         val sources = atlases.values.flatten().flatMap {
             try {
                 val dynamic = it.reader.use { Dynamic(JsonOps.INSTANCE, JsonParser.parseReader(it)) }

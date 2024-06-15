@@ -2,6 +2,7 @@ package dev.kikugie.elytratrims.mixin.client;
 
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
+import dev.kikugie.elytratrims.mixin.constants.Targets;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
 import net.minecraft.entity.EquipmentSlot;
@@ -45,16 +46,7 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
         } else isElytra = false;
     }
 
-    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE",
-            //? if >1.20.4 {
-            /*target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *///?} elif >=1.20.2 {
-            /*target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *///?} elif >=1.20.1 {
-            target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            //?} else
-            /*target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"*/
-    ), index = /*? if >=1.20.2 {*/ /*5 *//*?} else {*/ 4 /*?}*/)
+    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = Targets.drawEntity), index = Targets.drawEntityIndex)
     private Quaternionf applyRotation(Quaternionf quaternionf) {
         return elytratrims$rotateElytra(quaternionf);
     }

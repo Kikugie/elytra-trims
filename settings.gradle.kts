@@ -10,12 +10,11 @@ pluginManagement {
         maven("https://maven.minecraftforge.net")
         maven("https://maven.neoforged.net/releases/")
         maven("https://maven.kikugie.dev/releases")
-        maven("https://maven.kikugie.dev/snapshots")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.4-rc.2"
+    id("dev.kikugie.stonecutter") version "0.4"
 }
 
 extensions.configure<StonecutterSettings> {

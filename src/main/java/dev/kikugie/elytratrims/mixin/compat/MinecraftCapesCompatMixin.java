@@ -7,6 +7,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
+import dev.kikugie.elytratrims.common.util.ColorKt;
+import dev.kikugie.elytratrims.mixin.constants.Targets;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
 import net.minecraft.client.render.VertexConsumer;
@@ -27,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = ElytraFeatureRenderer.class, priority = 1500)
 public class MinecraftCapesCompatMixin {
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
-    @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
+    @ModifyExpressionValue(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = Targets.isPartVisible))
     private boolean minecraftcapes$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
@@ -38,6 +40,7 @@ public class MinecraftCapesCompatMixin {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
+    // FIXME when minecraft capes updates
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
     @WrapOperation(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
     private void minecraftcapes$elytraPostRender(ElytraEntityModel<?> model,
@@ -53,6 +56,6 @@ public class MinecraftCapesCompatMixin {
                                   @Local(argsOnly = true) VertexConsumerProvider provider,
                                   @Local(argsOnly = true) LivingEntity entity) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, alpha);
+        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, ColorKt.toARGB(red, green, blue, alpha));
     }
 }

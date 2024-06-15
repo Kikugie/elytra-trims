@@ -45,7 +45,7 @@ interface FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
+        color: ARGB
     )
 
     fun createVertexConsumer(sprite: Sprite, provider: VertexConsumerProvider, stack: ItemStack): VertexConsumer =
@@ -94,14 +94,14 @@ class ColorOverlayRenderer : FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
+        color: ARGB
     ) {
         if (sprite.missing) return
-        val color = if (stack.name.string == "jeb_")
+        val itemColor = if (stack.name.string == "jeb_")
             hsvToRgb((CLIENT.world?.time ?: 0) % 360 / 360F, 1F, 1F)
         else stack.getColor()
-        if (color == 0) return
-        model.render(sprite, matrices, provider, stack, light, color.withAlpha(alpha))
+        if (itemColor == 0) return
+        model.render(sprite, matrices, provider, stack, light, itemColor.withAlpha(color.alpha))
     }
 }
 
@@ -124,11 +124,11 @@ class PatternsOverlayRenderer : FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
+        color: ARGB
     ) = stack.getPatterns().forEach {
         val sprite = cache(it.pattern)
         if (sprite.missing) return@forEach
-        model.render(sprite, matrices, provider, stack, light, it.color.components(alpha))
+        model.render(sprite, matrices, provider, stack, light, it.color.toArgb(color.alpha))
     }
 }
 
@@ -163,17 +163,16 @@ class TrimOverlayRenderer : FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
+        color: ARGB
     ) = stack.getTrims(
         entity?.world?.registryManager ?: CLIENT.world?.registryManager
         ?: throw AssertionError("No available world - nowhere to get trims from")
     ).forEach {
         val sprite = vanillaCache(it)
-        val color = 0xFFFFFF.withAlpha(alpha)
         if (!sprite.missing)
             model.render(sprite, matrices, provider, stack, light, color)
         else if (ModStatus.isLoaded("allthetrims"))
-            renderTrimExtended(model, matrices, provider, entity, stack, it, light, alpha)
+            renderTrimExtended(model, matrices, provider, entity, stack, it, light, color)
         else if (entity != null && ETRenderer.renderAlways(entity))
             model.render(sprite, matrices, provider, stack, light, color)
     }
@@ -186,14 +185,13 @@ class TrimOverlayRenderer : FeatureRenderer {
         stack: ItemStack,
         trim: ArmorTrim,
         light: Int,
-        alpha: Float,
+        color: ARGB
     ) {
         val palette = PaletteHelper.getPalette(trim.material.value().ingredient.value())
         for (i in 0 until 8) {
             val sprite = attCache(TrimInfo(trim, i))
             if (sprite.missing && !(entity == null || ETRenderer.renderAlways(entity))) continue
-            val color = palette[i]
-            model.render(sprite, matrices, provider, stack, light, color.rgb.withAlpha(alpha))
+            model.render(sprite, matrices, provider, stack, light, palette[i].rgb.withAlpha(color.alpha))
         }
     }
 
@@ -218,10 +216,10 @@ class AnimationRenderer : FeatureRenderer {
         entity: LivingEntity?,
         stack: ItemStack,
         light: Int,
-        alpha: Float,
+        color: ARGB
     ) {
         if (!ETClient.config.texture.animationEasterEgg.value || !stack.getAnimationStatus()) return
-        model.render(background, matrices, provider, stack, light, 0.withAlpha(alpha))
-        model.render(animation, matrices, provider, stack, light, 0xFFFFFF.withAlpha(alpha))
+        model.render(background, matrices, provider, stack, light, color.alpha shl 24)
+        model.render(animation, matrices, provider, stack, light, 0xFFFFFF.withAlpha(color.alpha))
     }
 }

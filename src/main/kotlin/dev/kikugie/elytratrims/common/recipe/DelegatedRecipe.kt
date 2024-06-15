@@ -29,11 +29,11 @@ abstract class DelegatedRecipe(id: Identifier, category: CraftingRecipeCategory)
     override fun craft(inventory: net.minecraft.inventory.RecipeInputInventory, lookup: net.minecraft.registry.DynamicRegistryManager): ItemStack =
         craft(inventory.inputStacks)
     override fun matches(inventory: net.minecraft.inventory.RecipeInputInventory, world: World): Boolean =
-        matches(inventory.heldStacks)
+        matches(inventory.inputStacks)
     //?} else {
     /*override fun craft(inventory: net.minecraft.inventory.CraftingInventory, registryManager: net.minecraft.registry.DynamicRegistryManager): ItemStack =
-        craft(inventory)
+        craft(inventory.inputStacks)
     override fun matches(inventory: net.minecraft.inventory.CraftingInventory, world: World): Boolean =
-        matches(inventory)
+        matches(inventory.inputStacks)
     *///?}
 }

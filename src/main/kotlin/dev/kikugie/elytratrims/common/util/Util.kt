@@ -35,6 +35,6 @@ fun identifier(path: String, id: String): Identifier =
     /*? if <1.21 {*/Identifier(path, id)
     /*?} else*//*Identifier.of(path, id)*/
 
-fun DyeColor.components(alpha: Float = 1F) =
-    /*? if <1.21 {*/colorComponents.toARGB().withAlpha(alpha)
+fun DyeColor.toArgb(alpha: Int = 255) =
+        /*? if <1.21 {*/colorComponents.toARGB().withAlpha(alpha)
     /*?} else*//*entityColor.withAlpha(alpha)*/

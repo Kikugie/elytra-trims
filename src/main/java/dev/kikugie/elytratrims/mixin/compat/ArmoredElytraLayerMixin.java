@@ -6,6 +6,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
+import dev.kikugie.elytratrims.common.util.ColorKt;
+import dev.kikugie.elytratrims.mixin.constants.Targets;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
 import net.minecraft.client.render.VertexConsumer;
@@ -24,12 +26,13 @@ import org.spongepowered.asm.mixin.injection.At;
 @RequireMod("betterend")
 @Mixin(ArmoredElytraLayer.class)
 public class ArmoredElytraLayerMixin {
-    /*? if fabric {*/
-    @ModifyExpressionValue(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
+    //? if fabric && <1.21 {
+    @ModifyExpressionValue(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = Targets.isPartVisible))
     private boolean betterend$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
     }
 
+    // FIXME when betterend updates
     @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "INVOKE",
                     target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
@@ -48,7 +51,7 @@ public class ArmoredElytraLayerMixin {
             @Local(argsOnly = true) LivingEntity entity,
             @Local ItemStack stack) {
         original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETRenderer.render(model, matrices, provider, entity, stack, light, alpha);
+        ETRenderer.render(model, matrices, provider, entity, stack, light, ColorKt.toARGB(red, green, blue, alpha));
     }
-    /*?}*/
+    //?}
 }

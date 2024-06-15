@@ -2,6 +2,7 @@ package dev.kikugie.elytratrims.mixin.compat;
 
 import com.bawnorton.mixinsquared.TargetHandler;
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
+import dev.kikugie.elytratrims.mixin.constants.Targets;
 import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
@@ -19,21 +20,12 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor {
     @TargetHandler(
             mixin = "me.bettersmithingtable.mixin.SmithingScreenMixin",
-            /*? if >=1.20.2 {*/
+            //? if >=1.20.2 {
             /*name = "renderBg"
-            *//*?} else {*/
+            *///?} else
             name = "drawArmorStandPreview"
-            /*?}*/
     )
-    @ModifyArg(method = "@MixinSquared:Handler", at = @At(value = "INVOKE",
-            /*? if >=1.20.2 {*/
-            /*target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;FFILorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?} elif >=1.20.1 {*/
-            target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/gui/DrawContext;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            /*?} else {*//*
-            target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;drawEntity(Lnet/minecraft/client/util/math/MatrixStack;IIILorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V"
-            *//*?}*/
-    ), index = /*? if >=1.20.2 {*/ /*5 *//*?} else {*/ 4 /*?}*/)
+    @ModifyArg(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = Targets.drawEntity), index = Targets.drawEntityIndex)
     private Quaternionf applyElytraRotation(Quaternionf quaternionf) {
         return elytratrims$rotateElytra(quaternionf);
     }

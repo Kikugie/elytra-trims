@@ -15,6 +15,7 @@ val Channel.scaled: Float
     @JvmName("scaled") get() = this / 255F
 val ARGB.floatChannels
     @JvmName("floatChannels") get() = floatArrayOf(red.scaled, green.scaled, blue.scaled, alpha.scaled)
+fun toARGB(red: Float, green: Float, blue: Float, alpha: Float) = floatArrayOf(red, green, blue, alpha).toARGB()
 fun FloatArray.toARGB(): ARGB {
     val r = (this[0] * 255).toInt() and 0xFF
     val g = (this[1] * 255).toInt() and 0xFF
@@ -26,4 +27,6 @@ fun FloatArray.toARGB(): ARGB {
     }
     return (a shl 24) or (r shl 16) or (g shl 8) or b
 }
-fun ARGB.withAlpha(alpha: Float) = this and 0xFFFFFF or ((alpha * 255).toInt() and 0xFF shl 24)
+
+fun ARGB.withoutAlpha() = this and 0xFFFFFF
+fun ARGB.withAlpha(alpha: Int) = withoutAlpha() or (alpha shl 24)
