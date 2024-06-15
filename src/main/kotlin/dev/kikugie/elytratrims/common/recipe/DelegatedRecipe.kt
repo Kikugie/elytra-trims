@@ -25,6 +25,11 @@ abstract class DelegatedRecipe(id: Identifier, category: CraftingRecipeCategory)
         craft(inventory.heldStacks)
     override fun matches(inventory: net.minecraft.inventory.RecipeInputInventory, world: World): Boolean =
         matches(inventory.heldStacks)
+    *///?} elif >=1.20.4 {
+    /*override fun craft(inventory: net.minecraft.inventory.RecipeInputInventory, lookup: net.minecraft.registry.DynamicRegistryManager): ItemStack =
+        craft(inventory.heldStacks)
+    override fun matches(inventory: net.minecraft.inventory.RecipeInputInventory, world: World): Boolean =
+        matches(inventory.heldStacks)
     *///?} elif >=1.20 {
     override fun craft(inventory: net.minecraft.inventory.RecipeInputInventory, lookup: net.minecraft.registry.DynamicRegistryManager): ItemStack =
         craft(inventory.inputStacks)
