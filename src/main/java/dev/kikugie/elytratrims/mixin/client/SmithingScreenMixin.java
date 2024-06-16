@@ -3,7 +3,6 @@ package dev.kikugie.elytratrims.mixin.client;
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
-import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -20,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static dev.kikugie.elytratrims.common.util.UtilKt.isProbablyElytra;
 
-@MixinConfigurable
 @Mixin(value = SmithingScreen.class, priority = 1100)
 public class SmithingScreenMixin implements ElytraRotationAccessor {
     @Unique

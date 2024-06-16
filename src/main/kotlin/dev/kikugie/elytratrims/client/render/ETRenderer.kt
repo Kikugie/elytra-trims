@@ -65,16 +65,13 @@ object ETRenderer {
     }
 
     @JvmStatic
-    fun shouldRender(type: RenderType, entity: LivingEntity): Boolean {
-        val mode = ETClient.config.render.effective(type)
-        val player = CLIENT.player
-        return renderAlways(entity) || when (mode) {
+    fun shouldRender(type: RenderType, entity: LivingEntity): Boolean =
+        renderAlways(entity) || when (ETClient.config.render[type]) {
             NONE -> false
-            SELF -> entity == player
-            OTHERS -> entity != player
+            SELF -> entity == CLIENT.player
+            OTHERS -> entity != CLIENT.player
             ALL -> true
         }
-    }
 
     @JvmStatic
     fun renderAlways(entity: LivingEntity): Boolean = (entity as LivingEntityAccessor).`elytratrims$isGui`()

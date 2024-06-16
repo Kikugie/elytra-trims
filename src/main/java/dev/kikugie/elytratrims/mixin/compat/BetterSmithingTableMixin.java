@@ -3,8 +3,8 @@ package dev.kikugie.elytratrims.mixin.compat;
 import com.bawnorton.mixinsquared.TargetHandler;
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
-import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.gui.screen.ingame.SmithingScreen;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Pseudo
-@MixinConfigurable
-@RequireMod("bettersmithingtable")
+@Restriction(require = {@Condition("bettersmithingtable")})
 @SuppressWarnings("ALL")
 @Mixin(value = SmithingScreen.class, priority = 1500)
 public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor {

@@ -109,7 +109,7 @@ class PatternsOverlayRenderer : FeatureRenderer {
     override val type = RenderType.PATTERNS
     private val cache: (RegistryEntry<BannerPattern>) -> Sprite = memoize {
         val key = it/*? if <=1.20.4*/.key.get()
-        val useBanner = ETClient.config.texture.useBannerTextures.value
+        val useBanner = ETClient.config.texture.useBannerTextures
         val spriteId = if (useBanner)
             TexturedRenderLayers.getBannerPatternTextureId(key).textureId
         else
@@ -149,7 +149,7 @@ class TrimOverlayRenderer : FeatureRenderer {
     }
 
     private fun sprite(id: Identifier): Sprite {
-        if (ETClient.config.texture.useDarkerTrim.value) {
+        if (ETClient.config.texture.useDarkerTrim) {
             val sprite = atlas.getSprite(id.withSuffixedPath("_darker"))
             if (!sprite.missing) return sprite
         }
@@ -218,7 +218,7 @@ class AnimationRenderer : FeatureRenderer {
         light: Int,
         color: ARGB
     ) {
-        if (!ETClient.config.texture.animationEasterEgg.value || !stack.getAnimationStatus()) return
+        if (!stack.getAnimationStatus()) return
         model.render(background, matrices, provider, stack, light, color.alpha shl 24)
         model.render(animation, matrices, provider, stack, light, 0xFFFFFF.withAlpha(color.alpha))
     }

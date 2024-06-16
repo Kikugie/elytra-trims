@@ -3,6 +3,7 @@ package dev.kikugie.elytratrims.mixin.client;
 import dev.kikugie.elytratrims.client.ETClient;
 import dev.kikugie.elytratrims.common.access.FeatureAccess;
 import dev.kikugie.elytratrims.common.util.UtilKt;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class ItemMixin {
         if (FeatureAccess.INSTANCE.hasGlow(stack))
             tooltip.add(Text.translatable("elytratrims.item.glow"));
         BannerItem.appendBannerTooltip(stack, tooltip);
-        if (ETClient.INSTANCE.getConfig().getTexture().getUseElytraModel().getValue()) {
+        if (ETClient.INSTANCE.getConfig().texture.useElytraModel && Screen.hasShiftDown()) {
             tooltip.add(Text.translatable("elytratrims.item.model1"));
             tooltip.add(Text.translatable("elytratrims.item.model2"));
         }

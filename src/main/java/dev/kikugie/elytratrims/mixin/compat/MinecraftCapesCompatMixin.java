@@ -9,8 +9,8 @@ import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
 import dev.kikugie.elytratrims.common.util.ColorKt;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
-import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
@@ -23,9 +23,8 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Pseudo
-@MixinConfigurable
-@RequireMod("minecraftcapes")
 @SuppressWarnings("ALL")
+@Restriction(require = {@Condition("minecraftcapes")})
 @Mixin(value = ElytraFeatureRenderer.class, priority = 1500)
 public class MinecraftCapesCompatMixin {
     @TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")

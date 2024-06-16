@@ -1,8 +1,7 @@
-import dev.kikugie.stonecutter.StonecutterBuild
-
 plugins {
     `maven-publish`
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     id("dev.architectury.loom")
     id("me.modmuss50.mod-publish-plugin")
     id("me.fallenbreath.yamlang") version "1.3.1"
@@ -30,19 +29,15 @@ base { archivesName.set("${mod.id}-$loader") }
 
 // Dependencies
 repositories {
-    exclusiveContent {
-        forRepository { maven("https://www.cursemaven.com") { name = "CurseForge" } }
-        filter { includeGroup("curse.maven") }
+    fun strictMaven(url: String, vararg groups: String) = exclusiveContent {
+        forRepository { maven(url) }
+        filter { groups.forEach(::includeGroup) }
     }
-    exclusiveContent {
-        forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
-        filter { includeGroup("maven.modrinth") }
-    }
-    maven("https://jitpack.io") { name = "Jitpack" }
-    maven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
-    maven("https://maven.kikugie.dev/releases")
+    strictMaven("https://api.modrinth.com/maven", "maven.modrinth")
+    strictMaven("https://thedarkcolour.github.io/KotlinForForge/", "thedarkcolour")
+    maven("https://jitpack.io")
     maven("https://maven.neoforged.net/releases/")
-    maven("https://thedarkcolour.github.io/KotlinForForge/")
+    maven("https://maven.terraformersmc.com/releases/")
 }
 
 dependencies {
@@ -63,6 +58,7 @@ dependencies {
     val mixinExtras = "io.github.llamalad7:mixinextras-%s:${property("deps.mixin_extras")}"
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
     implementation(annotationProcessor(mixinSquared.format("common"))!!)
+    include(implementation("com.github.Fallen-Breath.conditional-mixin:conditional-mixin-$loader:${property("deps.cond_mixin")}")!!)
     if (isFabric) {
         modules("registry-sync-v0", "resource-loader-v0", "entity-events-v1")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")

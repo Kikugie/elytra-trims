@@ -18,7 +18,7 @@ object ETItemRenderer {
     @JvmStatic
     fun render(stack: ItemStack, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int): Boolean {
         if (CLIENT.world == null) return false
-        if (!ETClient.config.texture.useElytraModel.value) return false
+        if (!ETClient.config.texture.useElytraModel) return false
         if (!isProbablyElytra(stack.item)) return false
         if (dummy == null || dummy?.world != CLIENT.world)
             dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0).apply { isInvisible = true }

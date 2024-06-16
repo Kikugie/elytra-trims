@@ -7,8 +7,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
 import dev.kikugie.elytratrims.common.util.ColorKt;
-import dev.kikugie.elytratrims.mixin.plugin.MixinConfigurable;
-import dev.kikugie.elytratrims.mixin.plugin.RequireMod;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -22,9 +22,8 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Pseudo
-@MixinConfigurable
 @SuppressWarnings("ALL")
-@RequireMod("elytra_trinket")
+@Restriction(require = {@Condition("elytra_trinket")})
 @Mixin(targets = "pw.lakuna.elytra_trinket.ElytraTrinketFeatureRenderer")
 public abstract class ElytraTrinketFeatureRendererMixin extends FeatureRenderer {
     public ElytraTrinketFeatureRendererMixin(FeatureRendererContext context) {

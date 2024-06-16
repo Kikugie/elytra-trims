@@ -1,5 +1,7 @@
 package dev.kikugie.elytratrims.common.util
 
+import net.minecraft.util.DyeColor
+
 typealias ARGB = Int
 typealias Channel = Int
 
@@ -30,3 +32,7 @@ fun FloatArray.toARGB(): ARGB {
 
 fun ARGB.withoutAlpha() = this and 0xFFFFFF
 fun ARGB.withAlpha(alpha: Int) = withoutAlpha() or (alpha shl 24)
+
+fun DyeColor.toArgb(alpha: Int = 255) =
+    /*? if <1.21 {*/colorComponents.toARGB().withAlpha(alpha)
+/*?} else*//*entityColor.withAlpha(alpha)*/

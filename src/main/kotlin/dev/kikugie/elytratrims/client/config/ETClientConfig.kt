@@ -1,23 +1,16 @@
 package dev.kikugie.elytratrims.client.config
 
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.kikugie.elytratrims.common.config.ConfigLoader
+import dev.kikugie.elytratrims.common.config.ETConfigLoader
 import dev.kikugie.elytratrims.platform.ModStatus
-import java.nio.file.Path
+import kotlinx.serialization.Required
+import kotlinx.serialization.Serializable
 
-data class ETClientConfig(val render: RenderConfig, val texture: TextureConfig) {
-    fun save() = ConfigLoader.save(FILE, CODEC, this)
+@Serializable
+data class ETClientConfig(
+    @Required @JvmField val render: RenderConfig = RenderConfig(),
+    @Required @JvmField val texture: TextureConfig = TextureConfig(),
+) {
     companion object {
-        val CODEC: Codec<ETClientConfig> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                RenderConfig.CODEC.fieldOf("render").forGetter { it.render },
-                TextureConfig.CODEC.fieldOf("texture").forGetter { it.texture }
-            ).apply(instance, ::ETClientConfig)
-        }
-        val FILE: Path = ModStatus.configDir.resolve("elytra-trims.json")
-
-        fun load(): ETClientConfig = ConfigLoader.load(FILE, CODEC, ::create)
-        private fun create() = ETClientConfig(RenderConfig.default(), TextureConfig.default())
+        fun load() = ETConfigLoader.load(ModStatus.configDir.resolve("elytra-trims.json"), ::ETClientConfig)
     }
 }

@@ -17,11 +17,10 @@ import net.minecraft.stat.Stats
 
 object ETCommon {
     @JvmField
-    val config: ETServerConfig = if (ModStatus.isClient) ETServerConfig.create() else ETServerConfig.load()
+    val config: ETServerConfig = if (ModStatus.isClient) ETServerConfig() else ETServerConfig.load()
 
     fun init() {
         ETCommentary.run()
-        if (!config.cleanableElytra) return
         val behaviour = CauldronBehavior { state, world, pos, player, _, stack ->
             var glowRemoval = false
             var bannerRemoval = false
