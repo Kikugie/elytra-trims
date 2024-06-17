@@ -52,7 +52,7 @@ object ETAtlasHolder : ResourceReloader {
     }
 
     private fun patterns(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
-        val useBanners = ETClient.config.texture.useBannerTextures.value
+        val useBanners = ETClient.config.texture.useBannerTextures
         val finder = ResourceFinder("textures/entity/${if (useBanners) "banner" else "shield"}", ".png")
         return buildList {
             for ((id, res) in finder.findResources(manager)) {
@@ -75,7 +75,7 @@ object ETAtlasHolder : ResourceReloader {
     }
 
     private fun trims(manager: ResourceManager, model: NativeImage): Collection<ContentSupplier> {
-        val crop = ETClient.config.texture.cropTrims.value
+        val crop = ETClient.config.texture.cropTrims
         val atlases = manager.findAllResources("atlases") { it.path.endsWith("armor_trims.json") }
         val sources = atlases.values.flatten().flatMap {
             try {
@@ -111,7 +111,6 @@ object ETAtlasHolder : ResourceReloader {
     }
 
     private fun animation(manager: ResourceManager): Collection<ContentSupplier> = buildList {
-        if (!ETClient.config.texture.animationEasterEgg.value) return emptyList()
         val resource = manager.getResource(ETReference.id("textures/animation/animation.png")).getOrNull()
             ?: return emptyList()
         /*? if <1.20.2*/

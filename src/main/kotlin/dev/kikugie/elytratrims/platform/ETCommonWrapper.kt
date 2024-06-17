@@ -9,11 +9,11 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
     override fun onInitialize() {
         ETCommon.init()
 
-        if (ETCommon.config.addPatterns) RecipeSerializer.register(
+        RecipeSerializer.register(
             "elytratrims:crafting_special_elytrapatterns",
             ETPatternRecipe.SERIALIZER
         )
-        if (ETCommon.config.addGlow) RecipeSerializer.register(
+        RecipeSerializer.register(
             "elytratrims:crafting_special_elytraglow",
             ETGlowRecipe.SERIALIZER
         )
@@ -25,7 +25,8 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
 }
 /*?} elif forge {*/
 /*import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
+import dev.kikugie.elytratrims.client.config.lib.create
+import dev.kikugie.elytratrims.client.config.lib.isAvailable
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
@@ -46,17 +47,15 @@ object ETCommonWrapper {
             MOD_BUS.addListener<RegisterClientReloadListenersEvent> {
                 it.registerReloadListener(ETAtlasHolder)
             }
-
-            val provider = ConfigScreenProvider.screen
-            ModLoadingContext.get().registerExtensionPoint(
+            if (isAvailable) ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenFactory::class.java,
-            ) { ConfigScreenFactory { _, parent -> provider(parent) } }
+            ) { ConfigScreenFactory { _, parent -> create(parent) } }
         }
         val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ETReference.MOD_ID)
-        if (ETCommon.config.addPatterns) registry.register(
+        registry.register(
             "crafting_special_elytrapatterns"
         ) { ETPatternRecipe.SERIALIZER }
-        if (ETCommon.config.addGlow) registry.register(
+        registry.register(
             "crafting_special_elytraglow"
         ) { ETGlowRecipe.SERIALIZER }
         registry.register(
@@ -68,7 +67,8 @@ object ETCommonWrapper {
 }
 *//*?} else {*/
 /*import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
+import dev.kikugie.elytratrims.client.config.lib.create
+import dev.kikugie.elytratrims.client.config.lib.isAvailable
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraft.registry.Registries
 import net.neoforged.fml.common.Mod
@@ -95,18 +95,17 @@ object ETCommonWrapper {
                 it.registerReloadListener(ETAtlasHolder)
             }
 
-            val provider = ConfigScreenProvider.screen
-            ModLoadingContext.get().registerExtensionPoint(
+            if (isAvailable) ModLoadingContext.get().registerExtensionPoint(
                 CSF::class.java,
-            ) { CSF { _, parent -> provider(parent) } }
+            ) { CSF { _, parent -> create(parent) } }
         }
 
         val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)
-        if (ETCommon.config.addPatterns) registry.register(
+        registry.register(
             "crafting_special_elytrapatterns",
             Supplier { ETPatternRecipe.SERIALIZER }
         )
-        if (ETCommon.config.addGlow) registry.register(
+        registry.register(
             "crafting_special_elytraglow",
             Supplier { ETGlowRecipe.SERIALIZER }
         )

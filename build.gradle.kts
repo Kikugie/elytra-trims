@@ -53,7 +53,10 @@ dependencies {
     @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         mappings("net.fabricmc:yarn:${mcVersion}+build.${property("deps.yarn_build")}:v2")
-        mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
+        if (stonecutter.compare(mcVersion, "1.20.6") == 0)
+            mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
+        else if (stonecutter.compare(mcVersion, "1.21") >= 0)
+            mappings(rootProject.file("mappings/fix.tiny"))
     })
     val mixinExtras = "io.github.llamalad7:mixinextras-%s:${property("deps.mixin_extras")}"
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
@@ -86,6 +89,11 @@ dependencies {
     modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
     modCompileOnly(modrinth("betterend", "4.0.8"))
     modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
+    if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && loader == "neoforge") {
+        compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0")
+        compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0")
+    }
+
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 }
 
@@ -128,6 +136,11 @@ if (stonecutter.current.isActive) {
     rootProject.tasks.register("buildActive") {
         group = "project"
         dependsOn(buildAndCollect)
+    }
+
+    rootProject.tasks.register("runActive") {
+        group = "project"
+        dependsOn(tasks.named("runClient"))
     }
 }
 

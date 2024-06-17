@@ -5,16 +5,13 @@ import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.dsl.YetAnotherConfigLib
 import dev.isxander.yacl3.dsl.binding
 import dev.isxander.yacl3.gui.controllers.cycling.EnumController
-import dev.kikugie.elytratrims.client.config.RenderConfig
-import dev.kikugie.elytratrims.client.config.RenderMode
-import dev.kikugie.elytratrims.client.config.RenderType
-import dev.kikugie.elytratrims.client.config.TextureConfig
+import dev.kikugie.elytratrims.client.config.*
 import dev.kikugie.elytratrims.client.translation
 import dev.kikugie.elytratrims.common.ETReference
 import net.minecraft.client.gui.screen.Screen
 import kotlin.reflect.KMutableProperty0
 
-fun create(parent: Screen) = YetAnotherConfigLib(ETReference.MOD_ID) {
+fun create(parent: Screen?): Screen = YetAnotherConfigLib(ETReference.MOD_ID) {
     title("elytratrims.config.title".translation())
     val main by categories.registering {
         title("elytratrims.config.category".translation())
@@ -49,4 +46,5 @@ fun create(parent: Screen) = YetAnotherConfigLib(ETReference.MOD_ID) {
             create(default = true, reload = false, prop = config::useElytraModel)
         }
     }
-}
+    save(ETClientConfig.Companion::save)
+}.generateScreen(parent)
