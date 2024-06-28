@@ -2,7 +2,6 @@ import dev.kikugie.stonecutter.StonecutterSettings
 
 pluginManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/")
@@ -14,7 +13,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.4"
+    id("dev.kikugie.stonecutter") version "0.4.1"
 }
 
 extensions.configure<StonecutterSettings> {

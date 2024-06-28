@@ -12,6 +12,7 @@ object ModStatus : IModStatus {
     override val isClient = fabric.environmentType == EnvType.CLIENT
     override val isDev = fabric.isDevelopmentEnvironment
     override val configDir = fabric.configDir
+    override val platform = "fabric"
 
     override fun isLoaded(mod: String) = fabric.isModLoaded(mod)
 }
@@ -28,6 +29,7 @@ object ModStatus : IModStatus {
     override val configDir: Path = FMLLoader.getGamePath().resolve("config").also {
         if (it.notExists()) it.createDirectories()
     }
+    override val platform = "forge"
     private val cache = Object2BooleanOpenHashMap<String>()
 
     override fun isLoaded(mod: String) = cache.computeIfAbsent(mod, Predicate {FMLLoader.getLoadingModList().getModFileById(mod) != null})
@@ -45,6 +47,7 @@ object ModStatus : IModStatus {
     override val configDir: Path = FMLLoader.getGamePath().resolve("config").also {
         if (it.notExists()) it.createDirectories()
     }
+    override val platform = "neoforge"
     private val cache = Object2BooleanOpenHashMap<String>()
     override fun isLoaded(mod: String) = cache.computeIfAbsent(mod, Predicate {FMLLoader.getLoadingModList().getModFileById(mod) != null})
 
@@ -55,6 +58,8 @@ private interface IModStatus {
     val isClient: Boolean
     val isDev: Boolean
     val configDir: Path
+    val platform: String
+    val mcVersion get() = /*$ mc >>*/ "1.20.1"
 
     fun isLoaded(mod: String): Boolean
 }

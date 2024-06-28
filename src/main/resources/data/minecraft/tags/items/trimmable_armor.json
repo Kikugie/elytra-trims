@@ -16,6 +16,10 @@
     {
       "id": "mekanism:hdpe_elytra",
       "required": false
+    },
+    {
+      "id": "netherite_plus:netherite_elytra",
+      "required": false
     }
   ]
 }

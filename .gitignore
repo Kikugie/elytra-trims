@@ -33,3 +33,4 @@ bin/
 run/
 .env
 /extensions/.architectury-transformer/
+/.kotlin/

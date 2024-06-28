@@ -61,4 +61,7 @@ elytratrims:
       self: Self
       others: Others
       all: All
+    noyacl:
+      .: Yet Another Config Lib is not installed
+      message: YACL 3 is required to edit the config in game, would you like to install YACL 3?
   legacy_rp: Elytra Trims legacy textures

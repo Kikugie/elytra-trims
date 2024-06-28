@@ -13,7 +13,12 @@ import kotlin.io.path.outputStream
 
 @OptIn(ExperimentalSerializationApi::class)
 object ETConfigLoader {
-    val json = Json { isLenient = true; ignoreUnknownKeys = true }
+    val json = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+        prettyPrint = true
+        encodeDefaults = true
+    }
 
     inline fun <reified T> load(file: Path, default: () -> T): T {
         if (file.exists()) try {

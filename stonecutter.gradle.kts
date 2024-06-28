@@ -18,9 +18,12 @@ stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.c
     ofTask("publishMods")
 }
 
-stonecutter configureEach {
-    val current = project.property("loom.platform")
-    val platforms = listOf("fabric", "forge", "neoforge")
-        .map { it to (it == current) }
-    consts(platforms)
+afterEvaluate {
+    stonecutter configureEach {
+        val data = current.project.split('-')
+        val platforms = listOf("fabric", "forge", "neoforge")
+            .map { it to (it == data[1]) }
+        consts(platforms)
+        swap("mc", "\"${data[0]}\"")
+    }
 }

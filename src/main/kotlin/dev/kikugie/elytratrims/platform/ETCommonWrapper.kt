@@ -25,8 +25,7 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
 }
 /*?} elif forge {*/
 /*import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.client.config.lib.create
-import dev.kikugie.elytratrims.client.config.lib.isAvailable
+import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
@@ -47,9 +46,9 @@ object ETCommonWrapper {
             MOD_BUS.addListener<RegisterClientReloadListenersEvent> {
                 it.registerReloadListener(ETAtlasHolder)
             }
-            if (isAvailable) ModLoadingContext.get().registerExtensionPoint(
+            ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenFactory::class.java,
-            ) { ConfigScreenFactory { _, parent -> create(parent) } }
+            ) { ConfigScreenFactory { _, parent -> ConfigScreenProvider.open(parent) } }
         }
         val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ETReference.MOD_ID)
         registry.register(
@@ -67,8 +66,7 @@ object ETCommonWrapper {
 }
 *//*?} else {*/
 /*import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.client.config.lib.create
-import dev.kikugie.elytratrims.client.config.lib.isAvailable
+import dev.kikugie.elytratrims.client.config.lib.ConfigScreenProvider
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import net.minecraft.registry.Registries
 import net.neoforged.fml.common.Mod
@@ -95,9 +93,9 @@ object ETCommonWrapper {
                 it.registerReloadListener(ETAtlasHolder)
             }
 
-            if (isAvailable) ModLoadingContext.get().registerExtensionPoint(
+            ModLoadingContext.get().registerExtensionPoint(
                 CSF::class.java,
-            ) { CSF { _, parent -> create(parent) } }
+            ) { CSF { _, parent -> ConfigScreenProvider.open(parent) } }
         }
 
         val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)

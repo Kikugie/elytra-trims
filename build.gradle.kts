@@ -45,6 +45,7 @@ dependencies {
     fun modules(vararg modules: String) {
         modules.forEach { modImplementation(fabricApi.module("fabric-$it", "${property("deps.fapi")}")) }
     }
+
     fun ifStable(str: String, action: (String) -> Unit = { modImplementation(it) }) {
         if (isSnapshot) modCompileOnly(str) else action(str)
     }
@@ -53,9 +54,9 @@ dependencies {
     @Suppress("UnstableApiUsage")
     mappings(loom.layered {
         mappings("net.fabricmc:yarn:${mcVersion}+build.${property("deps.yarn_build")}:v2")
-        if (stonecutter.compare(mcVersion, "1.20.6") == 0)
+        if (stonecutter.eval(mcVersion, "1.20.6"))
             mappings("dev.architectury:yarn-mappings-patch-neoforge:1.20.5+build.3")
-        else if (stonecutter.compare(mcVersion, "1.21") >= 0)
+        else if (stonecutter.eval(mcVersion, "1.21"))
             mappings(rootProject.file("mappings/fix.tiny"))
     })
     val mixinExtras = "io.github.llamalad7:mixinextras-%s:${property("deps.mixin_extras")}"
@@ -65,7 +66,7 @@ dependencies {
     if (isFabric) {
         modules("registry-sync-v0", "resource-loader-v0", "entity-events-v1")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-        modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.1.9.22")
+        modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.2.0.0")
         include(implementation(mixinSquared.format("fabric"))!!)
         ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     } else {
@@ -79,9 +80,7 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    val yacol = modrinth("yacl", property("deps.yacl"))
-    if (isSnapshot || stonecutter.compare(mcVersion, "1.20.6") >= 0 && !isFabric) modCompileOnly(yacol)
-    else modImplementation(yacol)
+    modCompileOnly(modrinth("yacl", property("deps.yacl")))
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
@@ -168,7 +167,7 @@ yamlang {
 
 // Env configuration
 stonecutter {
-    val j21 = mcVersion comp "1.20.6" >= 0
+    val j21 = eval(mcVersion, ">=1.20.6")
     java {
         withSourcesJar()
         sourceCompatibility = if (j21) JavaVersion.VERSION_21 else JavaVersion.VERSION_17
