@@ -107,6 +107,8 @@ loom {
             "${mod.id}-common.mixins.json",
             "${mod.id}-compat.mixins.json"
         )
+    } else if (loader == "neoforge") neoForge {
+
     }
 
     runConfigs["client"].apply {

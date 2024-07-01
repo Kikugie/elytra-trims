@@ -32,7 +32,10 @@ object ETAtlasHolder : ResourceReloader {
     /*private val opener: SpriteOpener = SpriteOpener.create(SpriteLoader.METADATA_READERS)*/
     val id: Identifier = ETReference.id("elytra_features")
     val atlas = SpriteAtlasTexture(ETReference.id("textures/atlas/elytra_features.png")).also {
-        RenderSystem.recordRenderCall { MinecraftClient.getInstance().textureManager.registerTexture(id, it) }
+        RenderSystem.recordRenderCall {
+            @Suppress("UsePropertyAccessSyntax") // Neoforge sees it as a private property access idk why
+            MinecraftClient.getInstance().getTextureManager().registerTexture(id, it)
+        }
     }
     var ready = false
         private set

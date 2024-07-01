@@ -13,7 +13,7 @@ object ConfigScreenProvider {
 
     fun open(parent: Screen?) = if (isAvailable) YaclConfig.create(parent) else createDummyScreen(parent)
 
-    fun createDummyScreen(parent: Screen?) = ConfirmScreen(
+    private fun createDummyScreen(parent: Screen?) = ConfirmScreen(
         {
             if (it) Util.getOperatingSystem().open(
                 URI.create(

@@ -1,10 +1,12 @@
 package dev.kikugie.elytratrims.client.config.lib
 
+import dev.isxander.yacl3.api.OptionDescription
 import dev.isxander.yacl3.api.OptionFlag
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.dsl.YetAnotherConfigLib
 import dev.isxander.yacl3.dsl.binding
 import dev.isxander.yacl3.gui.controllers.cycling.EnumController
+import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.*
 import dev.kikugie.elytratrims.client.translation
 import dev.kikugie.elytratrims.common.ETReference
@@ -15,13 +17,13 @@ object YaclConfig {
     fun create(parent: Screen?): Screen = YetAnotherConfigLib(ETReference.MOD_ID) {
         title("elytratrims.config.title".translation())
         val main by categories.registering {
-            title("elytratrims.config.category".translation())
+            name("elytratrims.config.category".translation())
             val render by groups.registering {
-                val config = RenderConfig()
-                title("elytratrims.config.category.render".translation())
-                fun create(type: RenderType, prop: KMutableProperty0<RenderMode>) = options.registering {
+                val config = ETClient.config.render
+                name("elytratrims.config.category.render".translation())
+                fun create(type: RenderType, prop: KMutableProperty0<RenderMode>) = options.register<RenderMode>(prop.name) {
                     name(type.text)
-                    tooltip(type.tooltip)
+                    description(OptionDescription.of(type.tooltip))
                     binding(prop, RenderMode.ALL)
                     customController { EnumController(it, RenderMode::text, RenderMode.entries.toTypedArray()) }
                 }
@@ -33,10 +35,11 @@ object YaclConfig {
                 create(RenderType.GLOBAL, config::global)
             }
             val texture by groups.registering {
-                val config = TextureConfig()
-                fun create(default: Boolean, reload: Boolean, prop: KMutableProperty0<Boolean>) = options.registering {
+                val config = ETClient.config.texture
+                name("elytratrims.config.category.texture".translation())
+                fun create(default: Boolean, reload: Boolean, prop: KMutableProperty0<Boolean>) = options.register<Boolean>(prop.name) {
                     name(TextureConfig.text(prop))
-                    tooltip(TextureConfig.tooltip(prop))
+                    description(OptionDescription.of(TextureConfig.tooltip(prop)))
                     binding(prop, default)
                     controller(TickBoxControllerBuilder::create)
                     if (reload) flag(OptionFlag.ASSET_RELOAD)
