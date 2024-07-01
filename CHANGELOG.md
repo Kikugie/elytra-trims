@@ -1,5 +1,7 @@
 ## Changes
-- Updated to 1.21. *This (again) required big code changes, so if anything breaks, open an issue report.*
-- Several trim textures have been reworked - Vex, Wild, Wayfinder, Raiser, Shaper, Spire and some minor tweaks to other textures. (@masik16u)
-![3.2 trims](https://cdn.modrinth.com/data/XpzGz7KD/images/6e8e22627a57ea58dec99c451c7e7595faf0c5a0.png)  
-If you don't like these designs, the old textures are available as a built-in resourcepack.
+- Updated to NeoForge 1.21.
+- Updated to Kotlin 2.0:
+  - On Fabric requires [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin) 1.11+
+  - On Forge requires [Kotlin For Forge](https://modrinth.com/mod/kotlin-for-forge) 4.11+
+  - On NeoForge requires [Kotlin For Forge](https://modrinth.com/mod/kotlin-for-forge) 5.3+
+- Improved config handling, which fixes some of the crashes.

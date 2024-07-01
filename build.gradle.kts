@@ -189,7 +189,7 @@ publishMods {
         "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = BETA
+    type = STABLE
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')
