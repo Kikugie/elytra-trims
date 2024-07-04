@@ -5,12 +5,11 @@
   "plugin": "dev.kikugie.elytratrims.mixin.plugin.ETMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ArmoredElytraLayerMixin",
     "BetterSmithingTableMixin",
-    "ElytraItemMixin",
-    "ElytraSlotLayerMixin",
-    "ElytraTrinketFeatureRendererMixin",
-    "MinecraftCapesCompatMixin"
+    "render.BetterEndMixin",
+    "render.ElytraSlotMixin",
+    "render.ElytraTrinketMixin",
+    "render.MinecraftCapesMixin"
   ],
   "mixins": [
     "FabricAPICompat"

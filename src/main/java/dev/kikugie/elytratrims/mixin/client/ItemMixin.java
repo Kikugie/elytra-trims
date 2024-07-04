@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.mixin.client;
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import dev.kikugie.elytratrims.client.ETClient;
 import dev.kikugie.elytratrims.common.access.FeatureAccess;
 import dev.kikugie.elytratrims.common.util.UtilKt;
@@ -28,7 +29,7 @@ public class ItemMixin {
         ItemStack stack, net.minecraft.world.World world, List<Text> tooltip, net.minecraft.client.item.TooltipContext context
         , CallbackInfo ci
     ) {
-        if (!UtilKt.isProbablyElytra(stack.getItem())) return;
+        if (!ElytraTrimsAPI.isProbablyElytra(stack)) return;
         if (FeatureAccess.INSTANCE.hasGlow(stack))
             tooltip.add(Text.translatable("elytratrims.item.glow"));
         BannerItem.appendBannerTooltip(stack, tooltip);

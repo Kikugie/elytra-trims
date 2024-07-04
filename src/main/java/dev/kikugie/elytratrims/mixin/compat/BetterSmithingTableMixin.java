@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Pseudo
+@SuppressWarnings("UnresolvedMixinReference")
 @Restriction(require = {@Condition("bettersmithingtable")})
-@SuppressWarnings("ALL")
 @Mixin(value = SmithingScreen.class, priority = 1500)
 public abstract class BetterSmithingTableMixin implements ElytraRotationAccessor {
     @TargetHandler(

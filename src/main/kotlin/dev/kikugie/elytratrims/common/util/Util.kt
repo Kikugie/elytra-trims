@@ -1,11 +1,11 @@
 package dev.kikugie.elytratrims.common.util
 
 import com.mojang.serialization.DataResult
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ElytraItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
-import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 
 fun <K, V> memoize(provider: (K) -> V): (K) -> V = object : (K) -> V {
@@ -13,6 +13,8 @@ fun <K, V> memoize(provider: (K) -> V): (K) -> V = object : (K) -> V {
 
     override fun invoke(key: K): V = cache.computeIfAbsent(key, provider)
 }
+
+val elytras: List<Item> by lazy { Registries.ITEM.filter(ElytraTrimsAPI::isProbablyElytra) }
 
 val Item.id get() = Registries.ITEM.getId(this)
 

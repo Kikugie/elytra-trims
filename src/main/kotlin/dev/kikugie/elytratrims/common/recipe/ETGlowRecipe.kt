@@ -1,8 +1,8 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.addGlow
-import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
@@ -14,7 +14,7 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
         var item = 0
         var sac = 0
         input.forEach {
-            if (isProbablyElytra(it.item)) item++
+            if (ElytraTrimsAPI.isProbablyElytra(it)) item++
             else if (it.item == Items.GLOW_INK_SAC) sac++
             else if (!it.isEmpty) return false
             if (item > 1 || sac > 1) return false
@@ -23,7 +23,7 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
     }
 
     override fun craft(input: Stacks): ItemStack {
-        val elytra = input.firstItemCopy(::isProbablyElytra) ?: return ItemStack.EMPTY
+        val elytra = input.firstItemCopy(ElytraTrimsAPI::isProbablyElytra) ?: return ItemStack.EMPTY
         elytra.addGlow()
         return elytra
     }

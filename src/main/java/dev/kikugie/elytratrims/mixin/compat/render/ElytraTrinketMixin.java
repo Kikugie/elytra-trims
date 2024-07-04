@@ -1,12 +1,9 @@
-package dev.kikugie.elytratrims.mixin.compat;
+package dev.kikugie.elytratrims.mixin.compat.render;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.kikugie.elytratrims.client.config.RenderType;
-import dev.kikugie.elytratrims.client.render.ETRenderer;
-import dev.kikugie.elytratrims.common.util.ColorKt;
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.VertexConsumer;
@@ -22,24 +19,24 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Pseudo
-@SuppressWarnings("ALL")
+@SuppressWarnings({"UnresolvedMixinReference", "rawtypes", "LocalMayBeArgsOnly"})
 @Restriction(require = {@Condition("elytra_trinket")})
 @Mixin(targets = "pw.lakuna.elytra_trinket.ElytraTrinketFeatureRenderer")
-public abstract class ElytraTrinketFeatureRendererMixin extends FeatureRenderer {
-    public ElytraTrinketFeatureRendererMixin(FeatureRendererContext context) {
+public abstract class ElytraTrinketMixin extends FeatureRenderer {
+    public ElytraTrinketMixin(FeatureRendererContext context) {
         super(context);
     }
 
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;isPartVisible(Lnet/minecraft/client/render/entity/PlayerModelPart;)Z"))
     private boolean elytra_trinket$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
-        return ETRenderer.shouldRender(RenderType.CAPE, entity) && original;
+        return ElytraTrimsAPI.shouldShowCape(entity) && original;
     }
 
     // FIXME when elytra trinket updates
-    @WrapOperation(method = "render",
+    @WrapWithCondition(method = "render",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void elytra_trinket$elytraPostRender(
+    private boolean elytra_trinket$elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
@@ -49,11 +46,10 @@ public abstract class ElytraTrinketFeatureRendererMixin extends FeatureRenderer 
             float green,
             float blue,
             float alpha,
-            Operation<ElytraEntityModel<?>> original,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity,
             @Local ItemStack stack) {
-        original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETRenderer.render(model, matrices, provider, entity, stack, light, ColorKt.toARGB(red, green, blue, alpha));
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
+        return true;
     }
 }

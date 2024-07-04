@@ -1,8 +1,8 @@
 package dev.kikugie.elytratrims.client.render
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import dev.kikugie.elytratrims.platform.ModStatus
 import dev.tr7zw.firstperson.FirstPersonModelCore
 import net.minecraft.client.render.VertexConsumerProvider
@@ -19,7 +19,7 @@ object ETItemRenderer {
     fun render(stack: ItemStack, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int): Boolean {
         if (CLIENT.world == null) return false
         if (!ETClient.config.texture.useElytraModel) return false
-        if (!isProbablyElytra(stack.item)) return false
+        if (!ElytraTrimsAPI.isProbablyElytra(stack)) return false
         if (dummy == null || dummy?.world != CLIENT.world)
             dummy = ArmorStandEntity(CLIENT.world, 0.0, 0.0, 0.0).apply { isInvisible = true }
         matrices.push()

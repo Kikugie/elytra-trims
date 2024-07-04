@@ -1,11 +1,11 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getBaseColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setPatterns
-import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.item.BannerItem
 import net.minecraft.item.ItemStack
 import net.minecraft.recipe.RecipeSerializer
@@ -17,7 +17,7 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
         var elytra = 0
         var banner = 0
         input.forEach {
-            if (isProbablyElytra(it.item)) elytra++
+            if (ElytraTrimsAPI.isProbablyElytra(it)) elytra++
             else if (it.item is BannerItem) {
                 if (it.getPatterns().isEmpty()) return false
                 banner++
@@ -29,7 +29,7 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
 
     override fun craft(input: Stacks): ItemStack {
         val banner = input.firstItemCopy { it is BannerItem } ?: return ItemStack.EMPTY
-        val elytra = input.firstItemCopy(::isProbablyElytra) ?: return ItemStack.EMPTY
+        val elytra = input.firstItemCopy(ElytraTrimsAPI::isProbablyElytra) ?: return ItemStack.EMPTY
         elytra.setPatterns(banner)
         val color = banner.getBaseColor()
         if (color != 0) elytra.setColor(color)

@@ -1,10 +1,10 @@
 package dev.kikugie.elytratrims.common.recipe
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.addAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
-import dev.kikugie.elytratrims.common.util.isProbablyElytra
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
@@ -18,7 +18,7 @@ class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : Dele
         var flesh = 0
         input.forEach {
             when {
-                isProbablyElytra(it.item) -> elytra++
+                ElytraTrimsAPI.isProbablyElytra(it) -> elytra++
                 it.item == Items.APPLE -> apple++
                 it.item == Items.ROTTEN_FLESH -> flesh++
             }
@@ -28,7 +28,7 @@ class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : Dele
     }
 
     override fun craft(input: Stacks): ItemStack {
-        val elytra = input.firstItemCopy(::isProbablyElytra) ?: return ItemStack.EMPTY
+        val elytra = input.firstItemCopy(ElytraTrimsAPI::isProbablyElytra) ?: return ItemStack.EMPTY
         with(elytra) {
             addAnimationStatus()
             removePatterns()

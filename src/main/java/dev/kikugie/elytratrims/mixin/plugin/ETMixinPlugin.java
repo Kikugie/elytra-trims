@@ -8,7 +8,7 @@ import java.util.Set;
 public class ETMixinPlugin extends RestrictiveMixinConfigPlugin {
     @Override
     public String getRefMapperConfig() {
-        return "";
+        return null;
     }
 
     @Override
@@ -18,6 +18,6 @@ public class ETMixinPlugin extends RestrictiveMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        return List.of();
+        return null;
     }
 }

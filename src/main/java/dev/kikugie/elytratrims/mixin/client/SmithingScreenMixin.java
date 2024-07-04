@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.mixin.client;
 
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import dev.kikugie.elytratrims.mixin.access.ElytraRotationAccessor;
 import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
@@ -16,8 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static dev.kikugie.elytratrims.common.util.UtilKt.isProbablyElytra;
 
 @Mixin(value = SmithingScreen.class, priority = 1100)
 public class SmithingScreenMixin implements ElytraRotationAccessor {
@@ -37,7 +36,7 @@ public class SmithingScreenMixin implements ElytraRotationAccessor {
     @Inject(method = "equipArmorStand", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"), cancellable = true)
     private void equipElytra(ItemStack stack, CallbackInfo ci) {
         if (armorStand == null) return;
-        if (isProbablyElytra(stack.getItem())) {
+        if (ElytraTrimsAPI.isProbablyElytra(stack)) {
             isElytra = true;
             armorStand.equipStack(EquipmentSlot.CHEST, stack.copy());
             ci.cancel();
