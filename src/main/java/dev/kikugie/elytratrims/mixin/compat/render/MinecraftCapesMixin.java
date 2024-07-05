@@ -2,7 +2,8 @@ package dev.kikugie.elytratrims.mixin.compat.render;
 
 import com.bawnorton.mixinsquared.TargetHandler;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
@@ -38,8 +39,8 @@ public class MinecraftCapesMixin {
 
 	// FIXME when minecraft capes updates
 	@TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
-	@WrapWithCondition(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-	private boolean minecraftcapes$elytraPostRender(
+	@WrapOperation(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+	private void minecraftcapes$elytraPostRender(
 			ElytraEntityModel<?> model,
 			MatrixStack matrices,
 			VertexConsumer vertices,
@@ -49,9 +50,10 @@ public class MinecraftCapesMixin {
 			float green,
 			float blue,
 			float alpha,
+			Operation<Void> operation,
 			@Local(argsOnly = true) VertexConsumerProvider provider,
 			@Local(argsOnly = true) LivingEntity entity) {
+		operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
 		ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, red, green, blue, alpha);
-		return true;
 	}
 }

@@ -1,7 +1,8 @@
 package dev.kikugie.elytratrims.mixin.compat.render;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -44,10 +45,10 @@ public abstract class ElytraSlotMixin extends FeatureRenderer {
     }
 
     // FIXME when elytra slot updates
-    @WrapWithCondition(method = "lambda$render$0",
+    @WrapOperation(method = "lambda$render$0",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private boolean elytraslot$elytraPostRender(
+    private void elytraslot$elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
@@ -57,10 +58,11 @@ public abstract class ElytraSlotMixin extends FeatureRenderer {
             float green,
             float blue,
             float alpha,
+            Operation<Void> operation,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity,
             @Share("stack") LocalRef<ItemStack> stack) {
+        operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
         ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack.get(), light, red, green, blue, alpha);
-        return true;
     }
 }

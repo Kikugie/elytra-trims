@@ -1,7 +1,8 @@
 package dev.kikugie.elytratrims.mixin.compat.render;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import dev.kikugie.elytratrims.mixin.constants.Targets;
@@ -29,8 +30,8 @@ public class BetterEndMixin {
     }
 
     // FIXME when betterend updates
-    @WrapWithCondition(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private boolean betterend$elytraPostRender(
+    @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+    private void betterend$elytraPostRender(
             ArmoredElytraModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
@@ -40,11 +41,12 @@ public class BetterEndMixin {
             float green,
             float blue,
             float alpha,
+            Operation<Void> operation,
+            @Local ItemStack stack,
             @Local(argsOnly = true) VertexConsumerProvider provider,
-            @Local(argsOnly = true) LivingEntity entity,
-            @Local ItemStack stack) {
+            @Local(argsOnly = true) LivingEntity entity) {
+        operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
         ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
-        return true;
     }
     //?}
 }

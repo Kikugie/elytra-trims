@@ -1,9 +1,11 @@
 package dev.kikugie.elytratrims.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
 import dev.kikugie.elytratrims.common.util.ColorKt;
@@ -15,6 +17,7 @@ import net.minecraft.client.render.entity.model.ElytraEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -44,11 +47,12 @@ public class ElytraFeatureRendererMixin {
             float green,
             float blue,
             float alpha,
-            Operation<ElytraEntityModel<?>> original,
+            Operation<Void> operation,
+            @Local(ordinal = 0) ItemStack stack,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity) {
-        original.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, ColorKt.toARGB(red, green, blue, alpha));
+        operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
     }
      //?} else {
     /*private void elytraPostRender(
@@ -57,11 +61,12 @@ public class ElytraFeatureRendererMixin {
             VertexConsumer vertices,
             int light,
             int overlay,
-            Operation<Void> original,
+            Operation<Void> operation,
+            @Local(ordinal = 0) ItemStack stack,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity) {
-        original.call(model, matrices, vertices, light, overlay);
-        ETRenderer.render(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, -1);
+        operation.call(model, matrices, vertices, light, overlay);
+        ETRenderer.render(model, matrices, provider, entity, stack, light, -1);
     }
     *///?}
 }
