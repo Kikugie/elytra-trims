@@ -22,28 +22,25 @@ object ETCommon {
     fun init() {
         ETCommentary.run()
         val behaviour = CauldronBehavior { state, world, pos, player, _, stack ->
-            var glowRemoval = false
-            var bannerRemoval = false
-            var dyeRemoval = false
-            var animationRemoval = false
+            var success = false
 
             if (stack.hasGlow()) {
                 stack.removeGlow()
-                glowRemoval = true
+                success = true
             }
             if (stack.getColor() != 0) {
                 stack.removeColor()
-                dyeRemoval = true
+                success = true
             }
             if (stack.getPatterns().isNotEmpty()) {
                 stack.removePatterns()
-                bannerRemoval = true
+                success = true
             }
             if (stack.getAnimationStatus()) {
                 stack.removeAnimationStatus()
-                animationRemoval = true
+                success = true
             }
-            val result = if (glowRemoval || bannerRemoval || dyeRemoval || animationRemoval) {
+            val result = if (success) {
                 player.incrementStat(Stats.CLEAN_ARMOR)
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos)
                 true

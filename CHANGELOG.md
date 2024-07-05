@@ -1,7 +1,6 @@
-## Changes
-- Updated to NeoForge 1.21.
-- Updated to Kotlin 2.0:
-  - On Fabric requires [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin) 1.11+
-  - On Forge requires [Kotlin For Forge](https://modrinth.com/mod/kotlin-for-forge) 4.11+
-  - On NeoForge requires [Kotlin For Forge](https://modrinth.com/mod/kotlin-for-forge) 5.3+
-- Improved config handling, which fixes some of the crashes.
+## New features
+- The mod now includes a basic API to ease compatibility. Check out the [API Reference](https://github.com/kikugie/elytra-trims/wiki/Elytra-Trims-API-reference) if you need it.
+- Trimmable and dyeable tags are now dynamically applied to items.
+
+## Fixes
+- Fixed trim upscaling for higher resolution textures.
