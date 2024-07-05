@@ -5,6 +5,7 @@
   "plugin": "dev.kikugie.elytratrims.mixin.plugin.ETMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DataPackContentsMixin",
     "ElytraItemMixin",
     "SynchronizeRecipesS2CPacketMixin"
   ],

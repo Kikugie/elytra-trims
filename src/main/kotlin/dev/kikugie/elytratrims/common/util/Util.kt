@@ -6,6 +6,10 @@ import net.minecraft.item.ArmorItem
 import net.minecraft.item.ElytraItem
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
+import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.registry.tag.ItemTags
+import net.minecraft.registry.tag.TagKey
+import net.minecraft.registry.tag.TagManagerLoader
 import net.minecraft.util.Identifier
 
 fun <K, V> memoize(provider: (K) -> V): (K) -> V = object : (K) -> V {
@@ -36,3 +40,22 @@ fun identifier(id: String): Identifier =
 fun identifier(path: String, id: String): Identifier =
     /*? if <1.21 {*/Identifier(path, id)
     /*?} else*//*Identifier.of(path, id)*/
+
+fun createTags(): TagManagerLoader.RegistryTags<Item> {
+    val elytras = elytras.mapNotNull { Registries.ITEM.getEntry(it) }
+    return TagManagerLoader.RegistryTags(Registries.ITEM.key, mapOf(
+        ItemTags.TRIMMABLE_ARMOR.id to elytras,
+    ))
+}
+
+fun populateTags(map: Map<TagKey<*>, List<RegistryEntry<*>>>): Map<TagKey<*>, List<RegistryEntry<*>>> {
+    val mutable = map.toMutableMap()
+    val entries = elytras.mapNotNull { Registries.ITEM.getEntry(it) }
+    val trimmables = mutable[ItemTags.TRIMMABLE_ARMOR] ?: emptyList()
+    mutable[ItemTags.TRIMMABLE_ARMOR] = trimmables.toMutableList() + entries
+    //? if >=1.20.6 {
+    /*val dyeables = mutable[ItemTags.DYEABLE] ?: emptyList()
+    mutable[ItemTags.DYEABLE] = dyeables.toMutableList() + entries
+    *///?}
+    return mutable
+}
