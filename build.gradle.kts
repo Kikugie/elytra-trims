@@ -92,6 +92,8 @@ dependencies {
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0")
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0")
     }
+    if (stonecutter.eval(mcVersion, ">=1.21"))
+        modCompileOnly(modrinth("show-me-your-skin", "1.11.1+1.21"))
 
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 }

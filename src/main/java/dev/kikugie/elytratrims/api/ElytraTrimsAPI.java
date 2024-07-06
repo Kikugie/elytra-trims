@@ -2,9 +2,11 @@ package dev.kikugie.elytratrims.api;
 
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
+import dev.kikugie.elytratrims.client.resource.ETAtlasHolder;
 import dev.kikugie.elytratrims.common.util.ColorKt;
 import dev.kikugie.elytratrims.common.util.UtilKt;
 import net.minecraft.client.model.Model;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -71,7 +73,7 @@ public class ElytraTrimsAPI {
 	 * Checks if the player has elytra cape rendering enabled in their config.
 	 *
 	 * @param entity Entity to be rendered
-	 * @return false if cape rendering is disabled in config
+	 * @return False if cape rendering is disabled in config
 	 */
 	public static boolean shouldShowCape(@NotNull LivingEntity entity) {
 		return ETRenderer.shouldRender(RenderType.CAPE, entity);
@@ -85,7 +87,7 @@ public class ElytraTrimsAPI {
 	 * <li>Item implements <a href="https://github.com/FabricMC/fabric/blob/1.21/fabric-entity-events-v1/src/main/java/net/fabricmc/fabric/api/entity/event/v1/FabricElytraItem.java">FabricElytraItem</a>.</li>
 	 * <li>Item extends {@link ArmorItem} and contains "elytra" in its id.</li>
 	 * @param stack Item stack to check
-	 * @return true if this item should be an elytra
+	 * @return True if this item should be an elytra
 	 */
 	public static boolean isProbablyElytra(@NotNull ItemStack stack) {
 		return isProbablyElytra(stack.getItem());
@@ -100,9 +102,16 @@ public class ElytraTrimsAPI {
 	 * <li>Item extends {@link ArmorItem} and contains "elytra" in its id.</li>
 	 *
 	 * @param item Item to check
-	 * @return true if this item should be an elytra
+	 * @return True if this item should be an elytra
 	 */
 	public static boolean isProbablyElytra(@NotNull Item item) {
 		return UtilKt.isProbablyElytra(item);
+	}
+
+	/**
+	 * @return Elytra render layer for the default trim atlas texture
+	 */
+	public static RenderLayer getElytraLayer() {
+		return ETRenderer.layer.invoke(ETAtlasHolder.INSTANCE.getId());
 	}
 }

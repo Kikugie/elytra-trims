@@ -1,8 +1,7 @@
 package dev.kikugie.elytratrims.common.access
 
+import dev.kikugie.elytratrims.common.compat.StackedArmorTrimsCompat
 import dev.kikugie.elytratrims.common.util.toArgb
-import dev.kikugie.elytratrims.platform.ModStatus
-import io.github.apfelrauber.stacked_trims.ArmorTrimList
 import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 import net.minecraft.registry.DynamicRegistryManager
@@ -16,10 +15,6 @@ import net.minecraft.util.DyeColor
 
 object FeatureAccess : IFeatureAccess {
     private val DYEABLE = object : net.minecraft.item.DyeableItem {}
-    override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
-        getArmorTrimList(this, manager) ?:
-        getTrim(manager).orElse(null)?.let(::listOf) ?:
-        emptyList()
 
     override fun ItemStack.getPatterns(): List<BannerLayer> {
         val nbt = BannerBlockEntity.getPatternListNbt(this) ?: return emptyList()
@@ -85,11 +80,6 @@ import net.minecraft.component.type.NbtComponent
 import net.minecraft.item.BannerItem
 
 object FeatureAccess : IFeatureAccess {
-    override fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> =
-        getArmorTrimList(this, manager) ?:
-        get(DataComponentTypes.TRIM)?.let(::listOf) ?:
-        emptyList()
-
     override fun ItemStack.getPatterns() = get(DataComponentTypes.BANNER_PATTERNS)?.layers?.map {
         BannerLayer(it.pattern, it.color)
     } ?: emptyList()
@@ -145,20 +135,8 @@ object FeatureAccess : IFeatureAccess {
 }
 *///?}
 
-private fun getArmorTrimList(stack: ItemStack, manager: DynamicRegistryManager): List<ArmorTrim>? =
-    /*? if fabric {*/
-    if (ModStatus.isLoaded("stacked-armor-trims")) ArmorTrimList.getTrims(manager, stack).orElse(null) else null
-    /*?} else {*/
-    /*null
-      *//*?}*/
-
-/*? if <=1.20.4 >=1.20.2*/
-/*private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this, true)*/  
-/*? if <1.20.2*/
-private fun ItemStack.getTrim(manager: DynamicRegistryManager) = ArmorTrim.getTrim(manager, this)
-
 private interface IFeatureAccess {
-    fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim>
+    fun ItemStack.getTrims(manager: DynamicRegistryManager): List<ArmorTrim> = StackedArmorTrimsCompat.getTrimList(manager, this)
 
     fun ItemStack.getPatterns(): List<BannerLayer>
     fun ItemStack.getBaseColor(): Int

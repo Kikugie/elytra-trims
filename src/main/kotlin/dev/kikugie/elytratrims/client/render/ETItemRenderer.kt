@@ -3,8 +3,7 @@ package dev.kikugie.elytratrims.client.render
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
-import dev.kikugie.elytratrims.platform.ModStatus
-import dev.tr7zw.firstperson.FirstPersonModelCore
+import dev.kikugie.elytratrims.common.compat.FirstPersonModelCompat
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EquipmentSlot
@@ -27,7 +26,7 @@ object ETItemRenderer {
         val items = dummy!!.armorItems as DefaultedList<ItemStack>
         val slot = EquipmentSlot.CHEST.entitySlotId
         items[slot] = stack
-        runWithFirstPersonMod {
+        FirstPersonModelCompat.runWithFirstPerson {
             CLIENT.entityRenderDispatcher.render(
                 dummy,
                 0.775,
@@ -43,15 +42,5 @@ object ETItemRenderer {
         items[slot] = ItemStack.EMPTY
         matrices.pop()
         return true
-    }
-
-    private inline fun runWithFirstPersonMod(action: () -> Unit) {
-        if (!ModStatus.isLoaded("firstperson")) action()
-        else {
-            val instance = FirstPersonModelCore.instance
-            val rendering = instance.isRenderingPlayer
-            action()
-            instance.isRenderingPlayer = rendering
-        }
     }
 }

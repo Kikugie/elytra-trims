@@ -2,11 +2,15 @@ package dev.kikugie.elytratrims.client.render
 
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
+import dev.kikugie.elytratrims.common.compat.ShowMeYourSkinCompat
 import dev.kikugie.elytratrims.client.config.RenderMode.*
 import dev.kikugie.elytratrims.client.config.RenderType
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder
 import dev.kikugie.elytratrims.common.access.FeatureAccess.hasGlow
+import dev.kikugie.elytratrims.common.util.alpha
 import dev.kikugie.elytratrims.common.util.memoize
+import dev.kikugie.elytratrims.common.util.scaled
+import dev.kikugie.elytratrims.common.util.withAlpha
 import dev.kikugie.elytratrims.mixin.access.LivingEntityAccessor
 import net.minecraft.client.model.Model
 import net.minecraft.client.render.*
@@ -60,8 +64,10 @@ object ETRenderer {
         if (!ETAtlasHolder.ready) return
         val effectiveLight = if (!stack.hasGlow() || !(entity == null || shouldRender(RenderType.GLOW, entity))) light
         else 0xFF00FF
+        val alpha = ShowMeYourSkinCompat.getElytraTransparency(color.alpha.scaled, entity)
+        val newColor = color.withAlpha((alpha * 0xFF).toInt() and 0xFF)
         for (it in renderers)
-            it.render(model, matrices, provider, entity, stack, effectiveLight, color)
+            it.render(model, matrices, provider, entity, stack, effectiveLight, newColor)
     }
 
     @JvmStatic
