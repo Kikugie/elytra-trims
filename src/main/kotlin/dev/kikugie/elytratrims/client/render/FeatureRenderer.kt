@@ -1,6 +1,5 @@
 package dev.kikugie.elytratrims.client.render
 
-import com.bawnorton.allthetrims.client.util.PaletteHelper
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.RenderType
@@ -11,8 +10,9 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.getAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
+import dev.kikugie.elytratrims.common.compat.AllTheTrimsCompat
+import dev.kikugie.elytratrims.common.compat.ShowMeYourSkinCompat
 import dev.kikugie.elytratrims.common.util.*
-import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.entity.BannerPattern
 import net.minecraft.client.model.Model
 import net.minecraft.client.render.OverlayTexture
@@ -35,6 +35,37 @@ private fun report(id: Identifier) {
     if (missing.add(id)) ETReference.LOGGER.warn("Texture $id is missing and will be skipped")
 }
 
+fun createVertexConsumer(sprite: Sprite, provider: VertexConsumerProvider, stack: ItemStack): VertexConsumer =
+    sprite.getTextureSpecificVertexConsumer(
+        ItemRenderer.getDirectItemGlintConsumer(
+            provider,
+            ETRenderer.layer(ETAtlasHolder.id),
+            false,
+            stack.hasGlint()
+        )
+    )
+
+fun Model.render(
+    sprite: Sprite,
+    matrices: MatrixStack,
+    provider: VertexConsumerProvider,
+    stack: ItemStack,
+    light: Int,
+    color: Int
+): Unit = render(
+    matrices,
+    createVertexConsumer(sprite, provider, stack),
+    light,
+    OverlayTexture.DEFAULT_UV,
+    //? if <1.21 {
+    color.red.scaled,
+    color.green.scaled,
+    color.blue.scaled,
+    color.alpha.scaled,
+    //?} else
+    /*color*/
+)
+
 interface FeatureRenderer {
     val type: RenderType
     val atlas get() = ETAtlasHolder.atlas
@@ -46,37 +77,6 @@ interface FeatureRenderer {
         stack: ItemStack,
         light: Int,
         color: ARGB
-    )
-
-    fun createVertexConsumer(sprite: Sprite, provider: VertexConsumerProvider, stack: ItemStack): VertexConsumer =
-        sprite.getTextureSpecificVertexConsumer(
-            ItemRenderer.getDirectItemGlintConsumer(
-                provider,
-                ETRenderer.layer(ETAtlasHolder.id),
-                false,
-                stack.hasGlint()
-            )
-        )
-
-    fun Model.render(
-        sprite: Sprite,
-        matrices: MatrixStack,
-        provider: VertexConsumerProvider,
-        stack: ItemStack,
-        light: Int,
-        color: Int
-    ): Unit = render(
-        matrices,
-        createVertexConsumer(sprite, provider, stack),
-        light,
-        OverlayTexture.DEFAULT_UV,
-        //? if <1.21 {
-        color.red.scaled,
-        color.green.scaled,
-        color.blue.scaled,
-        color.alpha.scaled,
-        //?} else
-        /*color*/
     )
 }
 
@@ -164,38 +164,24 @@ class TrimOverlayRenderer : FeatureRenderer {
         stack: ItemStack,
         light: Int,
         color: ARGB
-    ) = stack.getTrims(
-        entity?.world?.registryManager ?: CLIENT.world?.registryManager
-        ?: throw AssertionError("No available world - nowhere to get trims from")
-    ).forEach {
-        val sprite = vanillaCache(it)
-        if (!sprite.missing)
-            model.render(sprite, matrices, provider, stack, light, color)
-        else if (ModStatus.isLoaded("allthetrims"))
-            renderTrimExtended(model, matrices, provider, entity, stack, it, light, color)
-        else if (entity != null && ETRenderer.renderAlways(entity))
-            model.render(sprite, matrices, provider, stack, light, color)
-    }
-
-    private fun renderTrimExtended(
-        model: Model,
-        matrices: MatrixStack,
-        provider: VertexConsumerProvider,
-        entity: LivingEntity?,
-        stack: ItemStack,
-        trim: ArmorTrim,
-        light: Int,
-        color: ARGB
-    ) {
-        val palette = PaletteHelper.getPalette(trim.material.value().ingredient.value())
-        for (i in 0 until 8) {
-            val sprite = attCache(TrimInfo(trim, i))
-            if (sprite.missing && !(entity == null || ETRenderer.renderAlways(entity))) continue
-            model.render(sprite, matrices, provider, stack, light, palette[i].rgb.withAlpha(color.alpha))
+    ) = (entity?.world?.registryManager ?: CLIENT.world?.registryManager).let {
+        if (it != null) stack.getTrims(it)
+        else {
+            ETReference.LOGGER.warn("No available world - nowhere to get trims from")
+            emptyList()
         }
+    }.forEach {
+        val sprite = vanillaCache(it)
+        val newColorAgain = if (ShowMeYourSkinCompat.ignoreTrimTransparency) color.withAlpha(0xFF) else color
+        if (!sprite.missing)
+            model.render(sprite, matrices, provider, stack, light, newColorAgain)
+        else if (AllTheTrimsCompat.isLegacyATT)
+            AllTheTrimsCompat.renderTrimExtended(model, matrices, provider, entity, stack, it, light, newColorAgain, attCache)
+        else if (entity != null && ETRenderer.renderAlways(entity))
+            model.render(sprite, matrices, provider, stack, light, newColorAgain)
     }
 
-    private data class TrimInfo(val trim: ArmorTrim, val index: Int)
+    data class TrimInfo(val trim: ArmorTrim, val index: Int)
 }
 
 class AnimationRenderer : FeatureRenderer {

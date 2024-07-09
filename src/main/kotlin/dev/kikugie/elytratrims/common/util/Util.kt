@@ -9,7 +9,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.registry.tag.ItemTags
 import net.minecraft.registry.tag.TagKey
-import net.minecraft.registry.tag.TagManagerLoader
 import net.minecraft.util.Identifier
 
 fun <K, V> memoize(provider: (K) -> V): (K) -> V = object : (K) -> V {
@@ -40,13 +39,6 @@ fun identifier(id: String): Identifier =
 fun identifier(path: String, id: String): Identifier =
     /*? if <1.21 {*/Identifier(path, id)
     /*?} else*//*Identifier.of(path, id)*/
-
-fun createTags(): TagManagerLoader.RegistryTags<Item> {
-    val elytras = elytras.mapNotNull { Registries.ITEM.getEntry(it) }
-    return TagManagerLoader.RegistryTags(Registries.ITEM.key, mapOf(
-        ItemTags.TRIMMABLE_ARMOR.id to elytras,
-    ))
-}
 
 fun populateTags(map: Map<TagKey<*>, List<RegistryEntry<*>>>): Map<TagKey<*>, List<RegistryEntry<*>>> {
     val mutable = map.toMutableMap()
