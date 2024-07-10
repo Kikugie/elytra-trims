@@ -1,3 +1,2 @@
-## New features
-- More Armor Trims 1.3+ compat
-- NeoForge build
+## Fixes
+- Temp fix for 1.21 crash
