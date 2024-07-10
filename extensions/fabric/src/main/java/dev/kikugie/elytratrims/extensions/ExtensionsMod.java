@@ -18,22 +18,22 @@ public class ExtensionsMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        List<PackEntry> packs = List.of(
-                new PackEntry("more_armor_trims", "more_armor_trims_legacy", "Legacy More Armor Trims")
-        );
-
-        var fabric = FabricLoader.getInstance();
-        var container = fabric.getModContainer(MOD_ID).get();
-        for (PackEntry pack : packs) {
-            if (!fabric.isModLoaded(pack.mod())) continue;
-            LOGGER.info("Registering extension pack: {}", pack.path());
-            ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(MOD_ID, pack.path()),
-                    container,
-                    ResourcePackActivationType.NORMAL
-            );
-        }
-
-        if (fabric.isModLoaded("dynamictrim"))
-            DynamicTrimRegistry.add(new TrimmableItem("elytra", new Identifier("elytra")));
+//        List<PackEntry> packs = List.of(
+//                new PackEntry("more_armor_trims", "more_armor_trims_legacy", "Legacy More Armor Trims")
+//        );
+//
+//        var fabric = FabricLoader.getInstance();
+//        var container = fabric.getModContainer(MOD_ID).get();
+//        for (PackEntry pack : packs) {
+//            if (!fabric.isModLoaded(pack.mod())) continue;
+//            LOGGER.info("Registering extension pack: {}", pack.path());
+//            ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(MOD_ID, pack.path()),
+//                    container,
+//                    ResourcePackActivationType.NORMAL
+//            );
+//        }
+//
+//        if (fabric.isModLoaded("dynamictrim"))
+//            DynamicTrimRegistry.add(new TrimmableItem("elytra", new Identifier("elytra")));
     }
 }
