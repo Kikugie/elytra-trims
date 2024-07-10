@@ -36,6 +36,6 @@ rootProject.name = "Elytra Trims"
 
 include("extensions")
 val ext = project(":extensions")
-listOf("common", "fabric", "forge").forEach {
+listOf("common", "fabric", "forge", "neoforge").forEach {
     include("extensions:$it")
 }
