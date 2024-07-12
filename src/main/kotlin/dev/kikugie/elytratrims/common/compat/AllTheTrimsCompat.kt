@@ -17,6 +17,8 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.trim.ArmorTrim
 
+// TODO currently unused - "will pr later - baw"
+// https://github.com/Bawnorton/AllTheTrims/blob/db9c61166368eedf4dbf20b7d2df2a9fa50fd065/src/main/java/com/bawnorton/allthetrims/mixin/compat/elytratrims/TrimOverlayRendererMixin.java#L51
 object AllTheTrimsCompat {
     val isLegacyATT = ModStatus.getVersion("allthetrims")?.startsWith('3') == true
 

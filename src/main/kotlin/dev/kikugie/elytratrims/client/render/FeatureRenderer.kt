@@ -1,5 +1,6 @@
 package dev.kikugie.elytratrims.client.render
 
+import com.bawnorton.allthetrims.client.util.PaletteHelper
 import dev.kikugie.elytratrims.client.CLIENT
 import dev.kikugie.elytratrims.client.ETClient
 import dev.kikugie.elytratrims.client.config.RenderType
@@ -13,6 +14,7 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.getTrims
 import dev.kikugie.elytratrims.common.compat.AllTheTrimsCompat
 import dev.kikugie.elytratrims.common.compat.ShowMeYourSkinCompat
 import dev.kikugie.elytratrims.common.util.*
+import dev.kikugie.elytratrims.platform.ModStatus
 import net.minecraft.block.entity.BannerPattern
 import net.minecraft.client.model.Model
 import net.minecraft.client.render.OverlayTexture
@@ -175,10 +177,28 @@ class TrimOverlayRenderer : FeatureRenderer {
         val newColorAgain = if (ShowMeYourSkinCompat.ignoreTrimTransparency) color.withAlpha(0xFF) else color
         if (!sprite.missing)
             model.render(sprite, matrices, provider, stack, light, newColorAgain)
-        else if (AllTheTrimsCompat.isLegacyATT)
-            AllTheTrimsCompat.renderTrimExtended(model, matrices, provider, entity, stack, it, light, newColorAgain, attCache)
+        else if (ModStatus.isLoaded("allthetrims"))
+            renderTrimExtended(model, matrices, provider, entity, stack, it, light, color)
         else if (entity != null && ETRenderer.renderAlways(entity))
             model.render(sprite, matrices, provider, stack, light, newColorAgain)
+    }
+
+    private fun renderTrimExtended(
+        model: Model,
+        matrices: MatrixStack,
+        provider: VertexConsumerProvider,
+        entity: LivingEntity?,
+        stack: ItemStack,
+        trim: ArmorTrim,
+        light: Int,
+        color: ARGB
+    ) {
+        val palette = PaletteHelper.getPalette(trim.material.value().ingredient.value())
+        for (i in 0 until 8) {
+            val sprite = attCache(TrimInfo(trim, i))
+            if (sprite.missing && !(entity == null || ETRenderer.renderAlways(entity))) continue
+            model.render(sprite, matrices, provider, stack, light, palette[i].rgb.withAlpha(color.alpha))
+        }
     }
 
     data class TrimInfo(val trim: ArmorTrim, val index: Int)
