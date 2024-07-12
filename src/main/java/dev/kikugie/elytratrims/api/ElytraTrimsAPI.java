@@ -1,5 +1,7 @@
 package dev.kikugie.elytratrims.api;
 
+import dev.kikugie.elytratrims.client.ETClient;
+import dev.kikugie.elytratrims.client.config.ETClientConfig;
 import dev.kikugie.elytratrims.client.config.RenderType;
 import dev.kikugie.elytratrims.client.render.ETRenderer;
 import dev.kikugie.elytratrims.client.resource.ETAtlasHolder;
@@ -17,6 +19,7 @@ import net.minecraft.item.ElytraItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class ElytraTrimsAPI {
 	/**
 	 * Provides feature rendering access for custom elytras.
@@ -113,5 +116,12 @@ public class ElytraTrimsAPI {
 	 */
 	public static RenderLayer getElytraLayer() {
 		return ETRenderer.layer.invoke(ETAtlasHolder.INSTANCE.getId());
+	}
+
+	/**
+	 * @return The configuration instance for the mod
+	 */
+	public static ETClientConfig getConfig() {
+		return ETClient.INSTANCE.getConfig();
 	}
 }

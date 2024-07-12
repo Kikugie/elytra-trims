@@ -59,7 +59,7 @@ data class TextureConfig(
     @JvmField var cropTrims: Boolean = true,
     @JvmField var useDarkerTrim: Boolean = false,
     @JvmField var useBannerTextures: Boolean = false,
-    @JvmField var useElytraModel: Boolean = true
+    @JvmField var useElytraModel: Boolean = true,
 )
 
 @Serializable
