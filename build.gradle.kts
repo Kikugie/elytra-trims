@@ -86,7 +86,7 @@ dependencies {
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
     modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
     modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
-    modCompileOnly(modrinth("betterend", "4.0.8"))
+    modCompileOnly(modrinth("betterend", if (stonecutter.eval(mcVersion, "<1.21")) "4.0.8" else "yvOGk2s5"))
     modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
     if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && loader == "neoforge") {
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0")

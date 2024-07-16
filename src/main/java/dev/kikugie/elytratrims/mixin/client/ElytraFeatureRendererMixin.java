@@ -36,37 +36,24 @@ public class ElytraFeatureRendererMixin {
      * Handles rendering of the mod features
      */
     @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = Targets.renderModel))
-    //? if <1.21 {
     private void elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
             int light,
             int overlay,
+            //? if <1.21 {
             float red,
             float green,
             float blue,
             float alpha,
+            //?}
             Operation<Void> operation,
             @Local(ordinal = 0) ItemStack stack,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity) {
+        //$ render_call {
         operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);//$}
     }
-     //?} else {
-    /*private void elytraPostRender(
-            ElytraEntityModel<?> model,
-            MatrixStack matrices,
-            VertexConsumer vertices,
-            int light,
-            int overlay,
-            Operation<Void> operation,
-            @Local(ordinal = 0) ItemStack stack,
-            @Local(argsOnly = true) VertexConsumerProvider provider,
-            @Local(argsOnly = true) LivingEntity entity) {
-        operation.call(model, matrices, vertices, light, overlay);
-        ETRenderer.render(model, matrices, provider, entity, stack, light, -1);
-    }
-    *///?}
 }
