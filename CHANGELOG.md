@@ -1,2 +1,5 @@
+# Notice
+Starting with Elytra Trims 3.5.0, it will no longer receive updates for 1.20.4 and 1.20.6.
+
 ## Fixes
-- Reintroduced compatibility for Elytra Trinket, Elytra Slot, Better End and Minecraft Capes on 1.21
+- Fixed compatibility for Elytra Slot (again)

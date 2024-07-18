@@ -34,9 +34,7 @@ public abstract class ElytraTrinketMixin extends FeatureRenderer {
         return ElytraTrimsAPI.shouldShowCape(entity) && original;
     }
 
-    @WrapOperation(method = "render",
-            at = @At(value = "INVOKE",
-                    target = Targets.renderModel))
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = Targets.renderModel))
     private void elytra_trinket$elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,

@@ -114,14 +114,14 @@ public class ElytraTrimsAPI {
 	/**
 	 * @return Elytra render layer for the default trim atlas texture
 	 */
-	public static RenderLayer getElytraLayer() {
+	public static @NotNull RenderLayer getElytraLayer() {
 		return ETRenderer.layer.invoke(ETAtlasHolder.INSTANCE.getId());
 	}
 
 	/**
 	 * @return The configuration instance for the mod
 	 */
-	public static ETClientConfig getConfig() {
+	public static @NotNull ETClientConfig getConfig() {
 		return ETClient.INSTANCE.getConfig();
 	}
 }
