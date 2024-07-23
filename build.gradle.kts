@@ -97,7 +97,7 @@ dependencies {
 
     if (stonecutter.eval(mcVersion, ">=1.21")) {
         if(loader != "forge") {
-            modCompileOnly("com.bawnorton.allthetrims:allthetrims-%s:4.0.0+1.21".format(loader)) {
+            modCompileOnly("com.bawnorton.allthetrims:allthetrims-%s:4.0.1+1.21".format(loader)) {
                 isTransitive = false
             }
         }
