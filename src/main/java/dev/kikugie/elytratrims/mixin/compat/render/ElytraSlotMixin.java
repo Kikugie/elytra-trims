@@ -44,25 +44,27 @@ public abstract class ElytraSlotMixin extends FeatureRenderer {
         return stack;
     }
 
-    // FIXME when elytra slot updates
-    @WrapOperation(method = "lambda$render$0",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+    @WrapOperation(method = "lambda$render$0", at = @At(value = "INVOKE", target = Targets.renderModelWithColor))
     private void elytraslot$elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
             int light,
             int overlay,
+            //? if <1.21 {
             float red,
             float green,
             float blue,
             float alpha,
+            //?} else
+            /*int color,*/
             Operation<Void> operation,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity,
-            @Share("stack") LocalRef<ItemStack> stack) {
+            @Share("stack") LocalRef<ItemStack> stackRef) {
+        ItemStack stack = stackRef.get();
+        //$ render_call_color {
         operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack.get(), light, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);//$}
     }
 }

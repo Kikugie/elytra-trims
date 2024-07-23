@@ -16,6 +16,7 @@ import net.minecraft.client.render.entity.model.ElytraEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,23 +38,26 @@ public class MinecraftCapesMixin {
 		return ElytraTrimsAPI.shouldShowCape(entity) && original;
 	}
 
-	// FIXME when minecraft capes updates
 	@TargetHandler(mixin = "net.minecraftcapes.mixin.MixinElytraLayer", name = "render")
-	@WrapOperation(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+	@WrapOperation(method = "@MixinSquared:Handler", at = @At(value = "INVOKE", target = Targets.renderModel))
 	private void minecraftcapes$elytraPostRender(
 			ElytraEntityModel<?> model,
 			MatrixStack matrices,
 			VertexConsumer vertices,
 			int light,
 			int overlay,
+			//? if <1.21 {
 			float red,
 			float green,
 			float blue,
 			float alpha,
+			//?}
 			Operation<Void> operation,
 			@Local(argsOnly = true) VertexConsumerProvider provider,
 			@Local(argsOnly = true) LivingEntity entity) {
-		operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-		ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, entity.getEquippedStack(EquipmentSlot.CHEST), light, red, green, blue, alpha);
+		ItemStack stack = entity.getEquippedStack(EquipmentSlot.CHEST);
+		//$ render_call {
+        operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);//$}
 	}
 }

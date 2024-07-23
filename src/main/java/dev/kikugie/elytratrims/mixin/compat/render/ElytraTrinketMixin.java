@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI;
+import dev.kikugie.elytratrims.mixin.constants.Targets;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.VertexConsumer;
@@ -33,25 +34,25 @@ public abstract class ElytraTrinketMixin extends FeatureRenderer {
         return ElytraTrimsAPI.shouldShowCape(entity) && original;
     }
 
-    // FIXME when elytra trinket updates
-    @WrapOperation(method = "render",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = Targets.renderModel))
     private void elytra_trinket$elytraPostRender(
             ElytraEntityModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
             int light,
             int overlay,
+            //? if <1.21 {
             float red,
             float green,
             float blue,
             float alpha,
+            //?}
             Operation<Void> operation,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity,
             @Local ItemStack stack) {
+        //$ render_call {
         operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);//$}
     }
 }

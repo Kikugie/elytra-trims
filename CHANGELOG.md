@@ -1,7 +1,5 @@
-## Fixes
-- Elytra features not rendering semi-transparently with [Show Me Your Skin](https://modrinth.com/mod/show-me-your-skin)
-- Modded elytras not being cleanable with a cauldron
+# Notice
+Starting with Elytra Trims 3.5.0, it will no longer receive updates for 1.20.4 and 1.20.6.
 
-## API changes
-- Added `ElytraTrimsAPI.getConfig()`
-- Added `ElytraTrimsAPI.getElytraLayer()`
+## Fixes
+- Fixed compatibility for Elytra Slot (again)

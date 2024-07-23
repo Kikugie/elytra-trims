@@ -18,12 +18,31 @@ stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.c
     ofTask("publishMods")
 }
 
-afterEvaluate {
-    stonecutter configureEach {
-        val data = current.project.split('-')
-        val platforms = listOf("fabric", "forge", "neoforge")
-            .map { it to (it == data[1]) }
-        consts(platforms)
-        swap("mc", "\"${data[0]}\"")
+stonecutter configureEach {
+    val data = current.project.split('-')
+    val platforms = listOf("fabric", "forge", "neoforge")
+        .map { it to (it == data[1]) }
+    consts(platforms)
+    swap("mc", "\"${data[0]}\"")
+
+    val is21 = eval(current.version, ">=1.21")
+    val oldRender = """
+        operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
+        """.trimIndent().prependIndent("        ")
+
+    swap("render_call") {
+        if (is21) """
+        operation.call(model, matrices, vertices, light, overlay);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, -1);
+        """.trimIndent().prependIndent("        ")
+        else oldRender
+    }
+    swap("render_call_color") {
+        if (is21) """
+        operation.call(model, matrices, vertices, light, overlay, color);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, color);
+        """.trimIndent().prependIndent("        ")
+        else oldRender
     }
 }

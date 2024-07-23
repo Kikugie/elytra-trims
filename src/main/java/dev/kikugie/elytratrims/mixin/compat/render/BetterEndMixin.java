@@ -23,30 +23,41 @@ import org.spongepowered.asm.mixin.injection.At;
 @Restriction(require = {@Condition("betterend")})
 @Mixin(ArmoredElytraLayer.class)
 public class BetterEndMixin {
-    //? if fabric && <1.21 {
+    //? if fabric {
     @ModifyExpressionValue(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = Targets.isPartVisible))
     private boolean betterend$cancelCapeRender(boolean original, @Local(argsOnly = true) LivingEntity entity) {
         return ElytraTrimsAPI.shouldShowCape(entity) && original;
     }
 
-    // FIXME when betterend updates
-    @WrapOperation(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+    @WrapOperation(
+            method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V",
+            at = @At(
+                    value = "INVOKE",
+                    //? if <1.21 {
+                    target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"
+                    //?} else
+                    /*target = "Lorg/betterx/betterend/item/model/ArmoredElytraModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V"*/
+            )
+    )
     private void betterend$elytraPostRender(
             ArmoredElytraModel<?> model,
             MatrixStack matrices,
             VertexConsumer vertices,
             int light,
             int overlay,
+            //? if <1.21 {
             float red,
             float green,
             float blue,
             float alpha,
+            //?}
             Operation<Void> operation,
             @Local ItemStack stack,
             @Local(argsOnly = true) VertexConsumerProvider provider,
             @Local(argsOnly = true) LivingEntity entity) {
+        //$ render_call {
         operation.call(model, matrices, vertices, light, overlay, red, green, blue, alpha);
-        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);
+        ElytraTrimsAPI.renderFeatures(model, matrices, provider, entity, stack, light, red, green, blue, alpha);//$}
     }
     //?}
 }
