@@ -95,14 +95,9 @@ dependencies {
     if (stonecutter.eval(mcVersion, ">=1.21"))
         modCompileOnly(modrinth("show-me-your-skin", "1.11.1+1.21"))
 
-    if (stonecutter.eval(mcVersion, ">=1.21")) {
-        if(loader != "forge") {
-            modCompileOnly("com.bawnorton.allthetrims:allthetrims-%s:4.0.1+1.21".format(loader)) {
-                isTransitive = false
-            }
-        }
-    } else {
-        modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
+    if (!stonecutter.eval(mcVersion, ">=1.21")) modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
+    else modCompileOnly("com.bawnorton.allthetrims:allthetrims-%s:4.0.1+1.21".format(loader)) {
+        isTransitive = false
     }
 
     vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
