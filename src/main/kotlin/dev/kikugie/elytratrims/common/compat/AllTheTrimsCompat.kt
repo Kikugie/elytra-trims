@@ -25,6 +25,8 @@ import com.bawnorton.allthetrims.client.util.PaletteHelper
 /*import com.bawnorton.allthetrims.AllTheTrims
 import com.bawnorton.allthetrims.client.AllTheTrimsClient
 import com.bawnorton.allthetrims.client.compat.Compat
+import dev.kikugie.elytratrims.api.ElytraTrimsAPI
+
 *///?}
 
 object AllTheTrimsCompat {
@@ -77,7 +79,7 @@ object AllTheTrimsCompat {
             renderer.getModelId(sprite)
         }
         val renderLayer = if (renderer.useLegacyRenderer(sprite)) {
-            Compat.getElytraTrimsCompat().orElseThrow().elytraTrimRenderLayer
+            ElytraTrimsAPI.getElytraLayer()
         } else {
             AllTheTrimsClient.getTrimRenderLayer(stack.item, trim)
         }
