@@ -175,13 +175,8 @@ class TrimOverlayRenderer : FeatureRenderer {
         val sprite = vanillaCache(it)
         val newColorAgain = if (ShowMeYourSkinCompat.ignoreTrimTransparency) color.withAlpha(0xFF) else color
 
-        val attPresent = ModStatus.isLoaded("allthetrims")
-        if(attPresent) {
-            if(AllTheTrimsCompat.isLegacyATT && sprite.missing)
-                AllTheTrimsCompat.renderTrimExtendedLegacy(model, matrices, provider, entity, stack, it, light, color, attCache)
-            else if (AllTheTrimsCompat.isSpriteDynamic(sprite))
-                AllTheTrimsCompat.renderTrimExtended(sprite, model, matrices, provider, entity, stack, it, light, color)
-        }
+        if (ModStatus.isLoaded("allthetrims"))
+            AllTheTrimsCompat.renderTrimAtt(sprite, model, matrices, provider, entity, stack, it, light, color, attCache)
         if (!sprite.missing)
             model.render(sprite, matrices, provider, stack, light, newColorAgain)
         else if (entity != null && ETRenderer.renderAlways(entity))
