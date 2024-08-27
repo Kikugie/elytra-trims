@@ -8,6 +8,19 @@ import net.minecraft.recipe.RecipeSerializer
 object ETCommonWrapper : net.fabricmc.api.ModInitializer {
     override fun onInitialize() {
         ETCommon.init()
+
+        RecipeSerializer.register(
+            "elytratrims:crafting_special_elytrapatterns",
+            ETPatternRecipe.SERIALIZER
+        )
+        RecipeSerializer.register(
+            "elytratrims:crafting_special_elytraglow",
+            ETGlowRecipe.SERIALIZER
+        )
+        RecipeSerializer.register(
+            "elytratrims:crafting_special_elytraanimation",
+            ETAnimationRecipe.SERIALIZER
+        )
     }
 }
 /*?} elif forge {*/
@@ -37,6 +50,17 @@ object ETCommonWrapper {
                 ConfigScreenFactory::class.java,
             ) { ConfigScreenFactory { _, parent -> ConfigScreenProvider.open(parent) } }
         }
+        val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ETReference.MOD_ID)
+        registry.register(
+            "crafting_special_elytrapatterns"
+        ) { ETPatternRecipe.SERIALIZER }
+        registry.register(
+            "crafting_special_elytraglow"
+        ) { ETGlowRecipe.SERIALIZER }
+        registry.register(
+            "crafting_special_elytraanimation"
+        ) { ETAnimationRecipe.SERIALIZER }
+        registry.register(MOD_BUS)
     }
 
 }
@@ -73,6 +97,21 @@ object ETCommonWrapper {
                 CSF::class.java,
             ) { CSF { _, parent -> ConfigScreenProvider.open(parent) } }
         }
+
+        val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)
+        registry.register(
+            "crafting_special_elytrapatterns",
+            Supplier { ETPatternRecipe.SERIALIZER }
+        )
+        registry.register(
+            "crafting_special_elytraglow",
+            Supplier { ETGlowRecipe.SERIALIZER }
+        )
+        registry.register(
+            "crafting_special_elytraanimation",
+            Supplier { ETAnimationRecipe.SERIALIZER }
+        )
+        registry.register(MOD_BUS)
     }
 }
   *//*?}*/

@@ -12,6 +12,7 @@
     "render.MinecraftCapesMixin"
   ],
   "mixins": [
+    "FabricAPICompat",
     "CustomElytraItemMixin"
   ]
 }
