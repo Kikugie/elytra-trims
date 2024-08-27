@@ -1,18 +1,17 @@
 package dev.kikugie.elytratrims.common.recipe
 
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI
-import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getBaseColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.getPatterns
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.setPatterns
 import net.minecraft.item.BannerItem
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
-class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : DelegatedRecipe(id, category) {
+class ETPatternRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output)  {
     override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var banner = 0
@@ -43,7 +42,9 @@ class ETPatternRecipe(id: Identifier, category: CraftingRecipeCategory) : Delega
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETPatternRecipe> =
-            serializer(ETReference.id("crafting_special_elytrapatterns"), ::ETPatternRecipe)
+        val SAMPLE = ItemStack(Items.ELYTRA).apply {
+            // TODO
+        }
+        val SERIALIZER: RecipeSerializer<ETPatternRecipe> = Serializer(SAMPLE, ::ETPatternRecipe)
     }
 }

@@ -1,17 +1,15 @@
 package dev.kikugie.elytratrims.common.recipe
 
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI
-import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.addAnimationStatus
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
-class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : DelegatedRecipe(id, category) {
+class ETAnimationRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output) {
     override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var apple = 0
@@ -42,7 +40,7 @@ class ETAnimationRecipe(id: Identifier, category: CraftingRecipeCategory) : Dele
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETAnimationRecipe> =
-            serializer(ETReference.id("crafting_special_elytraanimation"), ::ETAnimationRecipe)
+        val SAMPLE = ItemStack(Items.ELYTRA).apply { addAnimationStatus() }
+        val SERIALIZER: RecipeSerializer<ETAnimationRecipe> = Serializer(SAMPLE, ::ETAnimationRecipe)
     }
 }

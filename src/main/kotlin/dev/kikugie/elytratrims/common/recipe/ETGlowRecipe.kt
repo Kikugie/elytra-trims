@@ -1,15 +1,13 @@
 package dev.kikugie.elytratrims.common.recipe
 
 import dev.kikugie.elytratrims.api.ElytraTrimsAPI
-import dev.kikugie.elytratrims.common.ETReference
 import dev.kikugie.elytratrims.common.access.FeatureAccess.addGlow
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 
-class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : DelegatedRecipe(id, category) {
+class ETGlowRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output)  {
     override fun matches(input: Stacks): Boolean {
         var item = 0
         var sac = 0
@@ -33,7 +31,7 @@ class ETGlowRecipe(id: Identifier, category: CraftingRecipeCategory) : Delegated
     override fun getSerializer() = SERIALIZER
 
     companion object {
-        val SERIALIZER: RecipeSerializer<ETGlowRecipe> =
-            serializer(ETReference.id("crafting_special_elytraglow"), ::ETGlowRecipe)
+        val SAMPLE = ItemStack(Items.ELYTRA).apply { addGlow() }
+        val SERIALIZER: RecipeSerializer<ETGlowRecipe> = Serializer(SAMPLE, ::ETGlowRecipe)
     }
 }

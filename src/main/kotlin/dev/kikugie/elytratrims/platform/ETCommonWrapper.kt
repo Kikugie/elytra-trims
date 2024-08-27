@@ -9,18 +9,9 @@ object ETCommonWrapper : net.fabricmc.api.ModInitializer {
     override fun onInitialize() {
         ETCommon.init()
 
-        RecipeSerializer.register(
-            "elytratrims:crafting_special_elytrapatterns",
-            ETPatternRecipe.SERIALIZER
-        )
-        RecipeSerializer.register(
-            "elytratrims:crafting_special_elytraglow",
-            ETGlowRecipe.SERIALIZER
-        )
-        RecipeSerializer.register(
-            "elytratrims:crafting_special_elytraanimation",
-            ETAnimationRecipe.SERIALIZER
-        )
+        RecipeSerializer.register("elytratrims:patterns", ETPatternRecipe.SERIALIZER)
+        RecipeSerializer.register("elytratrims:glow", ETGlowRecipe.SERIALIZER)
+        RecipeSerializer.register("elytratrims:animation", ETAnimationRecipe.SERIALIZER)
     }
 }
 /*?} elif forge {*/
@@ -51,15 +42,9 @@ object ETCommonWrapper {
             ) { ConfigScreenFactory { _, parent -> ConfigScreenProvider.open(parent) } }
         }
         val registry = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ETReference.MOD_ID)
-        registry.register(
-            "crafting_special_elytrapatterns"
-        ) { ETPatternRecipe.SERIALIZER }
-        registry.register(
-            "crafting_special_elytraglow"
-        ) { ETGlowRecipe.SERIALIZER }
-        registry.register(
-            "crafting_special_elytraanimation"
-        ) { ETAnimationRecipe.SERIALIZER }
+        registry.register("patterns") { ETPatternRecipe.SERIALIZER }
+        registry.register("glow") { ETGlowRecipe.SERIALIZER }
+        registry.register("animation") { ETAnimationRecipe.SERIALIZER }
         registry.register(MOD_BUS)
     }
 
@@ -99,18 +84,9 @@ object ETCommonWrapper {
         }
 
         val registry = DeferredRegister.create(Registries.RECIPE_SERIALIZER, ETReference.MOD_ID)
-        registry.register(
-            "crafting_special_elytrapatterns",
-            Supplier { ETPatternRecipe.SERIALIZER }
-        )
-        registry.register(
-            "crafting_special_elytraglow",
-            Supplier { ETGlowRecipe.SERIALIZER }
-        )
-        registry.register(
-            "crafting_special_elytraanimation",
-            Supplier { ETAnimationRecipe.SERIALIZER }
-        )
+        registry.register("patterns",Supplier { ETPatternRecipe.SERIALIZER })
+        registry.register("glow",Supplier { ETGlowRecipe.SERIALIZER })
+        registry.register("animation",Supplier { ETAnimationRecipe.SERIALIZER })
         registry.register(MOD_BUS)
     }
 }
