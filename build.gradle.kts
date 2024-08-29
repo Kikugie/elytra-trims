@@ -111,11 +111,11 @@ loom {
 
     }
 
-    runConfigs["client"].apply {
+    runConfigs.all {
         ideConfigGenerated(true)
         vmArgs("-Dmixin.debug.export=true")
-        programArgs("--username=KikuGie") // Mom look I'm in the codebase!
         runDir = "../../run"
+        if (environment == "client") programArgs("--username=KikuGie") // Mom look I'm in the codebase!
     }
 
     decompilers {
@@ -189,7 +189,7 @@ publishMods {
         "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = STABLE
+    type = BETA
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')
