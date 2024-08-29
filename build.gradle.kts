@@ -183,6 +183,10 @@ stonecutter {
 
 // Publishing
 publishMods {
+    val modrinthToken = findProperty("modrinthToken")
+    val curseforgeToken = findProperty("curseforgeToken")
+    dryRun = modrinthToken == null || curseforgeToken == null
+
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
     displayName =
@@ -193,13 +197,9 @@ publishMods {
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')
-
-    dryRun = providers.environmentVariable("MODRINTH_TOKEN")
-        .getOrNull() == null || providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
-
     modrinth {
         projectId = property("publish.modrinth").toString()
-        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        accessToken = modrinthToken.toString()
         targets.forEach(minecraftVersions::add)
         if (isFabric) {
             requires("fabric-api", "fabric-language-kotlin")
@@ -210,7 +210,7 @@ publishMods {
 
     curseforge {
         projectId = property("publish.curseforge").toString()
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        accessToken = curseforgeToken.toString()
         targets.forEach(minecraftVersions::add)
         if (isFabric) {
             requires("fabric-api", "fabric-language-kotlin")
