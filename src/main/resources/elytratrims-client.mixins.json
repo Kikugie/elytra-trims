@@ -11,7 +11,8 @@
     "LivingEntityMixin",
     "LivingEntityRendererAccessor",
     "PalettedPermutationsAtlasSourceAccessor",
-    "SmithingScreenMixin"
+    "SmithingScreenMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

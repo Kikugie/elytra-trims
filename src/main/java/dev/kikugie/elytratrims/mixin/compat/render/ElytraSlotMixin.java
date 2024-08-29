@@ -18,12 +18,14 @@ import net.minecraft.client.render.entity.model.ElytraEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Debug(export = true)
 @Pseudo
-@SuppressWarnings({"UnresolvedMixinReference", "rawtypes"})
+@SuppressWarnings({"UnresolvedMixinReference", "rawtypes", "InvalidInjectorMethodSignature", "MixinAnnotationTarget"})
 @Restriction(require = {@Condition("elytraslot")})
 @Mixin(targets = "com.illusivesoulworks.elytraslot.client.ElytraSlotLayer")
 public abstract class ElytraSlotMixin extends FeatureRenderer {

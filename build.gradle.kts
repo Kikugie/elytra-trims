@@ -81,26 +81,19 @@ dependencies {
         include(implementation(mixinSquared.format(loader))!!)
     }
     // Config
-    modCompileOnly(modrinth("yacl", property("deps.yacl")))
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
-    modCompileOnly(modrinth("stacked-armor-trims", "1.1.0"))
-    modCompileOnly(modrinth("betterend", if (stonecutter.eval(mcVersion, "<1.21")) "4.0.8" else "yvOGk2s5"))
-    modCompileOnly(modrinth("first-person-model", "UtdDBPeE"))
     if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && loader == "neoforge") {
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0")
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0")
     }
-    if (stonecutter.eval(mcVersion, ">=1.21"))
-        modCompileOnly(modrinth("show-me-your-skin", "1.11.1+1.21"))
-
-    if (!stonecutter.eval(mcVersion, ">=1.21")) modCompileOnly(modrinth("allthetrims", if (isFabric) "3.4.2" else "NXPVk0Ym"))
-    else modCompileOnly("com.bawnorton.allthetrims:allthetrims-%s:4.0.1+1.21".format(loader)) {
-        isTransitive = false
+    for (it in property("deps.compat").toString().split(',')) {
+        @Suppress("UselessCallOnNotNull")
+        if (it.isNullOrBlank()) continue
+        val (modid, version) = it.split('=')
+        modCompileOnly(modrinth(modid, version))
     }
-
-    vineflowerDecompilerClasspath("org.vineflower:vineflower:1.10.1")
 }
 
 // Loom config
