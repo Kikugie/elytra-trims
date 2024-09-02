@@ -1,2 +1,2 @@
 ## Fixes
-- Clients with Fabric API, but no Elytra Trims unable to join servers with Elytra Trims.
+- Forge 1.20.1 crash on 3.5.1
