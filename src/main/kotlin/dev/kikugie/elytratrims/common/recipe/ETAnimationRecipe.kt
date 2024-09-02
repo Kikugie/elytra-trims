@@ -6,10 +6,9 @@ import dev.kikugie.elytratrims.common.access.FeatureAccess.removeColor
 import dev.kikugie.elytratrims.common.access.FeatureAccess.removePatterns
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.util.Identifier
 
-class ETAnimationRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output) {
+class ETAnimationRecipe(id: Identifier) : DelegatedRecipe(id, SAMPLE) {
     override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var apple = 0
@@ -37,10 +36,7 @@ class ETAnimationRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id,
 
     override fun fits(width: Int, height: Int) = width * height >= 3
 
-    override fun getSerializer() = SERIALIZER
-
     companion object {
         val SAMPLE = ItemStack(Items.ELYTRA).apply { addAnimationStatus() }
-        val SERIALIZER: RecipeSerializer<ETAnimationRecipe> = Serializer(SAMPLE, ::ETAnimationRecipe)
     }
 }

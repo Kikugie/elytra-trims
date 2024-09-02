@@ -11,7 +11,7 @@ import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.util.Identifier
 
-class ETPatternRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output)  {
+class ETPatternRecipe(id: Identifier) : DelegatedRecipe(id, SAMPLE)  {
     override fun matches(input: Stacks): Boolean {
         var elytra = 0
         var banner = 0
@@ -39,12 +39,9 @@ class ETPatternRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, o
         return width * height >= 2
     }
 
-    override fun getSerializer() = SERIALIZER
-
     companion object {
         val SAMPLE = ItemStack(Items.ELYTRA).apply {
             // TODO
         }
-        val SERIALIZER: RecipeSerializer<ETPatternRecipe> = Serializer(SAMPLE, ::ETPatternRecipe)
     }
 }

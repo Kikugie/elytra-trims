@@ -7,7 +7,7 @@ import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.util.Identifier
 
-class ETGlowRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, output)  {
+class ETGlowRecipe(id: Identifier) : DelegatedRecipe(id, SAMPLE)  {
     override fun matches(input: Stacks): Boolean {
         var item = 0
         var sac = 0
@@ -28,10 +28,7 @@ class ETGlowRecipe(id: Identifier, output: ItemStack) : DelegatedRecipe(id, outp
 
     override fun fits(width: Int, height: Int): Boolean = width * height >= 2
 
-    override fun getSerializer() = SERIALIZER
-
     companion object {
         val SAMPLE = ItemStack(Items.ELYTRA).apply { addGlow() }
-        val SERIALIZER: RecipeSerializer<ETGlowRecipe> = Serializer(SAMPLE, ::ETGlowRecipe)
     }
 }
