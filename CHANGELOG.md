@@ -1,2 +1,5 @@
+## Added
+- Vietnamese translation (@godkyo98)
+
 ## Fixes
-- Forge 1.20.1 crash on 3.5.1
+- Crash with come mods of course on Forge
