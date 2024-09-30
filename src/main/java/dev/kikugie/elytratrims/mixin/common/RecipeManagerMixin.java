@@ -9,8 +9,6 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.Objects;
-
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
 	//? if <1.21 && fabric {
@@ -22,7 +20,8 @@ public class RecipeManagerMixin {
 		)
 	)
 	private Recipe<?> modifyElytraRecipes(Recipe<?> original, @Local Identifier id) {
-		return Objects.requireNonNullElse(RecipeUtilsKt.MOD_RECIPES.get(id), original);
+		var result = RecipeUtilsKt.MOD_RECIPES.get(id);
+		return result != null ? result : original;
 	}
 	//?} elif <1.21 {
 	/*@ModifyExpressionValue(
@@ -33,7 +32,8 @@ public class RecipeManagerMixin {
 		)
 	)
 	private Recipe<?> modifyElytraRecipes(Recipe<?> original, @Local Identifier id) {
-		return Objects.requireNonNullElse(RecipeUtilsKt.MOD_RECIPES.get(id), original);
+		var result = RecipeUtilsKt.MOD_RECIPES.get(id);
+		return result != null ? result : original;
 	}
 	*///?} elif fabric {
 	/*@ModifyExpressionValue(
@@ -41,7 +41,8 @@ public class RecipeManagerMixin {
 		at = @At(value = "INVOKE", target = "Lcom/mojang/serialization/DataResult;getOrThrow(Ljava/util/function/Function;)Ljava/lang/Object;")
 	)
 	private Object modifyElytraRecipes(Object original, @Local Identifier id) {
-		return Objects.requireNonNullElse(RecipeUtilsKt.MOD_RECIPES.get(id), original);
+		var result = RecipeUtilsKt.MOD_RECIPES.get(id);
+		return result != null ? result : original;
 	}
 	*///?} else {
 	/*@ModifyExpressionValue(
@@ -49,7 +50,8 @@ public class RecipeManagerMixin {
 		at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/common/conditions/WithConditions;carrier()Ljava/lang/Object;")
 	)
 	private static Object modifyElytraRecipes(Object original, @Local(argsOnly = true) Identifier id) {
-		return Objects.requireNonNullElse(RecipeUtilsKt.MOD_RECIPES.get(id), original);
+		var result = RecipeUtilsKt.MOD_RECIPES.get(id);
+		return result != null ? result : original;
 	}
 	*///?}
 }
