@@ -82,9 +82,8 @@ object AllTheTrimsCompat {
         colour: Int,
     ) {
         //? if >=1.21 {
-        /*AllTheTrimsClient.getShaderManger().setContext(entity, stack.item)
-
-        val renderer = AllTheTrimsClient.getTrimRenderer()
+        /*val renderer = AllTheTrimsClient.getTrimRenderer()
+        renderer.setContext(entity, stack.item)
         val modelId = if (AllTheTrimsClient.getConfig().overrideExisting) {
             Identifier.ofVanilla(
                 "trims/models/elytra/%s_%s".format(
@@ -98,7 +97,7 @@ object AllTheTrimsCompat {
         val renderLayer = if (renderer.useLegacyRenderer(sprite)) {
             ElytraTrimsAPI.getElytraLayer()
         } else {
-            AllTheTrimsClient.getTrimRenderLayer(stack.item, trim)
+            AllTheTrimsClient.getShaderManger().getTrimRenderLayer(stack.item, AllTheTrimsClient.getTrimPalettes().getPalette(stack.item))
         }
 
         renderer.renderTrim(
