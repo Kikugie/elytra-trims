@@ -1,5 +1,3 @@
-## Added
-- Vietnamese translation (@godkyo98)
-
 ## Fixes
-- Crash with come mods of course on Forge
+- Chinese translation errors (@suoyukii)
+- All The Trims compatibility changes (@Bawnorton)
