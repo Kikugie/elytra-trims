@@ -1,3 +1,2 @@
 ## Fixes
-- Chinese translation errors (@suoyukii)
-- All The Trims compatibility changes (@Bawnorton)
+- Pattern textures were scaled incorrectly for HD banners.

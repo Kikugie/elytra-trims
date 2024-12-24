@@ -1,5 +1,3 @@
-import dev.kikugie.stonecutter.StonecutterSettings
-
 pluginManagement {
     repositories {
         mavenCentral()
@@ -8,26 +6,22 @@ pluginManagement {
         maven("https://maven.architectury.dev")
         maven("https://maven.minecraftforge.net")
         maven("https://maven.neoforged.net/releases/")
-        maven("https://maven.kikugie.dev/releases")
+        maven("https://maven.kikugie.dev/snapshots")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.4.+"
+    id("dev.kikugie.stonecutter") version "0.5"
 }
 
-extensions.configure<StonecutterSettings> {
+stonecutter {
     kotlinController = true
     centralScript = "build.gradle.kts"
     shared {
         fun mc(version: String, vararg loaders: String) {
             for (it in loaders) vers("$version-$it", version)
         }
-        //mc("1.19.4", "fabric", "forge")
         mc("1.20.1", "fabric", "forge")
-        //mc("1.20.2", "fabric", "forge")
-        //mc("1.20.4", "fabric", "neoforge")
-        //mc("1.20.6", "fabric", "neoforge")
         mc("1.21", "fabric", "neoforge")
     }
     create(rootProject)

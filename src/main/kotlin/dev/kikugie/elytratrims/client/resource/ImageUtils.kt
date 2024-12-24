@@ -54,24 +54,24 @@ fun NativeImage.offset(dx: Int, dy: Int) = NativeImage(width, height, true).also
     }
 }
 
-fun NativeImage.mask(mask: NativeImage) = NativeImage(width, height, true).also {
-    val scale = when {
-        mask.width > width -> mask.width / width
-        mask.width < width -> width / mask.width
-        else -> 1
-    }
-    if (mask.width == width) forEachPixel { x, y ->
-        if (mask.alpha(x, y) != 0) copyColor(it, x, y)
-    } else if (mask.width < width) forEachPixel { x, y -> // Mask is smaller
-        val mx = x * scale
-        val my = y * scale
-        if (mask.isInBounds(mx, my) && mask.alpha(mx, my) != 0)
-            copyColor(it, x, y)
-    } else forEachPixel { x, y -> // Mask is bigger
-        val sx = scale * x
-        val sy = scale * y
-        for (my in sy..<sy + scale) for (mx in sx..<sx + scale)
-            if (mask.isInBounds(mx, my) && mask.alpha(mx, my) != 0) copyColor(it, x, y)
+internal fun NativeImage.mask(mask: NativeImage) = NativeImage(width, height, true).also {
+    val scale = mask.width / width.toFloat()
+    when {
+        scale < 1 -> forEachPixel { x, y -> // Mask is smaller
+            val mx = (x * scale).toInt()
+            val my = (y * scale).toInt()
+            if (mask.isInBounds(mx, my) && mask.alpha(mx, my) != 0)
+                copyColor(it, x, y)
+        }
+        scale > 1 -> forEachPixel { x, y -> // Mask is bigger
+            val sx = (scale * x).toInt()
+            val sy = (scale * y).toInt()
+            for (my in sy..<sy + scale.toInt()) for (mx in sx..<sx + scale.toInt())
+                if (mask.isInBounds(mx, my) && mask.alpha(mx, my) != 0) copyColor(it, x, y)
+        }
+        else -> forEachPixel { x, y ->
+            if (mask.alpha(x, y) != 0) copyColor(it, x, y)
+        }
     }
 }
 

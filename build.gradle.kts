@@ -35,6 +35,7 @@ repositories {
     }
     strictMaven("https://api.modrinth.com/maven", "maven.modrinth")
     strictMaven("https://thedarkcolour.github.io/KotlinForForge/", "thedarkcolour")
+    strictMaven("https://maven.fallenbreath.me/releases", "me.fallenbreath")
     maven("https://jitpack.io")
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.terraformersmc.com/releases/")
@@ -63,11 +64,11 @@ dependencies {
     val mixinExtras = "io.github.llamalad7:mixinextras-%s:${property("deps.mixin_extras")}"
     val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-%s:${property("deps.mixin_squared")}"
     implementation(annotationProcessor(mixinSquared.format("common"))!!)
-    include(implementation("com.github.Fallen-Breath.conditional-mixin:conditional-mixin-$loader:${property("deps.cond_mixin")}")!!)
+    include(modImplementation("me.fallenbreath:conditional-mixin-$loader:${property("deps.cond_mixin")}")!!)
     if (isFabric) {
         modules("registry-sync-v0", "resource-loader-v0", "entity-events-v1")
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-        modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.2.0.0")
+        modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.2.1.0")
         include(implementation(mixinSquared.format("fabric"))!!)
         ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     } else {
@@ -84,7 +85,7 @@ dependencies {
 
     // Compat
 //    if (stonecutter.current.isActive) modLocalRuntime("net.fabricmc.fabric-api:fabric-api:${property("deps.fapi")}") // Uncomment when a compat mod complaints about no fapi
-    if (stonecutter.compare(mcVersion, "1.20.6") >= 0 && loader == "neoforge") {
+    if (stonecutter.eval(mcVersion, ">=1.20.6") && loader == "neoforge") {
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.0")
         compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.0")
     }
@@ -101,7 +102,7 @@ loom {
     accessWidenerPath.set(rootProject.file("src/main/resources/elytratrims.accesswidener"))
 
     if (loader == "forge") forge {
-        convertAccessWideners.set(true)
+        convertAccessWideners.set(false)
         mixinConfigs(
             "${mod.id}-client.mixins.json",
             "${mod.id}-common.mixins.json",
@@ -193,7 +194,7 @@ publishMods {
         "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = BETA
+    type = STABLE
     modLoaders.add(loader)
 
     val targets = property("mod.mc_targets").toString().split(' ')

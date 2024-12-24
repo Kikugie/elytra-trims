@@ -50,7 +50,7 @@
   "depends": {
     "fabricloader": ">=0.15.0",
     "minecraft": "${mc}",
-    "fabric-language-kotlin": ">=0.11"
+    "fabric-language-kotlin": ">=0.13"
   },
   "conflicts": {
     "customizableelytra": "*"
