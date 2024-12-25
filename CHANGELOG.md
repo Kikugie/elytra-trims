@@ -1,2 +1,2 @@
 ## Fixes
-- Pattern textures were scaled incorrectly for HD banners.
+- Crash on forge because of course it does

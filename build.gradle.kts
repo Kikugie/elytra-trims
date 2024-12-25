@@ -102,7 +102,7 @@ loom {
     accessWidenerPath.set(rootProject.file("src/main/resources/elytratrims.accesswidener"))
 
     if (loader == "forge") forge {
-        convertAccessWideners.set(false)
+        convertAccessWideners.set(true)
         mixinConfigs(
             "${mod.id}-client.mixins.json",
             "${mod.id}-common.mixins.json",
